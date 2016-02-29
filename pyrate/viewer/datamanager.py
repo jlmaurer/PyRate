@@ -1,4 +1,5 @@
-import os, datetime, numpy, gdal
+import os, datetime, numpy#, gdal
+from osgeo import gdal
 import numpy as np
 import numpy.ma as ma
 import netCDF4 as nc
@@ -250,11 +251,12 @@ def makePube(rootDir, workingDir, ext):
     if not nTiles:
         raise Exception('no tiles found')
 
-    # get the
+    # get the image dimensions
     inputProt = gdal.Open(tiles[0].path)
     nx = inputProt.RasterXSize
     ny = inputProt.RasterYSize
     (xul, xsz, xrot, yul, yrot, ysz) = inputProt.GetGeoTransform()
+    print (xul, xsz, xrot, yul, yrot, ysz)
     inputProt = None
 
     ndat = nc.Dataset(outFile, 'w', 'NETCDF4')
@@ -286,6 +288,9 @@ def makePube(rootDir, workingDir, ext):
             # should we also check spatial extent here?
             raise Exception('tile {} has shape {}, but should have {}'.format(
                 tile.data.shape, shape))
+
+        print 'at: {}'.format(at)
+
         data[at,:,:] = tileData
         grid += (~np.isnan(tileData)).astype(np.int)
         times[at] = tile.date

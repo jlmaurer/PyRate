@@ -3,7 +3,7 @@
 Script for viewing the inputs/outputs from pyrate. Uses
 """
 
-import os
+import os, time
 import sys
 import json
 import urllib
@@ -17,7 +17,8 @@ import webbrowser as wb
 import numpy as np
 import numpy.ma as ma
 
-import osgeo as gdal
+from osgeo import gdal
+#import osgeo as gdal
 
 try:
     import Image
@@ -228,8 +229,8 @@ def pixelScaler(x, y):
 
     lonDif = DATASET_GEO_DIMENSIONS[2] - DATASET_GEO_DIMENSIONS[0]
     latDif = DATASET_GEO_DIMENSIONS[3] - DATASET_GEO_DIMENSIONS[1]
-    x = math.floor(DATASET_PIXEL_DIMENSIONS[2] * (x - DATASET_GEO_DIMENSIONS[0]) / lonDif)
-    y = math.floor(DATASET_PIXEL_DIMENSIONS[3] * (y - DATASET_GEO_DIMENSIONS[1]) / latDif)
+    x = DATASET_PIXEL_DIMENSIONS[2] - 1 - math.floor(DATASET_PIXEL_DIMENSIONS[2] * -(x - DATASET_GEO_DIMENSIONS[0]) / lonDif)
+    y = DATASET_PIXEL_DIMENSIONS[3] - 1 - math.floor(DATASET_PIXEL_DIMENSIONS[3] * (y - DATASET_GEO_DIMENSIONS[1]) / latDif)
     return x, y
 
 
@@ -516,7 +517,7 @@ if __name__ == "__main__":
     # make the stack if it does not already exist. This must be done before the
     # definition of :py:data:`DATASET_GEO_DIMENSIONS`.
     if not os.path.exists(TIME_SERIES_FILE):
-        makePube(WORKING_DIR, TIME_SERIES_FILE, 'tif')
+        makePube(WORKING_DIR, WORKING_DIR, 'tif')
 
     DATASET_GEO_DIMENSIONS, DATASET_PIXEL_DIMENSIONS = getDimensions(TIME_SERIES_FILE)
 

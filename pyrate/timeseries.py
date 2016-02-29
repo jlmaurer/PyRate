@@ -317,6 +317,7 @@ def write_geotiff_output(md, data, dest, nodata):
     # ds.SetProjection(md[ifc.PYRATE_PROJECTION])
     # ds.SetGeoTransform(md[ifc.PYRATE_GEOTRANSFORM])
     ds.SetMetadataItem(ifc.PYRATE_DATE, str(md[ifc.PYRATE_DATE]))
+    # should have a metadata for color schema
 
     # write data
     band = ds.GetRasterBand(1)
