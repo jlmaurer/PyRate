@@ -159,7 +159,7 @@ for path, dirs, files in os.walk(root_direct):
         # good to go... check for errors on this num_fld
         # load files/data
         # todo: put these in a try and give a better error message
-        pick_f = open(join(path, 'python', 'out_py.pkl'), 'r')
+        pick_f = open(join(path, 'python', 'out_py.pkl'), 'r')      # todo: don't create pickle. read in tiff files (this requires changing run_pyrate.py though)
         out_py = pickle.load(pick_f)
         out_mt = scipy.io.loadmat(join(path, 'matlab', 'out_mt.mat'))
 

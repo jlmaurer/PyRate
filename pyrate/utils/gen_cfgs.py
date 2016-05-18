@@ -212,11 +212,13 @@ def rec_loop(n_v_s, loop=0):
             h1[ML] += 'obsdir: '+ml_obs_d+os.path.sep+'\n'
             h1[ML] += 'demdir: '+ml_dem_d+os.path.sep+'\n'
             h1[ML] += 'outdir: '+ml_d+os.path.sep+'\n'
+            h1[ML] += '\n'
             # -----------------------------------------------------------------------------------------
             h1[PY] += '### FILE DIRECTORIES ###\n'
             h1[PY] += 'obsdir: '+py_obs_d+os.path.sep+'\n'
             h1[PY] += 'demdir: '+py_dem_d+os.path.sep+'\n'
             h1[PY] += 'outdir: '+py_d+os.path.sep+'\n'
+            h1[PY] += '\n'
             cfg.append(h1)
 
             h2 = ['', '']
@@ -225,16 +227,18 @@ def rec_loop(n_v_s, loop=0):
             h2[ML] += 'processor: 1\n'
             h2[ML] += 'demfile: '+demfile_fr+'\n'
             h2[ML] += 'parfile: '+parfile_fr+'\n'
+            h2[ML] += '\n'
             # -----------------------------------------------------------------------------------------
             h2[PY] = '### OTHER ###\n'
             h2[PY] += 'ifgfilelist: '+join(py_obs_d, ifgfilelist_fr)+'\n'   # Python wants absolute path
             h2[PY] += 'processor: 1\n'
             h2[PY] += 'demfile: '+join(py_dem_d, demfile_fr)+'\n'
             h2[PY] += 'demHeaderFile: '+join(py_dem_d, parfile_fr)+'\n'     # different name for Python
+            h2[PY] += '\n'
             cfg.append(h2)
 
             h3 = ['', '']
-            h3[ML] += '### NEEDED FOR MATLAB TO WORK ###'
+            h3[ML] += '### NEEDED FOR MATLAB TO WORK ###\n'
             h3[ML] += 'wavelength: '+wl+'\n'
             h3[ML] += 'gmtfaultfile: xxxx.gmt\n'
             h3[ML] += 'ifgname_prefix_len: 0\n'
@@ -244,12 +248,17 @@ def rec_loop(n_v_s, loop=0):
             h3[ML] += 'ratedir: ratemap'+os.path.sep+'\n'
             h3[ML] += 'tsdir: timeseries'+os.path.sep+'\n'
             h3[ML] += 'profdir: prof'+os.path.sep+'\n'
+            h3[ML] += '\n'
             # -----------------------------------------------------------------------------------------
-            # this header isn't relevant for Python. leave as ''
+            h3[PY] += '### NEEDED FOR PYTHON TO WORK ###\n'
+            h3[PY] += 'pickle: 1\n'       # cmp_out.py needs pickled output
+            h3[PY] += '\n'
             cfg.append(h3)
 
             # stringify the parameters that are recursed in this function
             body = ['', '']
+            body[ML] += '### BODY ###\n'
+            body[PY] += '### BODY ###\n'
             for item in n_v_s:
                 # check if name is ifglks or orbfitlks and set appropriately
                 if item[NAME] == 'ifglks':
