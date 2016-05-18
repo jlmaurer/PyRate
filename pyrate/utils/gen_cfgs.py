@@ -48,7 +48,7 @@ base = [
     ['noDataValue', [0.0]],     # depends on data. convert these values to NaNs
     ['nan_conversion', [1]],    # if you have a noDataValue convert it to NaN
 
-    ['ifglks', [(1, 1)]],       # tuples for x and y looks
+    ['ifglks', [(1, 1), (2, 2)]],       # tuples for x and y looks
 
     # stacking/velocity parameters
     ['nsig', [2]],      # Matlab default 2
@@ -262,11 +262,14 @@ def rec_loop(n_v_s, loop=0):
             for item in n_v_s:
                 # check if name is ifglks or orbfitlks and set appropriately
                 if item[NAME] == 'ifglks':
-                    body[ML] += 'ifglksx: '+str(item[VALUE][item[STATE]][0])+'\n'
-                    body[ML] += 'ifglksy: '+str(item[VALUE][item[STATE]][1])+'\n'
+                    for vrsn in [ML, PY]:
+                        body[vrsn] += 'ifglksx: '+str(item[VALUE][item[STATE]][0])+'\n'
+                        body[vrsn] += 'ifglksy: '+str(item[VALUE][item[STATE]][1])+'\n'
                 elif item[NAME] == 'orbfitlks':
-                    body[ML] += 'orbfitlksx: '+str(item[VALUE][item[STATE]][0])+'\n'
-                    body[ML] += 'orbfitlksy: '+str(item[VALUE][item[STATE]][1])+'\n'
+                    for vrsn in [ML, PY]:
+                        body[vrsn] += 'orbfitlksx: '+str(item[VALUE][item[STATE]][0])+'\n'
+                        body[vrsn] += 'orbfitlksy: '+str(item[VALUE][item[STATE]][1])+'\n'
+                # todo: consider doing similar with vcmslks
                 # other data doesn't need processing
                 else:
                     body[ML] += item[NAME]+': '+str(item[VALUE][item[STATE]])+'\n'

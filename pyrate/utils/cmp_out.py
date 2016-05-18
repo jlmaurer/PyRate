@@ -29,7 +29,44 @@ def chk_out_mats(m1, m2):
 
     er_str = ''
     if m1.shape != m2.shape:
-        return ' '*12+'* ARRAY SHAPES DO NOT MATCH. DOES NOT MAKE SENSE TO CHECK FURTHER.\n'
+        er_str += ' '*16+'* ARRAY SHAPES DO NOT MATCH. CHECKING WITH STRIPPED DATA...\n'
+        er_str += ' '*20+'* m1 is '+repr(m1.shape)+'\n'
+        er_str += ' '*20+'* m2 is '+repr(m2.shape)+'\n'
+
+        # strip rows or cols to make have the same shape
+        # don't worry about epochs. you'd hope they're equal...
+        shape_diff = tuple(np.subtract(m1.shape, m2.shape))
+        for elem in [0, 1]:
+            if shape_diff[elem] > 0:
+                # strip diff off m1
+                if elem == 0:
+                    if len(shape_diff) == 2:
+                        m1 = m1[:m1.shape[elem]-shape_diff[elem],:]
+                    else:
+                        # must be 3d array
+                        m1 = m1[:m1.shape[elem]-shape_diff[elem],:,:]
+                else:
+                    # must be elem == 1
+                    if len(shape_diff) == 2:
+                        m1 = m1[:,:m1.shape[elem]-shape_diff[elem]]
+                    else:
+                        m1 = m1[:,:m1.shape[elem]-shape_diff[elem],:]
+            else:
+                # must be negative. strip abs off m2
+                if elem == 0:
+                    if len(shape_diff) == 2:
+                        m2 = m2[:m2.shape[elem]-abs(shape_diff[elem]),:]
+                    else:
+                        m2 = m2[:m2.shape[elem]-abs(shape_diff[elem]),:,:]
+                else:
+                    # must be elem == 1
+                    if len(shape_diff) == 2:
+                        m2 = m2[:,:m2.shape[elem]-abs(shape_diff[elem])]
+                    else:
+                        m2 = m2[:,:m2.shape[elem]-abs(shape_diff[elem]),:]
+
+    # sanity checking
+    assert m1.size == m2.size, 'array shapes do not match up even after stripping'
     '''
     print len(m1.shape)
     while True: pass
@@ -166,12 +203,12 @@ for path, dirs, files in os.walk(root_direct):
         ers = []
         py = out_py['tsincr']   # data is double
         mt = out_mt['tsincr']   # data is single
-        py = py[:py.shape[0]-1,:,:]     # remove last row... have to check this happens for all inputs
+        #py = py[:py.shape[0]-1,:,:]     # remove last row... have to check this happens for all inputs
         ers.append(('tsincr', chk_out_mats(m1=py, m2=mt)))
 
         py = out_py['rate']   # data is double
         mt = out_mt['stackmap']   # data is single
-        py = py[:py.shape[0]-1,:]     # remove last row... have to check this happens for all inputs
+        #py = py[:py.shape[0]-1,:]     # remove last row... have to check this happens for all inputs
         ers.append(('rate/stackmap', chk_out_mats(m1=py, m2=mt)))
 
         # check if actually have an error to write
