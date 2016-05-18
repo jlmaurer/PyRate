@@ -111,8 +111,9 @@ ts_b = [
     #    ['tscal', [1]],
     #    ['tsmethod', [1]],
     #
-    #    ['smorder', [1]],       # pyrate config.py says this and smfactor "NOT CURRENTLY USED"
-    #    ['smfactor', [1]],
+    #    ['smorder', [1]],       # pyrate config.py says this and smfactor "NOT CURRENTLY USED" (but I think they are implemented)
+    #    ['smfactor', [1]],      # smorder: order of smoothing operator(1: first-order difference; 2: second-order difference)
+    #                            # smfactor: smoothing factor(0: calculate & plot L-curve; others: using the specific smoothing factor)
     #
     #    ['ts_pthr', [12]],      # don't exceed number of epochs
     #
@@ -125,8 +126,8 @@ ts_b = [
         ['tscal', [1]],
         ['tsmethod', [2]],
 
-        ['smorder', [0]],
-        ['smfactor', [0]],
+        ['smorder', [1]],       # these aren't use for SVD, but Pyrate requires they exist (bug)
+        ['smfactor', [1]],
 
         ['ts_pthr', [12]],      # don't exceed number of epochs
 
