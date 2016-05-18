@@ -48,11 +48,11 @@ base = [
     ['noDataValue', [0.0]],     # depends on data. convert these values to NaNs
     ['nan_conversion', [1]],    # if you have a noDataValue convert it to NaN
 
-    ['ifglks', [(1, 1), (2, 2)]],       # tuples for x and y looks
+    ['ifglks', [(1, 1)]],       # tuples for x and y looks
 
     # stacking/velocity parameters
     ['nsig', [2]],      # Matlab default 2
-    ['pthr', [12]],     # dependant on ifgsize
+    ['pthr', [12]],     # don't exceed number of epochs
     ['maxsig', [2]],    # Matlab default 2
 
     ['vcmtmethod', [1]],    # Python uses general method 1... keep it at this
@@ -107,19 +107,19 @@ ts_b = [
     #[
     #    ['tscal', [0]],        # will never test this (will always want to create time series)
     #],
-    [   # laplcian smoothing
-        ['tscal', [1]],
-        ['tsmethod', [1]],
-
-        ['smorder', [1]],       # pyrate config.py says this and smfactor "NOT CURRENTLY USED"
-        ['smfactor', [1]],
-
-        ['ts_pthr', [12]],      # based on ifg size (12 is for sydney data)
-
-        ['ts_interp', [0]],     # Matlab laplacian only. default 0. Matt says keep this at 0
-
-        ['stepest', [0]],       # Matlab only, default 0
-    ],
+    #[   # laplcian smoothing
+    #    ['tscal', [1]],
+    #    ['tsmethod', [1]],
+    #
+    #    ['smorder', [1]],       # pyrate config.py says this and smfactor "NOT CURRENTLY USED"
+    #    ['smfactor', [1]],
+    #
+    #    ['ts_pthr', [12]],      # don't exceed number of epochs
+    #
+    #    ['ts_interp', [0]],     # Matlab laplacian only. default 0. Matt says keep this at 0
+    #
+    #    ['stepest', [0]],       # Matlab only, default 0
+    #],
     [
         # SVD (note pyrate required smorder & smfactor parameters (to run), even though they won't be used ==> dummy param
         ['tscal', [1]],
@@ -128,7 +128,7 @@ ts_b = [
         ['smorder', [0]],
         ['smfactor', [0]],
 
-        ['ts_pthr', [12]],      # based on ifg size (12 is for sydney data)
+        ['ts_pthr', [12]],      # don't exceed number of epochs
 
         ['stepest', [0]],       # matlab only, default 0
     ],
