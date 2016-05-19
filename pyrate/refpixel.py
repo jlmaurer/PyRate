@@ -10,7 +10,8 @@ from itertools import product
 import parmap
 import pyrate.config as cf
 from pyrate.shared import Ifg
-
+import os
+import pickle
 
 # TODO: move error checking to config step (for fail fast)
 def ref_pixel(ifgs, params):
@@ -42,6 +43,12 @@ def ref_pixel(ifgs, params):
         refx, refy = filter_means(mean_sds, grid)
 
     if refy and refx:
+        # save out reference pixel for testing...
+        refpix_fp = open(os.path.join(cf.PYRATEPATH, params[cf.OUT_DIR], 'refpt.pkl'), 'w')
+        ref_pt = (refx, refy)
+        pickle.dump(ref_pt, refpix_fp)
+        refpix_fp.close()
+
         return refy, refx
 
     raise RefPixelError("Could not find a reference pixel")

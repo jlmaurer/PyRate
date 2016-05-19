@@ -21,17 +21,28 @@ from decimal import Decimal
 # ARRAY CHECKING FUNCTIONS...
 # these could really be made into just 1 function
 # =================================================================
+M1_N = 'py'  # matrix name. should be passed as a function
+M2_N = 'mt'
 def chk_out_mats(m1, m2):
     # checks pirate/pyrate (m1/m2) output arrays
     # will determine if 2d or 3d... can only deal with either of those two
     # returns an error string that you just plonk into the error file
     relative_tolerance=0.1      # todo: have this as function and program argument
 
-    er_str = ''
+    er_str = ''     # the error string we build up
+
+    # check reference points here. not the right place but whatever
+    global rp_mt, rp_py
+    if rp_mt != rp_py:
+        er_str += ' '*16+'* REFERENCE PIXELS DO NOT MATCH...\n'
+        er_str += ' '*20+'* '+M1_N+' is '+repr(rp_py)+'\n'
+        er_str += ' '*20+'* '+M2_N+' is '+repr(rp_mt)+'\n'
+        return er_str           # exit here. won't be anything meaningful
+
     if m1.shape != m2.shape:
         er_str += ' '*16+'* ARRAY SHAPES DO NOT MATCH. CHECKING WITH STRIPPED DATA...\n'
-        er_str += ' '*20+'* m1 is '+repr(m1.shape)+'\n'
-        er_str += ' '*20+'* m2 is '+repr(m2.shape)+'\n'
+        er_str += ' '*20+'* '+M1_N+' is '+repr(m1.shape)+'\n'
+        er_str += ' '*20+'* '+M2_N+' is '+repr(m2.shape)+'\n'
 
         # strip rows or cols to make have the same shape
         # don't worry about epochs. you'd hope they're equal...
@@ -93,8 +104,8 @@ def chk_out_mats(m1, m2):
                     if abs(m1[it].item() - m2[it].item()) > relative_tolerance:
                         # not within tolerance...
                         er_str += ' '*16+'* do not match to tolerance @ '+str(it)+'\n'
-                        er_str += ' '*20+'* m1 = '+str(Decimal(m1[it].item()))+'\n'
-                        er_str += ' '*20+'* m2 = '+str(Decimal(m2[it].item()))+'\n'
+                        er_str += ' '*20+'* '+M1_N+' = '+str(Decimal(m1[it].item()))+'\n'
+                        er_str += ' '*20+'* '+M2_N+' = '+str(Decimal(m2[it].item()))+'\n'
                     '''
                     # my original ideas about checking if floats are equal...
                     # check if match to a certain number of decimal places
@@ -105,9 +116,9 @@ def chk_out_mats(m1, m2):
                     '''
                 else:   # atleast one of py[it], m2[it] is NaN
                     if (not np.isnan(m1[it])) and (np.isnan(m2[it])):
-                        er_str += ' '*16+'* m1 should be NaN (but is not)'+'\n'
+                        er_str += ' '*16+'* '+M1_N+' should be NaN (but is not)'+'\n'
                     if (np.isnan(m1[it])) and (not np.isnan(m2[it])):
-                        er_str += ' '*16+'* m1 should not be NaN (but is)'+'\n'
+                        er_str += ' '*16+'* '+M1_N+' should not be NaN (but is)'+'\n'
                 it_c += 1
             it_r += 1
         it_e += 1
@@ -198,18 +209,36 @@ for path, dirs, files in os.walk(root_direct):
         # todo: put these in a try and give a better error message
         pick_f = open(join(path, 'python', 'out_py.pkl'), 'r')      # todo: don't create pickle. read in tiff files (this requires changing run_pyrate.py though)
         out_py = pickle.load(pick_f)
+        pick_f.close()
         out_mt = scipy.io.loadmat(join(path, 'matlab', 'out_mt.mat'))
 
-        ers = []
-        py = out_py['tsincr']   # data is double
-        mt = out_mt['tsincr']   # data is single
-        #py = py[:py.shape[0]-1,:,:]     # remove last row... have to check this happens for all inputs
-        ers.append(('tsincr', chk_out_mats(m1=py, m2=mt)))
+        # load reference pixel values
+        refpix_f = open(join(path, 'python', 'refpt.pkl'), 'r')
+        rp_py = pickle.load(refpix_f)
+        refpix_f.close()
+        rp_mt = scipy.io.loadmat(join(path, 'matlab', 'refpt.mat'))
+        rp_mt = rp_mt['refpt']
+        rp_mt = rp_mt[0,0]
+        rp_mt = (rp_mt[0].item()-1, rp_mt[1].item()-1)  # matlab reference point seems to be greater by 1 in each dimension
 
-        py = out_py['rate']   # data is double
-        mt = out_mt['stackmap']   # data is single
-        #py = py[:py.shape[0]-1,:]     # remove last row... have to check this happens for all inputs
-        ers.append(('rate/stackmap', chk_out_mats(m1=py, m2=mt)))
+        '''
+        print rp_py
+        print rp_mt
+        print '----------------------'
+        '''
+
+        ers = []
+        if ('tsincr' in out_py) and ('tsincr' in out_mt):
+            py = out_py['tsincr']   # data is double
+            mt = out_mt['tsincr']   # data is single
+            #py = py[:py.shape[0]-1,:,:]     # remove last row... have to check this happens for all inputs
+            ers.append(('tsincr', chk_out_mats(m1=py, m2=mt)))
+
+        if ('rate' in out_py) and ('stackmap' in out_mt):
+            py = out_py['rate']   # data is double
+            mt = out_mt['stackmap']   # data is single
+            #py = py[:py.shape[0]-1,:]     # remove last row... have to check this happens for all inputs
+            ers.append(('rate/stackmap', chk_out_mats(m1=py, m2=mt)))
 
         # check if actually have an error to write
         if ['', ''] != [er[1] for er in ers]:
@@ -224,7 +253,6 @@ for path, dirs, files in os.walk(root_direct):
                 if er[1] != '':
                     out_fp.write(' '*12+'* '+er[0]+'\n')
                     out_fp.write(er[1])     # <-- pass an indent level parameter
-
 #out_fp.write('test!!!!')
 out_fp.close()
 

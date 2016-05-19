@@ -96,10 +96,10 @@ ref_b = [
         ['refest', [2]],            # 1 is stupid
         ['refx', [0]],
         ['refy', [0]],
-        ['refnx', [10]],            # x/10
-        ['refny', [10]],            # y/10
-        ['refchipsize', [5]],       # ?
-        ['refminfrac', [0.8]],      # default for matlab
+        ['refn', [(7, 4)]],                    # good values are resolution(x)/10, resoloution(y)/10
+                                               # above will de-tuple to refnx, refny
+        ['refchipsize', [5]],                  # can't have an #1 even chipsize (refpixel.py line 137), #2 < 3, #3 greater than width
+        ['refminfrac', [0.8]],                 # default for matlab
     ],
 ]
 
@@ -121,8 +121,7 @@ ts_b = [
     #
     #    ['stepest', [0]],       # Matlab only, default 0
     #],
-    [
-        # SVD (note pyrate required smorder & smfactor parameters (to run), even though they won't be used ==> dummy param
+    [   # SVD (note pyrate required smorder & smfactor parameters (to run), even though they won't be used ==> dummy param
         ['tscal', [1]],
         ['tsmethod', [2]],
 
@@ -261,7 +260,7 @@ def rec_loop(n_v_s, loop=0):
             body[ML] += '### BODY ###\n'
             body[PY] += '### BODY ###\n'
             for item in n_v_s:
-                # check if name is ifglks or orbfitlks and set appropriately
+                # check if name is ifglks or orbfitlks any other tuples and set appropriately
                 if item[NAME] == 'ifglks':
                     for vrsn in [ML, PY]:
                         body[vrsn] += 'ifglksx: '+str(item[VALUE][item[STATE]][0])+'\n'
@@ -270,6 +269,10 @@ def rec_loop(n_v_s, loop=0):
                     for vrsn in [ML, PY]:
                         body[vrsn] += 'orbfitlksx: '+str(item[VALUE][item[STATE]][0])+'\n'
                         body[vrsn] += 'orbfitlksy: '+str(item[VALUE][item[STATE]][1])+'\n'
+                elif item[NAME] == 'refn':
+                    for vrsn in [ML, PY]:
+                        body[vrsn] += 'refnx: '+str(item[VALUE][item[STATE]][0])+'\n'
+                        body[vrsn] += 'refny: '+str(item[VALUE][item[STATE]][1])+'\n'
                 # todo: consider doing similar with vcmslks
                 # other data doesn't need processing
                 else:

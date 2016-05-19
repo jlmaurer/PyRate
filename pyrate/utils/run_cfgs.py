@@ -76,7 +76,8 @@ PYRATEPATH = os.environ['PYRATEPATH']
 
 # configuration for running matlab...
 # hard code in for now
-mcc_exec_pth = '/nas/gemd/insar/pr_testing/mcc/v1/pirate'
+#mcc_exec_pth = '/nas/gemd/insar/pr_testing/mcc/v1_uni/pirate'
+mcc_exec_pth = '/nas/gemd/insar/pr_testing/mcc/v2_uni/pirate'
 mcc_env = deepcopy(os.environ)
 mcc_env['LD_LIBRARY_PATH'] = "/nas/gemd/insar/pr_testing/MATLAB_Runtime/v85/runtime/glnxa64:/nas/gemd/insar/pr_testing/MATLAB_Runtime/v85/bin/glnxa64:/nas/gemd/insar/pr_testing/MATLAB_Runtime/v85/sys/os/glnxa64"
 
