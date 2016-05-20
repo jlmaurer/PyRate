@@ -39,11 +39,12 @@ def chk_out_mats(m1, m2):
         er_str += ' '*20+'* '+M2_N+' is '+repr(rp_mt)+'\n'
         return er_str           # exit here. won't be anything meaningful
 
+    er_array_shapes = ''
     if m1.shape != m2.shape:
         if verbosity == 1:
-            er_str += ' '*16+'* ARRAY SHAPES DO NOT MATCH. CHECKING WITH STRIPPED DATA...\n'
-            er_str += ' '*20+'* '+M1_N+' is '+repr(m1.shape)+'\n'
-            er_str += ' '*20+'* '+M2_N+' is '+repr(m2.shape)+'\n'
+            er_array_shapes += ' '*16+'* ARRAY SHAPES DO NOT MATCH. CHECKING WITH STRIPPED DATA...\n'
+            er_array_shapes += ' '*20+'* '+M1_N+' is '+repr(m1.shape)+'\n'
+            er_array_shapes += ' '*20+'* '+M2_N+' is '+repr(m2.shape)+'\n'
 
         # strip rows or cols to make have the same shape
         # don't worry about epochs. you'd hope they're equal...
@@ -107,7 +108,7 @@ def chk_out_mats(m1, m2):
                     if abs(m1[it].item() - m2[it].item()) > relative_tolerance:
                         # not within tolerance...
                         n_tol_mis += 1
-                        if verbosity == 1:
+                        if verbosity == 1 or verbosity == 2:
                             er_str += ' '*16+'* do not match to tolerance @ '+str(it)+'\n'
                             er_str += ' '*20+'* '+M1_N+' = '+str(Decimal(m1[it].item()))+'\n'
                             er_str += ' '*20+'* '+M2_N+' = '+str(Decimal(m2[it].item()))+'\n'
@@ -122,11 +123,11 @@ def chk_out_mats(m1, m2):
                 else:   # atleast one of py[it], m2[it] is NaN
                     if (not np.isnan(m1[it])) and (np.isnan(m2[it])):
                         n_nan_mis += 1
-                        if verbosity == 1:
+                        if verbosity == 1 or verbosity == 2:
                             er_str += ' '*16+'* '+M1_N+' should be NaN (but is not)'+'\n'
                     if (np.isnan(m1[it])) and (not np.isnan(m2[it])):
                         n_nan_mis += 1
-                        if verbosity == 1:
+                        if verbosity == 1 or verbosity == 2:
                             er_str += ' '*16+'* '+M1_N+' should not be NaN (but is)'+'\n'
                 it_c += 1
             it_r += 1
@@ -139,13 +140,13 @@ def chk_out_mats(m1, m2):
     while True: pass
     '''
     if n_tol_mis != 0 or n_nan_mis != 0:
-        tot_pix = m1.shape[0]*m1.shape[1]
+        tot_pix = m1.shape[0]*m1.shape[1]*n_e
         tol_percent = (float(n_tol_mis)/tot_pix)*100
         nan_percent = (float(n_nan_mis)/tot_pix)*100
         er_str_prep += ' '*16+'* tolerance errors = '+str(n_tol_mis)+'/'+str(tot_pix)+' = '+str(tol_percent)+'%\n'
         er_str_prep += ' '*16+'* NaN errors       = '+str(n_nan_mis)+'/'+str(tot_pix)+' = '+str(nan_percent)+'%\n'
 
-    er_str = er_str_prep+er_str
+    er_str = er_array_shapes+er_str_prep+er_str
     return er_str
 # =================================================================
 # =================================================================
@@ -162,7 +163,7 @@ ign_list = []
 jst_list = []
 out_direct = False
 out_fn = False
-verbosity = 1
+verbosity = 2       # default verbosity (don't tell about stripping rows)
 # assiging and checking valid options
 for opt in opts:
     if opt[0] == '-d':
@@ -183,7 +184,7 @@ if out_direct != False and out_fn != False:
     print 'can only have one or the other or none of --od and --of'
     sys.exit(0)
 # check verbosity options are correct
-if not (verbosity in [1, 2]):
+if not (verbosity in [1, 2, 3]):
     print 'verbositiy can only be 1 or 2. default is 1 (most verbose)'
     sys.exit(0)
 # configuring global program variables
