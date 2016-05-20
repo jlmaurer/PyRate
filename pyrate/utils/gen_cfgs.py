@@ -157,7 +157,14 @@ for b_comb in work:
         n_perms_per_b *= len(n_v_s[1])
     n_perms += n_perms_per_b
 
-print 'generating '+str(n_perms)+' configuration files...'
+print 'generating and copying data for **'+str(n_perms)+'** configuration file(s)...'
+while True:
+    ans = raw_input('Do you wish to continue (Y/n): ')
+    if ans == 'Y':
+        break
+    if ans == 'n':
+        sys.exit(0)
+
 n_zs = len(str(n_perms))
 
 # FUNCTIONS ===============================================
