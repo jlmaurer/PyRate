@@ -124,11 +124,11 @@ def chk_out_mats(m1, m2):
                     if (not np.isnan(m1[it])) and (np.isnan(m2[it])):
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
-                            er_str += ' '*16+'* '+M1_N+' should be NaN (but is not)'+'\n'
+                            er_str += ' '*16+'* '+M1_N+' should be NaN (but is not) @ '+str(it)+'\n'
                     if (np.isnan(m1[it])) and (not np.isnan(m2[it])):
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
-                            er_str += ' '*16+'* '+M1_N+' should not be NaN (but is)'+'\n'
+                            er_str += ' '*16+'* '+M1_N+' should not be NaN (but is) @ '+str(it)+'\n'
                 it_c += 1
             it_r += 1
         it_e += 1
