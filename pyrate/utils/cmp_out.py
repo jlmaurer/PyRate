@@ -34,17 +34,17 @@ def chk_out_mats(m1, m2):
     # check reference points here. not the right place but whatever
     global rp_mt, rp_py
     if rp_mt != rp_py:
-        er_str += ' '*16+'* REFERENCE PIXELS DO NOT MATCH...\n'
-        er_str += ' '*20+'* '+M1_N+' is '+repr(rp_py)+'\n'
-        er_str += ' '*20+'* '+M2_N+' is '+repr(rp_mt)+'\n'
+        er_str += '\t'*4+'* REFERENCE PIXELS DO NOT MATCH...\n'
+        er_str += '\t'*5+'* '+M1_N+' is '+repr(rp_py)+'\n'
+        er_str += '\t'*5+'* '+M2_N+' is '+repr(rp_mt)+'\n'
         return er_str           # exit here. won't be anything meaningful
 
     er_array_shapes = ''
     if m1.shape != m2.shape:
         if verbosity == 1:
-            er_array_shapes += ' '*16+'* ARRAY SHAPES DO NOT MATCH. CHECKING WITH STRIPPED DATA...\n'
-            er_array_shapes += ' '*20+'* '+M1_N+' is '+repr(m1.shape)+'\n'
-            er_array_shapes += ' '*20+'* '+M2_N+' is '+repr(m2.shape)+'\n'
+            er_array_shapes += '\t'*4+'* ARRAY SHAPES DO NOT MATCH. CHECKING WITH STRIPPED DATA...\n'
+            er_array_shapes += '\t'*5+'* '+M1_N+' is '+repr(m1.shape)+'\n'
+            er_array_shapes += '\t'*5+'* '+M2_N+' is '+repr(m2.shape)+'\n'
 
         # strip rows or cols to make have the same shape
         # don't worry about epochs. you'd hope they're equal...
@@ -109,9 +109,9 @@ def chk_out_mats(m1, m2):
                         # not within tolerance...
                         n_tol_mis += 1
                         if verbosity == 1 or verbosity == 2:
-                            er_str += ' '*16+'* do not match to tolerance @ '+str(it)+'\n'
-                            er_str += ' '*20+'* '+M1_N+' = '+str(Decimal(m1[it].item()))+'\n'
-                            er_str += ' '*20+'* '+M2_N+' = '+str(Decimal(m2[it].item()))+'\n'
+                            er_str += '\t'*4+'* do not match to tolerance @ '+str(it)+'\n'
+                            er_str += '\t'*5+'* '+M1_N+' = '+str(Decimal(m1[it].item()))+'\n'
+                            er_str += '\t'*5+'* '+M2_N+' = '+str(Decimal(m2[it].item()))+'\n'
                     '''
                     # my original ideas about checking if floats are equal...
                     # check if match to a certain number of decimal places
@@ -124,11 +124,11 @@ def chk_out_mats(m1, m2):
                     if (not np.isnan(m1[it])) and (np.isnan(m2[it])):
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
-                            er_str += ' '*16+'* '+M1_N+' should be NaN (but is not) @ '+str(it)+'\n'
+                            er_str += '\t'*4+'* '+M1_N+' should be NaN (but is not) @ '+str(it)+'\n'
                     if (np.isnan(m1[it])) and (not np.isnan(m2[it])):
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
-                            er_str += ' '*16+'* '+M1_N+' should not be NaN (but is) @ '+str(it)+'\n'
+                            er_str += '\t'*4+'* '+M1_N+' should not be NaN (but is) @ '+str(it)+'\n'
                 it_c += 1
             it_r += 1
         it_e += 1
@@ -143,8 +143,8 @@ def chk_out_mats(m1, m2):
         tot_pix = m1.shape[0]*m1.shape[1]*n_e
         tol_percent = (float(n_tol_mis)/tot_pix)*100
         nan_percent = (float(n_nan_mis)/tot_pix)*100
-        er_str_prep += ' '*16+'* tolerance errors = '+str(n_tol_mis)+'/'+str(tot_pix)+' = '+str(tol_percent)+'%\n'
-        er_str_prep += ' '*16+'* NaN errors       = '+str(n_nan_mis)+'/'+str(tot_pix)+' = '+str(nan_percent)+'%\n'
+        er_str_prep += '\t'*4+'* tolerance errors = '+str(n_tol_mis)+'/'+str(tot_pix)+' = '+str(tol_percent)+'%\n'
+        er_str_prep += '\t'*4+'* NaN errors       = '+str(n_nan_mis)+'/'+str(tot_pix)+' = '+str(nan_percent)+'%\n'
 
     er_str = er_array_shapes+er_str_prep+er_str
     return er_str
@@ -278,12 +278,12 @@ for path, dirs, files in os.walk(root_direct):
             if write_tst:
                 out_fp.write('* '+tst_fld+'\n')
             if write_dat:
-                out_fp.write(' '*4+'* '+dat_fld+'\n')
-            out_fp.write(' '*8+'* '+cont_fld+'\n')
+                out_fp.write('\t'*1+'* '+dat_fld+'\n')
+            out_fp.write('\t'*2+'* '+cont_fld+'\n')
             # write errors
             for er in ers:
                 if er[1] != '':
-                    out_fp.write(' '*12+'* '+er[0]+'\n')
+                    out_fp.write('\t'*3+'* '+er[0]+'\n')
                     out_fp.write(er[1])     # <-- pass an indent level parameter
 #out_fp.write('test!!!!')
 out_fp.close()
