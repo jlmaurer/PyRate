@@ -214,79 +214,55 @@ in_dat = ''
 write_tst = False
 write_dat = False
 
-for path, dirs, files in os.walk(root_direct):
-    rest, cont_fld = os.path.split(path)    # containing folder
-    if cont_fld.isdigit():                  # if the containing folder is a number folder ==> will have stuff to compare...
-        # check if we should skip this folder...
-        rest, dat_fld = os.path.split(rest)
-        _, tst_fld = os.path.split(rest)
-        if jst_list != []:
-            want_list = list(set(jst_list)-set(ign_list))   # todo: could do this more efficient
-            if not (tst_fld in want_list):
-                continue
-        else:
-            if tst_fld in ign_list:
-                continue
+sorted_nums = sorted(filter(lambda x: os.path.isdir(os.path.join(root_direct, x)), os.listdir(root_direct)))
+#print sorted_nums
+#while True: pass
+dat_fld = os.path.split(os.path.split(root_direct)[0])[1]
+tst_fld = os.path.split(os.path.split(os.path.split(root_direct)[0])[0])[1]
+out_fp.write('* '+tst_fld+'\n')
+out_fp.write('\t'*1+'* '+dat_fld+'\n')
+for cont_fld in sorted_nums:
+    path = join(root_direct, cont_fld)
 
-        # determine if need to write indents
-        write_tst = False
-        write_dat = False
-        if in_tst != tst_fld:
-            in_tst = tst_fld
-            write_tst = True
-        if in_dat != dat_fld or write_tst:
-            in_dat = dat_fld
-            write_dat = True
+    pick_f = open(join(path, 'python', 'out_py.pkl'), 'r')      # todo: don't create pickle. read in tiff files (this requires changing run_pyrate.py though)
+    out_py = pickle.load(pick_f)
+    pick_f.close()
+    out_mt = scipy.io.loadmat(join(path, 'matlab', 'out_mt.mat'))
 
-        # good to go... check for errors on this num_fld
-        # load files/data
-        # todo: put these in a try and give a better error message
-        pick_f = open(join(path, 'python', 'out_py.pkl'), 'r')      # todo: don't create pickle. read in tiff files (this requires changing run_pyrate.py though)
-        out_py = pickle.load(pick_f)
-        pick_f.close()
-        out_mt = scipy.io.loadmat(join(path, 'matlab', 'out_mt.mat'))
+    # load reference pixel values
+    refpix_f = open(join(path, 'python', 'refpt.pkl'), 'r')
+    rp_py = pickle.load(refpix_f)
+    refpix_f.close()
+    rp_mt = scipy.io.loadmat(join(path, 'matlab', 'refpt.mat'))
+    rp_mt = rp_mt['refpt']
+    rp_mt = rp_mt[0,0]
+    rp_mt = (rp_mt[0].item()-1, rp_mt[1].item()-1)  # matlab reference point seems to be greater by 1 in each dimension
 
-        # load reference pixel values
-        refpix_f = open(join(path, 'python', 'refpt.pkl'), 'r')
-        rp_py = pickle.load(refpix_f)
-        refpix_f.close()
-        rp_mt = scipy.io.loadmat(join(path, 'matlab', 'refpt.mat'))
-        rp_mt = rp_mt['refpt']
-        rp_mt = rp_mt[0,0]
-        rp_mt = (rp_mt[0].item()-1, rp_mt[1].item()-1)  # matlab reference point seems to be greater by 1 in each dimension
+    ers = []
+    if ('tsincr' in out_py) and ('tsincr' in out_mt):
+        py = out_py['tsincr']   # data is double
+        mt = out_mt['tsincr']   # data is single
+        #py = py[:py.shape[0]-1,:,:]     # remove last row... have to check this happens for all inputs
+        ers.append(('tsincr', chk_out_mats(m1=py, m2=mt)))
 
-        '''
-        print rp_py
-        print rp_mt
-        print '----------------------'
-        '''
+    if ('rate' in out_py) and ('stackmap' in out_mt):
+        py = out_py['rate']   # data is double
+        mt = out_mt['stackmap']   # data is single
+        #py = py[:py.shape[0]-1,:]     # remove last row... have to check this happens for all inputs
+        ers.append(('rate/stackmap', chk_out_mats(m1=py, m2=mt)))
 
-        ers = []
-        if ('tsincr' in out_py) and ('tsincr' in out_mt):
-            py = out_py['tsincr']   # data is double
-            mt = out_mt['tsincr']   # data is single
-            #py = py[:py.shape[0]-1,:,:]     # remove last row... have to check this happens for all inputs
-            ers.append(('tsincr', chk_out_mats(m1=py, m2=mt)))
-
-        if ('rate' in out_py) and ('stackmap' in out_mt):
-            py = out_py['rate']   # data is double
-            mt = out_mt['stackmap']   # data is single
-            #py = py[:py.shape[0]-1,:]     # remove last row... have to check this happens for all inputs
-            ers.append(('rate/stackmap', chk_out_mats(m1=py, m2=mt)))
-
-        # check if actually have an error to write
-        if ['', ''] != [er[1] for er in ers]:
-            # write indents if need to
-            if write_tst:
-                out_fp.write('* '+tst_fld+'\n')
-            if write_dat:
-                out_fp.write('\t'*1+'* '+dat_fld+'\n')
-            out_fp.write('\t'*2+'* '+cont_fld+'\n')
-            # write errors
-            for er in ers:
-                if er[1] != '':
-                    out_fp.write('\t'*3+'* '+er[0]+'\n')
-                    out_fp.write(er[1])     # <-- pass an indent level parameter
+    # check if actually have an error to write
+    if ['', ''] != [er[1] for er in ers]:
+        # write indents if need to
+        #if write_tst:
+        #    out_fp.write('* '+tst_fld+'\n')
+        #if write_dat:
+        #    out_fp.write('\t'*1+'* '+dat_fld+'\n')
+        out_fp.write('\t'*2+'* '+cont_fld+'\n')
+        # write errors
+        for er in ers:
+            if er[1] != '':
+                out_fp.write('\t'*3+'* '+er[0]+'\n')
+                out_fp.write(er[1])     # <-- pass an indent level parameter
 #out_fp.write('test!!!!')
 out_fp.close()
-

@@ -47,10 +47,14 @@ if not (verbosity in [1, 2, 3]):
     sys.exit(0)
 '''
 
+opts, args = getopt.getopt(sys.argv[1:], 'i:')
+for opt in opts:
+    if opt[0] == '-i':
+        # check if is a valid directory and ensure ends in '/' or '\'
+        in_fn = opt[1]
 
-
-in_fp  = open('/home/gap/total.log', 'r')
-out_fp = open('/home/gap/filtered.log', 'w')
+in_fp  = open(in_fn, 'r')
+#out_fp = open('/home/gap/filtered.log', 'w')
 
 '''
 p_lt = 50       # filter out everything less than this percentage...
@@ -76,11 +80,12 @@ in_fp.close()
 out_fp.close()
 '''
 
-my_filter = 50  # filter on 50%
+#my_filter = 50  # filter on 50%
 
 # todo: check if in file is too big to store in memory
 in_lines = in_fp.readlines()
 #print in_lines
+in_fp.close()
 
 # get preview in TKinter
 from Tkinter import *
