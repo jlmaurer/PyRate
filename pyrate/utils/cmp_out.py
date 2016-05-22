@@ -143,8 +143,10 @@ def chk_out_mats(m1, m2):
         tot_pix = m1.shape[0]*m1.shape[1]*n_e
         tol_percent = (float(n_tol_mis)/tot_pix)*100
         nan_percent = (float(n_nan_mis)/tot_pix)*100
+        tot_percent = (float(n_tol_mis+n_nan_mis)/tot_pix)*100
         er_str_prep += '\t'*4+'* tolerance errors = '+str(n_tol_mis)+'/'+str(tot_pix)+' = '+str(tol_percent)+'%\n'
         er_str_prep += '\t'*4+'* NaN errors       = '+str(n_nan_mis)+'/'+str(tot_pix)+' = '+str(nan_percent)+'%\n'
+        er_str_prep += '\t'*4+'* total fail       = '+str(n_tol_mis+n_nan_mis)+'/'+str(tot_pix)+' = '+str(tot_percent)+'%\n'
 
     er_str = er_array_shapes+er_str_prep+er_str
     return er_str
@@ -163,7 +165,7 @@ ign_list = []
 jst_list = []
 out_direct = False
 out_fn = False
-verbosity = 2       # default verbosity (don't tell about stripping rows)
+verbosity = 3       # default verbosity (don't tell about stripping rows)
 # assiging and checking valid options
 for opt in opts:
     if opt[0] == '-d':
