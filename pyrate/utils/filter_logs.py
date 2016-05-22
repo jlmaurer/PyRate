@@ -98,14 +98,18 @@ class FilterGUI:
 
     def reset(self):
         # resets fields and textbox back to original
+        '''
         self.tolText.delete('0','end')
         self.nanText.delete('0','end')
+        '''
+        self.totText.delete('0','end')
         self.guiData = deepcopy(in_lines)
         self.logTxt.delete('1.0', 'end')
         self.showGuiData()
 
     def apply(self):
         # apply the filters
+        '''
         tol_fail = False
         nan_fail = False
         try:
@@ -119,16 +123,19 @@ class FilterGUI:
         except ValueError:
             nan_fail = True
         '''
+        fail = False
+        try:
+            tot_filter = float(self.totText.get())
+            self.clearMsgBox()
+        except ValueError:
+            fail = True
         if fail:
             self.messageBox.delete('0','end')
             self.messageBox.insert('0', 'invalid float encountered')
-            self.tolText.delete('0','end')
+            self.totText.delete('0','end')
             return
         else:
             self.clearMsgBox()
-        '''
-        # print test one or the other
-
 
         # got valid filters. filter current guiData
         filtered = []
@@ -138,7 +145,7 @@ class FilterGUI:
                 filtered.append(line)
             if '* total fail' in line:
                 # check it tolerance satisfied...
-                if float(line.split(' ')[-1][:-2]) > my_filter:
+                if float(line.split(' ')[-1][:-2]) > tot_filter:
 
                     # iterate backwards until reach number
                     it = num-1
@@ -175,12 +182,17 @@ class FilterGUI:
         self.topFrame = Frame(self.tk)
         self.topFrame.pack()
         # top frames
+
         self.filterFrame = Frame(self.topFrame)
         self.filterFrame.pack(side='left', anchor='w')
+        '''
         self.tolFilterFrame = Frame(self.filterFrame)
         self.tolFilterFrame.pack()
         self.nanFilterFrame = Frame(self.filterFrame)
         self.nanFilterFrame.pack()
+        '''
+        self.totFilterFrame = Frame(self.filterFrame)
+        self.totFilterFrame.pack()
         # ----------------------
         self.buttonsFrame = Frame(self.topFrame)
         self.buttonsFrame.pack()
@@ -189,6 +201,7 @@ class FilterGUI:
         self.messageFrame.pack()
 
         # add tolerance filter label and text box
+        '''
         self.tolLabel = Label(self.tolFilterFrame, text='tol filter:')
         self.tolLabel.pack(side='left', anchor='w')
         # -----------------------
@@ -200,6 +213,14 @@ class FilterGUI:
         # -----------------------
         self.nanText = Entry(self.nanFilterFrame, width='25')
         self.nanText.pack(anchor='w')
+        # =======================
+        '''
+        self.totLabel = Label(self.totFilterFrame, text='tot filter:')
+        self.totLabel.pack(side='left', anchor='w')
+        # -----------------------
+        self.totText = Entry(self.totFilterFrame, width='25')
+        self.totText.pack(anchor='w')
+
 
         # add buttons
         self.resetButton = Button(self.buttonsFrame, text='reset', command=self.reset)
