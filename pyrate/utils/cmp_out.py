@@ -17,6 +17,8 @@ import pickle
 import scipy.io     # scipy is the package. need must always import the module (io)
 from decimal import Decimal
 
+from PIL import Image
+
 # =================================================================
 # ARRAY CHECKING FUNCTIONS...
 # these could really be made into just 1 function
@@ -94,6 +96,10 @@ def chk_out_mats(m1, m2):
     it_r, it_c, it_e = (0,0,0)      # iterators. not pythonic, but whatever
     n_nan_mis = 0   # number of nan mismatches
     n_tol_mis = 0   # number of tolerance mismatches
+
+    # open up an image to put pixels to
+    img = Image.new('RGB', (n_r, n_c), (255, 255, 255))
+
     while it_e < n_e:
         it_r = 0
         while it_r < n_r:
@@ -106,6 +112,8 @@ def chk_out_mats(m1, m2):
                 if (not np.isnan(m1[it])) and (not np.isnan(m2[it])):  # both floats
                     # Duncan's way of checking if floats are equal...
                     if abs(m1[it].item() - m2[it].item()) > relative_tolerance:
+                        if fun_mode == 2:
+                            img.putpixel((it_r, it_c), (0, 255, 0))
                         # not within tolerance...
                         n_tol_mis += 1
                         if verbosity == 1 or verbosity == 2:
@@ -122,16 +130,22 @@ def chk_out_mats(m1, m2):
                     '''
                 else:   # atleast one of py[it], m2[it] is NaN
                     if (not np.isnan(m1[it])) and (np.isnan(m2[it])):
+                        if fun_mode == 2:
+                            img.putpixel((it_r, it_c), (255, 0, 0))
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should be NaN (but is not) @ '+str(it)+'\n'
                     if (np.isnan(m1[it])) and (not np.isnan(m2[it])):
+                        if fun_mode == 2:
+                            img.putpixel((it_r, it_c), (0, 0, 255))
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should not be NaN (but is) @ '+str(it)+'\n'
                 it_c += 1
             it_r += 1
         it_e += 1
+
+    img.save(er_img_rate_fn, 'PNG')
 
     er_str_prep = ''
     '''
@@ -237,6 +251,11 @@ for cont_fld in sorted_nums:
     rp_mt = rp_mt['refpt']
     rp_mt = rp_mt[0,0]
     rp_mt = (rp_mt[0].item()-1, rp_mt[1].item()-1)  # matlab reference point seems to be greater by 1 in each dimension
+
+    # paths where write out error image file
+    # overlay ontop of matlab image
+    #er_img_tsincr_fn = join(path, 'er_tsincr.png')     # do it just for rate for now
+    er_img_rate_fn = join(path, 'er_rate.png')
 
     ers = []
     if ('tsincr' in out_py) and ('tsincr' in out_mt):
