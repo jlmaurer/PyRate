@@ -19,6 +19,9 @@ from decimal import Decimal
 
 from PIL import Image
 
+import matplotlib.pyplot as plt
+from matplotlib import figure
+
 # =================================================================
 # ARRAY CHECKING FUNCTIONS...
 # these could really be made into just 1 function
@@ -98,7 +101,18 @@ def chk_out_mats(m1, m2):
     n_tol_mis = 0   # number of tolerance mismatches
 
     # open up an image to put pixels to
-    img = Image.new('RGB', (n_r, n_c), (255, 255, 255))
+    #img = Image.new('RGB', (n_r, n_c), (255, 255, 255))
+    if fun_mode == 2:
+        fig = plt.figure()
+        fig.set_size_inches(m2.shape[1], m2.shape[0])
+        ax = plt.Axes(fig, [0., 0., 1., 1.])
+        ax.set_axis_off()
+        fig.add_axes(ax)
+        plt.set_cmap('hot')
+        ax.imshow(m2, aspect = 'normal')
+        plt.savefig(er_img_rate_fn, dpi = 10)
+        # open it up in PIL now so we can add our hit markers *pttt* *pttt* <-- mw2. MLG!
+        img = Image.open(er_img_rate_fn)
 
     while it_e < n_e:
         it_r = 0
@@ -113,7 +127,7 @@ def chk_out_mats(m1, m2):
                     # Duncan's way of checking if floats are equal...
                     if abs(m1[it].item() - m2[it].item()) > relative_tolerance:
                         if fun_mode == 2:
-                            img.putpixel((it_r, it_c), (0, 255, 0))
+                            img.putpixel((it_c*10, it_r*10), (0, 0, 255))
                         # not within tolerance...
                         n_tol_mis += 1
                         if verbosity == 1 or verbosity == 2:
@@ -131,13 +145,15 @@ def chk_out_mats(m1, m2):
                 else:   # atleast one of py[it], m2[it] is NaN
                     if (not np.isnan(m1[it])) and (np.isnan(m2[it])):
                         if fun_mode == 2:
-                            img.putpixel((it_r, it_c), (255, 0, 0))
+                            for h in range(10):
+                                img.putpixel((it_c*10-5+h, it_r*10-5+h), (0, 0, 255))
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should be NaN (but is not) @ '+str(it)+'\n'
                     if (np.isnan(m1[it])) and (not np.isnan(m2[it])):
                         if fun_mode == 2:
-                            img.putpixel((it_r, it_c), (0, 0, 255))
+                            for h in range(10):
+                                img.putpixel((it_c*10-5+h, it_r*10-5+h), (0, 0, 255))
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should not be NaN (but is) @ '+str(it)+'\n'
@@ -145,7 +161,8 @@ def chk_out_mats(m1, m2):
             it_r += 1
         it_e += 1
 
-    img.save(er_img_rate_fn, 'PNG')
+    if fun_mode == 2:
+        img.save(er_img_rate_fn, 'PNG')
 
     er_str_prep = ''
     '''
