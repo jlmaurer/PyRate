@@ -239,7 +239,7 @@ class FilterGUI:
         self.messageBox.pack()
 
         # show the config file in text area...
-        self.logTxt = Text(self.showFrame, width=100, height=75)
+        self.logTxt = Text(self.showFrame, width=100, height=50)
         self.logTxt.pack()
 
         # actually show it
