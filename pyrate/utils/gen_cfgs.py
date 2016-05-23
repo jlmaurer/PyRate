@@ -36,27 +36,29 @@ base = [
     ['luigi', [0]],
 
     ['atmfit', [0]],     # Matt says don't use this
-                         # normally would have to specify atmfitmethod, atmfitlksx... afterward
+                         # normally would have to specify atmfitmethod, atmfitlksx...
 
     ['basepflag', [0]],  # needed for Matlab to work, Python will ignore it
     ['unwflag', [0]],    # not used in Python. leave as 0
-    ['prjflag', [3]],    # Re-project data from Line of sight, 1 = vertical, 2 = horizontal, 3 = no conversion
+    ['prjflag', [3]],    # Re-project data from Line of sight, 1 = vertical,
+                         # 2 = horizontal, 3 = no conversion
                          # 3 or run into problems. try others later
 
-    ['noDataAveragingThreshold', [0.5]],    # Sudipta says this is for network... doesn't look like it's even used
+    ['noDataAveragingThreshold', [0.5]],    # Sudipta says this is for network...
+                                            # doesn't look like it's even used
 
     ['noDataValue', [0.0]],     # depends on data. convert these values to NaNs
     ['nan_conversion', [1]],    # if you have a noDataValue convert it to NaN
 
     ['ifglks', [(1, 1)]],       # tuples for x and y looks
 
-    # stacking/velocity parameters
+    # stacking/rate parameters
     ['nsig', [2]],      # Matlab default 2
     ['pthr', [12]],     # don't exceed number of epochs
     ['maxsig', [2]],    # Matlab default 2
 
     ['vcmtmethod', [1]],    # Python uses general method 1... keep it at this
-    ['vcmsmethod', [1]],    # is calculated but not even used, only one that has looks, defaults to 10 looks
+    ['vcmsmethod', [1]],    # is calculated but not even used, only one that has looks
     ['vcmslksx', [10]],     # what to set for matlab
     ['vcmslksy', [10]],
 ]
@@ -65,7 +67,7 @@ base = [
 # ---------------------------------------------------------
 crop_b = [
     [
-        ['ifgcropopt', [1]],        # all ifgs the same size. don't need to do any processing
+        ['ifgcropopt', [1]],        # all ifgs the same size (sydney test data)
     ],
     #[
     #    ['ifgcropopt', [1, 2]],
@@ -87,45 +89,54 @@ orb_b = [
     #    ['orbfit', [1]],
     #    ['orbfitmethod', [1, 2]],
     #    ['orbfitdegrees', [1]],    # default 1
-    #    ['orbfitlks', [(5, 5)]],       # will probably depend on data
+    #    ['orbfitlks', [(5, 5)]],   # will probably depend on data
     #],
 ]
 
 ref_b = [
     [
-        ['refest', [2]],            # 1 is stupid
+        ['refest', [2]],
         ['refx', [0]],
         ['refy', [0]],
-        ['refn', [(7, 4)]],                    # good values are resolution(x)/10, resoloution(y)/10
-                                               # above will de-tuple to refnx, refny
-        ['refchipsize', [5]],                  # can't have an #1 even chipsize (refpixel.py line 137), #2 < 3, #3 greater than width
-        ['refminfrac', [0.8]],                 # default for matlab
+        ['refn', [(7, 4)]],         # good values are res(x)/10, res(y)/10
+                                    # above will de-tuple to refnx, refny
+        ['refchipsize', [5]],       # can't have a:
+                                    # - even chipsize (refpixel.py line 137),
+                                    # - < 3,
+                                    # - greater than width
+        ['refminfrac', [0.8]],      # default for matlab
     ],
 ]
 
 ts_b = [
     #[
-    #    ['tscal', [0]],        # will never test this (will always want to create time series)
+    #    ['tscal', [0]],        # will never test this (want to create time series)
     #],
     #[   # laplcian smoothing
     #    ['tscal', [1]],
     #    ['tsmethod', [1]],
     #
-    #    ['smorder', [1]],       # pyrate config.py says this and smfactor "NOT CURRENTLY USED" (but I think they are implemented)
-    #    ['smfactor', [1]],      # smorder: order of smoothing operator(1: first-order difference; 2: second-order difference)
-    #                            # smfactor: smoothing factor(0: calculate & plot L-curve; others: using the specific smoothing factor)
+    #    ['smorder', [1]],       # pyrate says this and smfactor "NOT CURRENTLY USED"
+    #                            # (but I think they are implemented)
+    #                            # smorder: order of smoothing operator
+    #                            #(1: first-order difference;
+    #                            # 2: second-order difference)
+    #    ['smfactor', [1]],      # smfactor: smoothing factor
+    #                            # (0: calculate & plot L-curve;
+    #                            # others: using the specific smoothing factor)
     #
     #    ['ts_pthr', [12]],      # don't exceed number of epochs
     #
-    #    ['ts_interp', [0]],     # Matlab laplacian only. default 0. Matt says keep this at 0
+    #    ['ts_interp', [0]],     # Matlab laplacian only. Matt says keep this at 0
     #
     #    ['stepest', [0]],       # Matlab only, default 0
     #],
-    [   # SVD (note pyrate required smorder & smfactor parameters (to run), even though they won't be used ==> dummy param
+    [   # SVD (note pyrate required smorder & smfactor parameters (to run),
+        # even though they won't be used
         ['tscal', [1]],
         ['tsmethod', [2]],
 
-        ['smorder', [1]],       # these aren't use for SVD, but Pyrate requires they exist (bug)
+        ['smorder', [1]],       # aren't use for SVD, but Pyrate requires them (bug)
         ['smfactor', [1]],
 
         ['ts_pthr', [12]],      # don't exceed number of epochs
