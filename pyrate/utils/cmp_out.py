@@ -18,9 +18,25 @@ import scipy.io     # scipy is the package. need must always import the module (
 from decimal import Decimal
 
 from PIL import Image
+from PIL import ImageDraw
 
 import matplotlib.pyplot as plt
 from matplotlib import figure
+
+MPL_SCALING = 10        # matplotlib scaling
+
+# =================================================================
+# MARKER DEFINITIONS...
+# =================================================================
+marker_tol = Image.new('RGBA', (MPL_SCALING, MPL_SCALING), (0, 0, 0, 0))      # fully transparent
+marker_nan1 = Image.new('RGBA', (MPL_SCALING, MPL_SCALING), (0, 0, 0, 0))
+marker_nan2 = Image.new('RGBA', (MPL_SCALING, MPL_SCALING), (0, 0, 0, 0))
+
+drawer = ImageDraw.ImageDraw(marker_tol)
+drawer.line((0, 0, 0, 9), (255, 0, 0, 255))     # fully opaque
+drawer.line((0, 0, 9, 0), (255, 0, 0, 255))
+drawer.line((9, 9, 9, 0), (255, 0, 0, 255))
+drawer.line((9, 9, 0, 9), (255, 0, 0, 255))
 
 # =================================================================
 # ARRAY CHECKING FUNCTIONS...
@@ -110,9 +126,15 @@ def chk_out_mats(m1, m2):
         fig.add_axes(ax)
         plt.set_cmap('hot')
         ax.imshow(m2, aspect = 'normal')
-        plt.savefig(er_img_rate_fn, dpi = 10)
+        plt.savefig(er_img_rate_fn, dpi=MPL_SCALING)   # pixels per data point...
         # open it up in PIL now so we can add our hit markers *pttt* *pttt* <-- mw2. MLG!
         img = Image.open(er_img_rate_fn)
+
+        '''
+        print m1.shape
+        print img.size
+        while True: pass
+        '''
 
     while it_e < n_e:
         it_r = 0
@@ -127,7 +149,8 @@ def chk_out_mats(m1, m2):
                     # Duncan's way of checking if floats are equal...
                     if abs(m1[it].item() - m2[it].item()) > relative_tolerance:
                         if fun_mode == 2:
-                            img.putpixel((it_c*10, it_r*10), (0, 0, 255))
+                            # img.putpixel((it_c*10, it_r*10), (0, 0, 255))
+                            img.paste(marker_tol, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_tol)
                         # not within tolerance...
                         n_tol_mis += 1
                         if verbosity == 1 or verbosity == 2:
@@ -145,15 +168,13 @@ def chk_out_mats(m1, m2):
                 else:   # atleast one of py[it], m2[it] is NaN
                     if (not np.isnan(m1[it])) and (np.isnan(m2[it])):
                         if fun_mode == 2:
-                            for h in range(10):
-                                img.putpixel((it_c*10-5+h, it_r*10-5+h), (0, 0, 255))
+                            img.paste(marker_tol, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_tol)
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should be NaN (but is not) @ '+str(it)+'\n'
                     if (np.isnan(m1[it])) and (not np.isnan(m2[it])):
                         if fun_mode == 2:
-                            for h in range(10):
-                                img.putpixel((it_c*10-5+h, it_r*10-5+h), (0, 0, 255))
+                            img.paste(marker_tol, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_tol)
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should not be NaN (but is) @ '+str(it)+'\n'
