@@ -64,9 +64,14 @@ drawer.line((0, MPL_SCALING-1, MPL_SCALING-1, 0), (0, 255, 0, 255))
 # ARRAY CHECKING FUNCTIONS...
 # these could really be made into just 1 function
 # =================================================================
+fig = plt.figure()
+rate_tot_hist = []  # where to store data for rate total fail histogram
+
 M1_N = 'py'  # matrix name. should be passed as a function
 M2_N = 'mt'
 def chk_out_mats(m1, m2):
+    global fig
+    global rate_tot_hist
     # checks pirate/pyrate (m1/m2) output arrays
     # will determine if 2d or 3d... can only deal with either of those two
     # returns an error string that you just plonk into the error file
@@ -141,7 +146,7 @@ def chk_out_mats(m1, m2):
     # open up an image to put pixels to
     #img = Image.new('RGB', (n_r, n_c), (255, 255, 255))
     if fun_mode == 2:
-        fig = plt.figure()
+        #fig = plt.figure()
         fig.set_size_inches(m2.shape[1], m2.shape[0])
         ax = plt.Axes(fig, [0., 0., 1., 1.])
         ax.set_axis_off()
@@ -215,10 +220,13 @@ def chk_out_mats(m1, m2):
     while True: pass
     '''
     if n_tol_mis != 0 or n_nan_mis != 0:
+        # if we got some errors
         tot_pix = m1.shape[0]*m1.shape[1]*n_e
         tol_percent = (float(n_tol_mis)/tot_pix)*100
         nan_percent = (float(n_nan_mis)/tot_pix)*100
         tot_percent = (float(n_tol_mis+n_nan_mis)/tot_pix)*100
+        # add data to histogram...
+        rate_tot_hist.append(tot_percent)
         er_str_prep += '\t'*4+'* tolerance errors = '+str(n_tol_mis)+'/'+str(tot_pix)+' = '+str(tol_percent)+'%\n'
         er_str_prep += '\t'*4+'* NaN errors       = '+str(n_nan_mis)+'/'+str(tot_pix)+' = '+str(nan_percent)+'%\n'
         er_str_prep += '\t'*4+'* total fail       = '+str(n_tol_mis+n_nan_mis)+'/'+str(tot_pix)+' = '+str(tot_percent)+'%\n'
@@ -353,3 +361,14 @@ for cont_fld in sorted_nums:
                 out_fp.write(er[1])     # <-- pass an indent level parameter
 #out_fp.write('test!!!!')
 out_fp.close()
+
+fig2 = plt.figure()
+# create histograms
+# hopefully error distribution images don't interfere
+plt.hist(rate_tot_hist, 100, range=[0, 100])
+
+#fig3 = plt.figure()
+
+
+
+plt.show()
