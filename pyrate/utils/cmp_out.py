@@ -326,6 +326,10 @@ else:
     # out_fn should be what we want
     pass
 '''
+if not os.path.isdir(out_direct):
+    # create the directory
+    os.mkdir(out_direct)
+
 # check if output image directory exists... if not create it...
 image_direct = join(out_direct, 'error_maps_rate')
 if not os.path.isdir(image_direct):
