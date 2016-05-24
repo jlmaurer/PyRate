@@ -65,16 +65,39 @@ drawer.line((0, MPL_SCALING-1, MPL_SCALING-1, 0), (0, 255, 0, 255))
 # these could really be made into just 1 function
 # =================================================================
 fig = plt.figure()
-rate_tot_hist = []  # where to store data for rate total fail histogram
+
+# histogram data (percentages)
+# get the length of these to get the total amount of errors
+hist_rate_tol = []
+hist_rate_nan1 = []
+hist_rate_nan2 = []
+hist_rate_nans = []
+hist_rate_tot = []
+# ------------------------------
+hist_ts_tol = []
+hist_ts_nan1 = []
+hist_ts_nan2 = []
+hist_ts_nans = []
+hist_ts_tot = []
+
+n_rate_ref = 0
+n_ts_ref = 0
+n_no_ref_fail = 0   # could probably get this some better way. but watever...
 
 M1_N = 'py'  # matrix name. should be passed as a function
 M2_N = 'mt'
 def chk_out_mats(m1, m2):
-    global fig
-    global rate_tot_hist
+    global fig # this might not need to be global
+    global n_rate_ref, n_ts_ref, n_no_ref_fail
+    # appending to histograms shouldn't need require them being global?
     # checks pirate/pyrate (m1/m2) output arrays
     # will determine if 2d or 3d... can only deal with either of those two
     # returns an error string that you just plonk into the error file
+    n_rate_tol, n_rate_nan1, n_rate_nan2 = (0, 0, 0)
+    n_ts_tol, n_ts_nan1, n_ts_nan2 = (0, 0, 0)
+
+    fun_mode = len(m1.shape)              # function mode. 2d or 3d matrices. don't bother checking otherwise. assume can't happen
+
     relative_tolerance=0.1      # todo: have this as function and program argument
 
     er_str = ''     # the error string we build up
@@ -85,7 +108,12 @@ def chk_out_mats(m1, m2):
         er_str += '\t'*4+'* REFERENCE PIXELS DO NOT MATCH...\n'
         er_str += '\t'*5+'* '+M1_N+' is '+repr(rp_py)+'\n'
         er_str += '\t'*5+'* '+M2_N+' is '+repr(rp_mt)+'\n'
+        # don't include in histogram or others... only keep track of in n_ref_fail
+        if fun_mode == 2: n_rate_ref += 1
+        if fun_mode == 3: n_ts_ref += 1
         return er_str           # exit here. won't be anything meaningful
+
+    n_no_ref_fail += 1
 
     er_array_shapes = ''
     if m1.shape != m2.shape:
@@ -132,7 +160,7 @@ def chk_out_mats(m1, m2):
     print len(m1.shape)
     while True: pass
     '''
-    fun_mode = len(m1.shape)              # function mode. 2d or 3d matrices. don't bother checking otherwise. assume can't happen
+
     if fun_mode == 2:
         n_r, n_c = m1.shape
         n_e = 1
@@ -140,8 +168,6 @@ def chk_out_mats(m1, m2):
         n_r, n_c, n_e = m1.shape        # number of rows, cols, epochs
 
     it_r, it_c, it_e = (0,0,0)      # iterators. not pythonic, but whatever
-    n_nan_mis = 0   # number of nan mismatches
-    n_tol_mis = 0   # number of tolerance mismatches
 
     # open up an image to put pixels to
     #img = Image.new('RGB', (n_r, n_c), (255, 255, 255))
@@ -177,33 +203,26 @@ def chk_out_mats(m1, m2):
                     # Duncan's way of checking if floats are equal...
                     if abs(m1[it].item() - m2[it].item()) > relative_tolerance:
                         if fun_mode == 2:
-                            # img.putpixel((it_c*10, it_r*10), (0, 0, 255))
+                            n_rate_tol += 1
                             img.paste(marker_tol, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_tol)
-                        # not within tolerance...
-                        n_tol_mis += 1
+                        if fun_mode == 3:n_ts_tol += 1
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* do not match to tolerance @ '+str(it)+'\n'
                             er_str += '\t'*5+'* '+M1_N+' = '+str(Decimal(m1[it].item()))+'\n'
                             er_str += '\t'*5+'* '+M2_N+' = '+str(Decimal(m2[it].item()))+'\n'
-                    '''
-                    # my original ideas about checking if floats are equal...
-                    # check if match to a certain number of decimal places
-                    if truncate(m1[it].item(),1) != truncate(m2[it].item(),1):
-                        er_str += ' '*8+'* do not match to precision @ '+str(it)+'\n'
-                        er_str += ' '*12+'* m1 = '+str(Decimal(m1[it].item()))+'\n'
-                        er_str += ' '*12+'* m2 = '+str(Decimal(m2[it].item()))+'\n'
-                    '''
                 else:   # atleast one of py[it], m2[it] is NaN
                     if (not np.isnan(m1[it])) and (np.isnan(m2[it])):
                         if fun_mode == 2:
+                            n_rate_nan1 += 1
                             img.paste(marker_nan1, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_nan1)
-                        n_nan_mis += 1
+                        if fun_mode == 3: n_ts_nan1 += 1
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should be NaN (but is not) @ '+str(it)+'\n'
                     if (np.isnan(m1[it])) and (not np.isnan(m2[it])):
                         if fun_mode == 2:
+                            n_rate_nan2 += 1
                             img.paste(marker_nan2, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_nan2)
-                        n_nan_mis += 1
+                        if fun_mode == 3: n_ts_nan2 += 1
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should not be NaN (but is) @ '+str(it)+'\n'
                 it_c += 1
@@ -219,17 +238,36 @@ def chk_out_mats(m1, m2):
     print n_nan_mis
     while True: pass
     '''
-    if n_tol_mis != 0 or n_nan_mis != 0:
-        # if we got some errors
-        tot_pix = m1.shape[0]*m1.shape[1]*n_e
-        tol_percent = (float(n_tol_mis)/tot_pix)*100
-        nan_percent = (float(n_nan_mis)/tot_pix)*100
-        tot_percent = (float(n_tol_mis+n_nan_mis)/tot_pix)*100
-        # add data to histogram...
-        rate_tot_hist.append(tot_percent)
-        er_str_prep += '\t'*4+'* tolerance errors = '+str(n_tol_mis)+'/'+str(tot_pix)+' = '+str(tol_percent)+'%\n'
-        er_str_prep += '\t'*4+'* NaN errors       = '+str(n_nan_mis)+'/'+str(tot_pix)+' = '+str(nan_percent)+'%\n'
-        er_str_prep += '\t'*4+'* total fail       = '+str(n_tol_mis+n_nan_mis)+'/'+str(tot_pix)+' = '+str(tot_percent)+'%\n'
+
+    tot_pix = m1.shape[0]*m1.shape[1]*n_e       # will be the same for either function mode
+    if fun_mode == 2:
+        percent_tol = (float(n_rate_tol)/tot_pix)*100
+        if percent_tol != 0.0: hist_rate_tol.append(percent_tol)       # append only if not zero...
+        percent_nan1 = (float(n_rate_nan1)/tot_pix)*100
+        if percent_nan1 != 0.0: hist_rate_nan1.append(percent_nan1)
+        percent_nan2 = (float(n_rate_nan2)/tot_pix)*100
+        if percent_nan2 != 0.0: hist_rate_nan2.append(percent_nan2)
+        percent_nans = percent_nan1 + percent_nan2
+        if percent_nans != 0.0: hist_rate_nans.append(percent_nans)
+        percent_tot = percent_nans + percent_tol
+        if percent_tot != 0.0: hist_rate_tot.append(percent_tot)
+
+    if fun_mode == 3:
+        percent_tol = (float(n_ts_tol)/tot_pix)*100
+        if percent_tol != 0.0: hist_ts_tol.append(percent_tol)
+        percent_nan1 = (float(n_ts_nan1)/tot_pix)*100
+        if percent_nan1 != 0.0: hist_ts_nan1.append(percent_nan1)
+        percent_nan2 = (float(n_ts_nan2)/tot_pix)*100
+        if percent_nan2 != 0.0: hist_ts_nan2.append(percent_nan2)
+        percent_nans = percent_nan1 + percent_nan2
+        if percent_nans != 0.0: hist_ts_nans.append(percent_nans)
+        percent_tot = percent_nans + percent_tol
+        if percent_tot != 0.0: hist_ts_tot.append(percent_tot)
+
+    if percent_tot != 0.0:        # only print to log file if have errors...
+        er_str_prep += '\t'*4+'* tolerance errors = '+str(percent_tol)+'%\n'
+        er_str_prep += '\t'*4+'* NaN errors       = '+str(percent_nans)+'%\n'
+        er_str_prep += '\t'*4+'* total fail       = '+str(percent_tot)+'%\n'
 
     er_str = er_array_shapes+er_str_prep+er_str
     return er_str
@@ -359,16 +397,106 @@ for cont_fld in sorted_nums:
             if er[1] != '':
                 out_fp.write('\t'*3+'* '+er[0]+'\n')
                 out_fp.write(er[1])     # <-- pass an indent level parameter
-#out_fp.write('test!!!!')
+
+# write out end of run metrics (n_ref_fail, etc.)
 out_fp.close()
 
+# plot histograms... store in /histogram folder of out_direct
+histo_d = join(out_direct, 'histograms')
+if not os.path.isdir(histo_d):
+    os.mkdir(histo_d)
+
+# rate
 fig2 = plt.figure()
-# create histograms
-# hopefully error distribution images don't interfere
-plt.hist(rate_tot_hist, 100, range=[0, 100])
+plt.hist(hist_rate_tol, 100, range=[0, 100])
+plt.title('rate_tol')
+plt.xlabel('x')
+plt.ylabel('y')
 
-#fig3 = plt.figure()
+fig3 = plt.figure()
+plt.hist(hist_rate_nan1, 100, range=[0, 100])
+plt.title('rate_nan1')
+plt.xlabel('x')
+plt.ylabel('y')
 
+fig4 = plt.figure()
+plt.hist(hist_rate_nan2, 100, range=[0, 100])
+plt.title('rate_nan2')
+plt.xlabel('x')
+plt.ylabel('y')
 
+fig5 = plt.figure()
+plt.hist(hist_rate_nans, 100, range=[0, 100])
+plt.title('rate_nans')
+plt.xlabel('x')
+plt.ylabel('y')
+
+fig6 = plt.figure()
+plt.hist(hist_rate_tot, 100, range=[0, 100])
+plt.title('rate_tot')
+plt.xlabel('x')
+plt.ylabel('y')
+
+# ts algorithm
+fig7 = plt.figure()
+plt.hist(hist_ts_tol, 100, range=[0, 100])
+plt.title('ts_tol')
+plt.xlabel('x')
+plt.ylabel('y')
+
+fig8 = plt.figure()
+plt.hist(hist_ts_nan1, 100, range=[0, 100])
+plt.title('ts_nan1')
+plt.xlabel('x')
+plt.ylabel('y')
+
+fig9 = plt.figure()
+plt.hist(hist_ts_nan2, 100, range=[0, 100])
+plt.title('ts_nan2')
+plt.xlabel('x')
+plt.ylabel('y')
+
+fig10 = plt.figure()
+plt.hist(hist_ts_nans, 100, range=[0, 100])
+plt.title('ts_nans')
+plt.xlabel('x')
+plt.ylabel('y')
+
+fig11 = plt.figure()
+plt.hist(hist_ts_tot, 100, range=[0, 100])
+plt.title('ts_tot')
+plt.xlabel('x')
+plt.ylabel('y')
+
+# both algorithms
+fig12 = plt.figure()
+plt.hist(hist_ts_tol+hist_rate_tol, 100, range=[0, 100])
+plt.title('tol')
+plt.xlabel('x')
+plt.ylabel('y')
+
+fig13 = plt.figure()
+plt.hist(hist_ts_nan1+hist_rate_nan1, 100, range=[0, 100])
+plt.title('ts_nan1')
+plt.xlabel('x')
+plt.ylabel('y')
+
+fig14 = plt.figure()
+plt.hist(hist_ts_nan2+hist_rate_nan2, 100, range=[0, 100])
+plt.title('ts_nan2')
+plt.xlabel('x')
+plt.ylabel('y')
+
+fig15 = plt.figure()
+plt.hist(hist_ts_nans+hist_rate_nans, 100, range=[0, 100])
+plt.title('ts_nans')
+plt.xlabel('x')
+plt.ylabel('y')
+
+fig16 = plt.figure()
+plt.hist(hist_ts_tot+hist_rate_tot, 100, range=[0, 100])
+plt.title('ts_tot')
+plt.xlabel('x')
+plt.ylabel('y')
 
 plt.show()
