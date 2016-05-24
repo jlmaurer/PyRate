@@ -148,9 +148,10 @@ def chk_out_mats(m1, m2):
         fig.add_axes(ax)
         plt.set_cmap('hot')
         ax.imshow(m2, aspect = 'normal')
-        plt.savefig(er_img_rate_fn, dpi=MPL_SCALING)   # pixels per data point...
+        img_fn = join(image_direct, 'rate_error_'+cont_fld+'.png')
+        plt.savefig(img_fn, dpi=MPL_SCALING)   # pixels per data point...
         # open it up in PIL now so we can add our hit markers *pttt* *pttt* <-- mw2. MLG!
-        img = Image.open(er_img_rate_fn)
+        img = Image.open(img_fn)
 
         '''
         print m1.shape
@@ -205,7 +206,7 @@ def chk_out_mats(m1, m2):
         it_e += 1
 
     if fun_mode == 2:
-        img.save(er_img_rate_fn, 'PNG')
+        img.save(img_fn, 'PNG')
 
     er_str_prep = ''
     '''
@@ -228,7 +229,7 @@ def chk_out_mats(m1, m2):
 # =================================================================
 
 import getopt
-opts, args = getopt.getopt(sys.argv[1:], 'd:i:j:v:', ['od=','of='])
+opts, args = getopt.getopt(sys.argv[1:], 'd:i:j:v:', ['od=','of=', 'id='])
 # usage checking
 if opts == [] and args != []:
     print 'read usage'
@@ -255,6 +256,8 @@ for opt in opts:
         out_fn = opt[1]
     if opt[0] == '-v':
         verbosity = int(opt[1])
+    if opt[0] == '--id':
+        image_direct = opt[1]       # directory to output images too... replaces er_img_rate_fn
 # checking for valid output options
 if out_direct != False and out_fn != False:
     print 'can only have one or the other or none of --od and --of'
@@ -277,6 +280,11 @@ else:
     # out_fn should be what we want
     pass
 '''
+# check if output image directory exists... if not create it...
+if not os.path.isdir(image_direct):
+    # create the directory
+    os.mkdir(image_direct)
+
 print 'writing output to '+out_fn
 out_fp = open(name=out_fn, mode='w')
 out_fp.write('cmp_out.py log file\n')
@@ -315,7 +323,7 @@ for cont_fld in sorted_nums:
     # paths where write out error image file
     # overlay ontop of matlab image
     #er_img_tsincr_fn = join(path, 'er_tsincr.png')     # do it just for rate for now
-    er_img_rate_fn = join(path, 'er_rate.png')
+    #er_img_rate_fn = join(path, 'er_rate.png')
 
     ers = []
     if ('tsincr' in out_py) and ('tsincr' in out_mt):
