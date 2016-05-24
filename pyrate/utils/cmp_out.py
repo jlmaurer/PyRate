@@ -327,6 +327,7 @@ else:
     pass
 '''
 # check if output image directory exists... if not create it...
+image_direct = join(out_direct, 'error_maps_rate')
 if not os.path.isdir(image_direct):
     # create the directory
     os.mkdir(image_direct)
@@ -412,30 +413,35 @@ plt.hist(hist_rate_tol, 100, range=[0, 100])
 plt.title('rate_tol')
 plt.xlabel('x')
 plt.ylabel('y')
+fig2.savefig(join(histo_d, 'rate_tol.png'), bbox_inches='tight')
 
 fig3 = plt.figure()
 plt.hist(hist_rate_nan1, 100, range=[0, 100])
 plt.title('rate_nan1')
 plt.xlabel('x')
 plt.ylabel('y')
+fig3.savefig(join(histo_d, 'rate_nan1.png'), bbox_inches='tight')
 
 fig4 = plt.figure()
 plt.hist(hist_rate_nan2, 100, range=[0, 100])
 plt.title('rate_nan2')
 plt.xlabel('x')
 plt.ylabel('y')
+fig4.savefig(join(histo_d, 'rate_nan2.png'), bbox_inches='tight')
 
 fig5 = plt.figure()
 plt.hist(hist_rate_nans, 100, range=[0, 100])
 plt.title('rate_nans')
 plt.xlabel('x')
 plt.ylabel('y')
+fig5.savefig(join(histo_d, 'rate_nans.png'), bbox_inches='tight')
 
 fig6 = plt.figure()
 plt.hist(hist_rate_tot, 100, range=[0, 100])
 plt.title('rate_tot')
 plt.xlabel('x')
 plt.ylabel('y')
+fig6.savefig(join(histo_d, 'rate_tot.png'), bbox_inches='tight')
 
 # ts algorithm
 fig7 = plt.figure()
@@ -443,30 +449,35 @@ plt.hist(hist_ts_tol, 100, range=[0, 100])
 plt.title('ts_tol')
 plt.xlabel('x')
 plt.ylabel('y')
+fig7.savefig(join(histo_d, 'ts_tol.png'), bbox_inches='tight')
 
 fig8 = plt.figure()
 plt.hist(hist_ts_nan1, 100, range=[0, 100])
 plt.title('ts_nan1')
 plt.xlabel('x')
 plt.ylabel('y')
+fig8.savefig(join(histo_d, 'ts_nan1.png'), bbox_inches='tight')
 
 fig9 = plt.figure()
 plt.hist(hist_ts_nan2, 100, range=[0, 100])
 plt.title('ts_nan2')
 plt.xlabel('x')
 plt.ylabel('y')
+fig9.savefig(join(histo_d, 'ts_nan2.png'), bbox_inches='tight')
 
 fig10 = plt.figure()
 plt.hist(hist_ts_nans, 100, range=[0, 100])
 plt.title('ts_nans')
 plt.xlabel('x')
 plt.ylabel('y')
+fig10.savefig(join(histo_d, 'ts_nans.png'), bbox_inches='tight')
 
 fig11 = plt.figure()
 plt.hist(hist_ts_tot, 100, range=[0, 100])
 plt.title('ts_tot')
 plt.xlabel('x')
 plt.ylabel('y')
+fig11.savefig(join(histo_d, 'ts_tot.png'), bbox_inches='tight')
 
 # both algorithms
 fig12 = plt.figure()
@@ -474,29 +485,34 @@ plt.hist(hist_ts_tol+hist_rate_tol, 100, range=[0, 100])
 plt.title('tol')
 plt.xlabel('x')
 plt.ylabel('y')
+fig12.savefig(join(histo_d, 'both_tol.png'), bbox_inches='tight')
 
 fig13 = plt.figure()
 plt.hist(hist_ts_nan1+hist_rate_nan1, 100, range=[0, 100])
 plt.title('ts_nan1')
 plt.xlabel('x')
 plt.ylabel('y')
+fig13.savefig(join(histo_d, 'both_nan1.png'), bbox_inches='tight')
 
 fig14 = plt.figure()
 plt.hist(hist_ts_nan2+hist_rate_nan2, 100, range=[0, 100])
 plt.title('ts_nan2')
 plt.xlabel('x')
 plt.ylabel('y')
+fig14.savefig(join(histo_d, 'both_nan2.png'), bbox_inches='tight')
 
 fig15 = plt.figure()
 plt.hist(hist_ts_nans+hist_rate_nans, 100, range=[0, 100])
 plt.title('ts_nans')
 plt.xlabel('x')
 plt.ylabel('y')
+fig15.savefig(join(histo_d, 'both_nans.png'), bbox_inches='tight')
 
 fig16 = plt.figure()
 plt.hist(hist_ts_tot+hist_rate_tot, 100, range=[0, 100])
 plt.title('ts_tot')
 plt.xlabel('x')
 plt.ylabel('y')
+fig16.savefig(join(histo_d, 'both_tot.png'), bbox_inches='tight')
 
-plt.show()
+#plt.show()
