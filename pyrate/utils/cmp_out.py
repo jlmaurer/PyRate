@@ -23,7 +23,7 @@ from PIL import ImageDraw
 import matplotlib.pyplot as plt
 from matplotlib import figure
 
-MPL_SCALING = 10        # matplotlib scaling
+MPL_SCALING = 11        # matplotlib scaling
 
 # =================================================================
 # MARKER DEFINITIONS...
@@ -32,11 +32,33 @@ marker_tol = Image.new('RGBA', (MPL_SCALING, MPL_SCALING), (0, 0, 0, 0))      # 
 marker_nan1 = Image.new('RGBA', (MPL_SCALING, MPL_SCALING), (0, 0, 0, 0))
 marker_nan2 = Image.new('RGBA', (MPL_SCALING, MPL_SCALING), (0, 0, 0, 0))
 
+# blue square box for tolerance errors
 drawer = ImageDraw.ImageDraw(marker_tol)
-drawer.line((0, 0, 0, 9), (255, 0, 0, 255))     # fully opaque
-drawer.line((0, 0, 9, 0), (255, 0, 0, 255))
-drawer.line((9, 9, 9, 0), (255, 0, 0, 255))
-drawer.line((9, 9, 0, 9), (255, 0, 0, 255))
+drawer.line((0, 0, 0, MPL_SCALING-1), (0, 0, 255, 255))     # fully opaque
+drawer.line((0, 0, MPL_SCALING-1, 0), (0, 0, 255, 255))
+drawer.line((MPL_SCALING-1, MPL_SCALING-1, MPL_SCALING-1, 0), (0, 0, 255, 255))
+drawer.line((MPL_SCALING-1, MPL_SCALING-1, 0, MPL_SCALING-1), (0, 0, 255, 255))
+
+# green '+' for nan type 1
+drawer = ImageDraw.ImageDraw(marker_nan1)
+drawer.line((0, 0, 0, MPL_SCALING-1), (0, 255, 0, 255))     # fully opaque
+drawer.line((0, 0, MPL_SCALING-1, 0), (0, 255, 0, 255))
+drawer.line((MPL_SCALING-1, MPL_SCALING-1, MPL_SCALING-1, 0), (0, 255, 0, 255))
+drawer.line((MPL_SCALING-1, MPL_SCALING-1, 0, MPL_SCALING-1), (0, 255, 0, 255))
+# ------------------
+mid = MPL_SCALING/2 # don't need to +1 because indexing starts @ 0
+drawer.line((0, mid, MPL_SCALING-1, mid), (0, 255, 0, 255))
+drawer.line((mid, 0, mid, MPL_SCALING-1), (0, 255, 0, 255))
+
+# green 'x' for nan type 2
+drawer = ImageDraw.ImageDraw(marker_nan2)
+drawer.line((0, 0, 0, MPL_SCALING-1), (0, 255, 0, 255))     # fully opaque
+drawer.line((0, 0, MPL_SCALING-1, 0), (0, 255, 0, 255))
+drawer.line((MPL_SCALING-1, MPL_SCALING-1, MPL_SCALING-1, 0), (0, 255, 0, 255))
+drawer.line((MPL_SCALING-1, MPL_SCALING-1, 0, MPL_SCALING-1), (0, 255, 0, 255))
+# ------------------
+drawer.line((0, 0, MPL_SCALING-1, MPL_SCALING-1), (0, 255, 0, 255))
+drawer.line((0, MPL_SCALING-1, MPL_SCALING-1, 0), (0, 255, 0, 255))
 
 # =================================================================
 # ARRAY CHECKING FUNCTIONS...
@@ -168,13 +190,13 @@ def chk_out_mats(m1, m2):
                 else:   # atleast one of py[it], m2[it] is NaN
                     if (not np.isnan(m1[it])) and (np.isnan(m2[it])):
                         if fun_mode == 2:
-                            img.paste(marker_tol, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_tol)
+                            img.paste(marker_nan1, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_nan1)
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should be NaN (but is not) @ '+str(it)+'\n'
                     if (np.isnan(m1[it])) and (not np.isnan(m2[it])):
                         if fun_mode == 2:
-                            img.paste(marker_tol, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_tol)
+                            img.paste(marker_nan2, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_nan2)
                         n_nan_mis += 1
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should not be NaN (but is) @ '+str(it)+'\n'
