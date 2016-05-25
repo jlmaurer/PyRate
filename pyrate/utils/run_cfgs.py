@@ -31,10 +31,14 @@ import os
 import threading
 import subprocess
 import time
-
 from os.path import join
-
 from copy import deepcopy
+from subprocess import Popen, PIPE, STDOUT
+try:
+    from subprocess import DEVNULL # py3k
+except ImportError:
+    import os
+    DEVNULL = open(os.devnull, 'wb')
 
 N_PROCS = 10    # max number of procs want to allow. TODO: make this adaptive
 procs = []
@@ -79,7 +83,7 @@ PYRATEPATH = os.environ['PYRATEPATH']
 #mcc_exec_pth = '/nas/gemd/insar/pr_testing/mcc/v1_uni/pirate'
 #mcc_exec_pth = '/nas/gemd/insar/pr_testing/mcc/v2_uni/pirate'
 #mcc_exec_pth = '/home/gap/pr_testing/mcc/v2_uni/pirate'
-mcc_exec_pth = '/nas/gemd/insar/Users/Paskos/pr_testing/mcc/v2_uni/pirate'
+mcc_exec_pth = '/nas/users/u43382/unix/ih/pr_testing/mcc/v2_uni/pirate'
 mcc_env = deepcopy(os.environ)
 mcc_env['LD_LIBRARY_PATH'] = "/nas/users/u43382/unix/ih/MATLAB/MATLAB_Runtime/v85/runtime/glnxa64:/nas/users/u43382/unix/ih/MATLAB/MATLAB_Runtime/v85/bin/glnxa64:/nas/users/u43382/unix/ih/MATLAB/MATLAB_Runtime/v85/sys/os/glnxa64"
 #mcc_env['LD_LIBRARY_PATH'] = "/usr/local/MATLAB/MATLAB_Runtime/v85/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v85/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v85/sys/os/glnxa64"
@@ -100,21 +104,22 @@ def spawner(spawn_type, prog):
                 while len(procs) >= N_PROCS:
                     time.sleep(1)   # TODO: wat set this to
                 # since this is the only spawner, queue won't be refilled
-                procs.append(subprocess.Popen(['python', join(PYRATEPATH,'pyrate','scripts', 'run_prepifg.py'), join(path,file)]))
+                procs.append(subprocess.Popen(['python', join(PYRATEPATH,'pyrate','scripts', 'run_prepifg.py'), join(path,file)], stdin=PIPE, stdout=DEVNULL, stderr=STDOUT))
             if (file[-5:] == '.pcfg' and (p_only or both) and spawn_type == SCND_PASS):
                 # we want to run this config file. but only if there is space in the queue to do so
                 while len(procs) >= N_PROCS:
                     time.sleep(1)   # TODO: wat set this to
                 # since this is the only spawner, queue won't be refilled
-                procs.append(subprocess.Popen(['python', join(PYRATEPATH,'pyrate','scripts', 'run_pyrate.py'), join(path,file)]))
+                procs.append(subprocess.Popen(['python', join(PYRATEPATH,'pyrate','scripts', 'run_pyrate.py'), join(path,file)], stdin=PIPE, stdout=DEVNULL, stderr=STDOUT))
             if (file[-5:] == '.mcfg' and (m_only or both) and spawn_type == SCND_PASS):
                 # we want to run this config file. but only if there is space in the queue to do so
                 while len(procs) >= N_PROCS:
                     time.sleep(1)   # TODO: wat set this to
-                procs.append(subprocess.Popen([mcc_exec_pth, join(path,file)], env=mcc_env))
+                procs.append(subprocess.Popen([mcc_exec_pth, join(path,file)], env=mcc_env, stdin=PIPE, stdout=DEVNULL, stderr=STDOUT))
     spawner_fin = True
 
 def oversee():
+    global n_prep_left, n_runs_left, prep_fin
     while True:
         if procs != []:
             for proc in procs:
@@ -122,11 +127,34 @@ def oversee():
                 if proc.poll() == None:     # process hasn't returned yet
                     time.sleep(0.1)     # may not need to sleep here
                 else:
-                    print proc.poll()   # better to assign to variable
+                    #print proc.poll()   # better to assign to variable
                     # inspect return code, but for now just remove from list
                     procs.remove(proc)
+                    # print updates
+                    if n_prep_left > 0:
+                        n_prep_left -= 1
+                        print str(n_prep_left)+' prep_ifgs left'
+                    if n_prep_left == 0 and prep_fin == False:
+                        print 'finished prepping. starting running...'
+                        print str(n_runs_left)+' PyRate and Pirate runs left'
+                        prep_fin = True
+                        continue
+                    if prep_fin:
+                        n_runs_left -= 1
+                        print str(n_runs_left)+' PyRate and Pirate runs left'
         elif spawner_fin:
             break
+
+# firstly figure out how many directories to give indication of time taken
+n_to_run = 0
+for path, dirs, files in os.walk(root_d):
+    for file in files:
+        if file[-5:] == '.pcfg':
+            n_to_run += 1
+n_prep_left = n_to_run
+n_runs_left = 2*n_to_run
+prep_fin = False
+print str(n_prep_left)+' prep_ifgs left'
 
 if p_only or both:
     spawner_fin = False

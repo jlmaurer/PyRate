@@ -84,11 +84,15 @@ n_rate_ref = 0
 n_ts_ref = 0
 n_no_ref_fail = 0   # could probably get this some better way. but watever...
 
+n_rate_total = 0
+n_ts_total = 0
+
 M1_N = 'py'  # matrix name. should be passed as a function
 M2_N = 'mt'
 def chk_out_mats(m1, m2):
     global fig # this might not need to be global
     global n_rate_ref, n_ts_ref, n_no_ref_fail
+    global n_rate_total, n_ts_total
     # appending to histograms shouldn't need require them being global?
     # checks pirate/pyrate (m1/m2) output arrays
     # will determine if 2d or 3d... can only deal with either of those two
@@ -172,7 +176,8 @@ def chk_out_mats(m1, m2):
     # open up an image to put pixels to
     #img = Image.new('RGB', (n_r, n_c), (255, 255, 255))
     if fun_mode == 2:
-        #fig = plt.figure()
+        #fig = plt.figure()     # this creates a new figure. use below instead.
+        fig.clf()
         fig.set_size_inches(m2.shape[1], m2.shape[0])
         ax = plt.Axes(fig, [0., 0., 1., 1.])
         ax.set_axis_off()
@@ -241,6 +246,7 @@ def chk_out_mats(m1, m2):
 
     tot_pix = m1.shape[0]*m1.shape[1]*n_e       # will be the same for either function mode
     if fun_mode == 2:
+        n_rate_total += 1   # add to number of tests...
         percent_tol = (float(n_rate_tol)/tot_pix)*100
         if percent_tol != 0.0: hist_rate_tol.append(percent_tol)       # append only if not zero...
         percent_nan1 = (float(n_rate_nan1)/tot_pix)*100
@@ -253,6 +259,7 @@ def chk_out_mats(m1, m2):
         if percent_tot != 0.0: hist_rate_tot.append(percent_tot)
 
     if fun_mode == 3:
+        n_ts_total += 1
         percent_tol = (float(n_ts_tol)/tot_pix)*100
         if percent_tol != 0.0: hist_ts_tol.append(percent_tol)
         percent_nan1 = (float(n_ts_nan1)/tot_pix)*100
@@ -275,7 +282,7 @@ def chk_out_mats(m1, m2):
 # =================================================================
 
 import getopt
-opts, args = getopt.getopt(sys.argv[1:], 'd:i:j:v:', ['od=','of=', 'id='])
+opts, args = getopt.getopt(sys.argv[1:], 'd:i:j:v:', ['od=','of='])
 # usage checking
 if opts == [] and args != []:
     print 'read usage'
@@ -302,8 +309,6 @@ for opt in opts:
         out_fn = opt[1]
     if opt[0] == '-v':
         verbosity = int(opt[1])
-    if opt[0] == '--id':
-        image_direct = opt[1]       # directory to output images too... replaces er_img_rate_fn
 # checking for valid output options
 if out_direct != False and out_fn != False:
     print 'can only have one or the other or none of --od and --of'
@@ -404,12 +409,64 @@ for cont_fld in sorted_nums:
                 out_fp.write(er[1])     # <-- pass an indent level parameter
 
 # write out end of run metrics (n_ref_fail, etc.)
+out_fp.write('\nSET METRICS')
+out_fp.write('\n===========\n')
+# -----------------------------------------------------
+met_string = ''
+tot_tested = n_no_ref_fail + n_rate_ref + n_ts_ref
+met_string += '* '+str(tot_tested)+' configuration files tested\n'
+temp_val = (float(n_rate_ref)/tot_tested)*100
+met_string += '* rate reference fails = '+str(n_rate_ref)+'/'+str(tot_tested)+' = '+str(temp_val)+'%\n'
+temp_val = (float(n_ts_ref)/tot_tested)*100
+met_string += '* ts reference fails = '+str(n_ts_ref)+'/'+str(tot_tested)+' = '+str(temp_val)+'%\n'
+temp_val = (float(n_ts_ref+n_rate_ref)/tot_tested)*100
+met_string += '* rate&ts reference fails = '+str(n_rate_ref+n_ts_ref)+'/'+str(tot_tested)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(hist_rate_tol))/n_rate_total)*100
+# ------------------------------
+met_string += '* rate tol fails = '+str(len(hist_rate_tol))+'/'+str(n_rate_total)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(hist_rate_nan1))/n_rate_total)*100
+met_string += '* rate nan1 fails = '+str(len(hist_rate_nan1))+'/'+str(n_rate_total)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(hist_rate_nan2))/n_rate_total)*100
+met_string += '* rate nan2 fails = '+str(len(hist_rate_nan2))+'/'+str(n_rate_total)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(hist_rate_nans))/n_rate_total)*100
+met_string += '* rate nan1&nan2 fails = '+str(len(hist_rate_nans))+'/'+str(n_rate_total)+' = '+str(temp_val)+'%\n'
+# ------------------------------
+temp_val = (float(len(hist_ts_tol))/n_ts_total)*100
+met_string += '* ts tol fails = '+str(len(hist_ts_tol))+'/'+str(n_ts_total)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(hist_ts_nan1))/n_ts_total)*100
+met_string += '* ts nan1 fails = '+str(len(hist_ts_nan1))+'/'+str(n_ts_total)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(hist_ts_nan2))/n_ts_total)*100
+met_string += '* ts nan2 fails = '+str(len(hist_ts_nan2))+'/'+str(n_ts_total)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(hist_ts_nans))/n_ts_total)*100
+met_string += '* ts nan1&nan2 fails = '+str(len(hist_ts_nans))+'/'+str(n_ts_total)+' = '+str(temp_val)+'%\n'
+# ------------------------------
+n1 = hist_ts_tol+hist_rate_tol
+n2 = hist_ts_nan1+hist_rate_nan1
+n3 = hist_ts_nan2+hist_rate_nan2
+n4 = n2 + n3
+# ------------------------------
+d1 = n_ts_total+n_rate_total        # denominator. all the same
+
+temp_val = (float(len(n1))/d1)*100
+met_string += '* all tol fails = '+str(len(n1))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(n2))/d1)*100
+met_string += '* all nan1 fails = '+str(len(n2))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(n3))/d1)*100
+met_string += '* all nan2 fails = '+str(len(n3))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(n4))/d1)*100
+met_string += '* all nan1&nan2 fails = '+str(len(n4))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
+
+out_fp.write(met_string)
+
+# everything that goes in the logfile is done. close it
 out_fp.close()
 
 # plot histograms... store in /histogram folder of out_direct
 histo_d = join(out_direct, 'histograms')
 if not os.path.isdir(histo_d):
     os.mkdir(histo_d)
+
+plt.close()     # close overwritten ratemap figure...
 
 # rate
 fig2 = plt.figure()
@@ -418,6 +475,7 @@ plt.title('rate_tol')
 plt.xlabel('x')
 plt.ylabel('y')
 fig2.savefig(join(histo_d, 'rate_tol.png'), bbox_inches='tight')
+plt.close()
 
 fig3 = plt.figure()
 plt.hist(hist_rate_nan1, 100, range=[0, 100])
@@ -425,6 +483,7 @@ plt.title('rate_nan1')
 plt.xlabel('x')
 plt.ylabel('y')
 fig3.savefig(join(histo_d, 'rate_nan1.png'), bbox_inches='tight')
+plt.close()
 
 fig4 = plt.figure()
 plt.hist(hist_rate_nan2, 100, range=[0, 100])
@@ -432,6 +491,7 @@ plt.title('rate_nan2')
 plt.xlabel('x')
 plt.ylabel('y')
 fig4.savefig(join(histo_d, 'rate_nan2.png'), bbox_inches='tight')
+plt.close()
 
 fig5 = plt.figure()
 plt.hist(hist_rate_nans, 100, range=[0, 100])
@@ -439,6 +499,7 @@ plt.title('rate_nans')
 plt.xlabel('x')
 plt.ylabel('y')
 fig5.savefig(join(histo_d, 'rate_nans.png'), bbox_inches='tight')
+plt.close()
 
 fig6 = plt.figure()
 plt.hist(hist_rate_tot, 100, range=[0, 100])
@@ -446,6 +507,7 @@ plt.title('rate_tot')
 plt.xlabel('x')
 plt.ylabel('y')
 fig6.savefig(join(histo_d, 'rate_tot.png'), bbox_inches='tight')
+plt.close()
 
 # ts algorithm
 fig7 = plt.figure()
@@ -454,6 +516,7 @@ plt.title('ts_tol')
 plt.xlabel('x')
 plt.ylabel('y')
 fig7.savefig(join(histo_d, 'ts_tol.png'), bbox_inches='tight')
+plt.close()
 
 fig8 = plt.figure()
 plt.hist(hist_ts_nan1, 100, range=[0, 100])
@@ -461,6 +524,7 @@ plt.title('ts_nan1')
 plt.xlabel('x')
 plt.ylabel('y')
 fig8.savefig(join(histo_d, 'ts_nan1.png'), bbox_inches='tight')
+plt.close()
 
 fig9 = plt.figure()
 plt.hist(hist_ts_nan2, 100, range=[0, 100])
@@ -468,6 +532,7 @@ plt.title('ts_nan2')
 plt.xlabel('x')
 plt.ylabel('y')
 fig9.savefig(join(histo_d, 'ts_nan2.png'), bbox_inches='tight')
+plt.close()
 
 fig10 = plt.figure()
 plt.hist(hist_ts_nans, 100, range=[0, 100])
@@ -475,6 +540,7 @@ plt.title('ts_nans')
 plt.xlabel('x')
 plt.ylabel('y')
 fig10.savefig(join(histo_d, 'ts_nans.png'), bbox_inches='tight')
+plt.close()
 
 fig11 = plt.figure()
 plt.hist(hist_ts_tot, 100, range=[0, 100])
@@ -482,6 +548,7 @@ plt.title('ts_tot')
 plt.xlabel('x')
 plt.ylabel('y')
 fig11.savefig(join(histo_d, 'ts_tot.png'), bbox_inches='tight')
+plt.close()
 
 # both algorithms
 fig12 = plt.figure()
@@ -490,6 +557,7 @@ plt.title('tol')
 plt.xlabel('x')
 plt.ylabel('y')
 fig12.savefig(join(histo_d, 'both_tol.png'), bbox_inches='tight')
+plt.close()
 
 fig13 = plt.figure()
 plt.hist(hist_ts_nan1+hist_rate_nan1, 100, range=[0, 100])
@@ -497,6 +565,7 @@ plt.title('ts_nan1')
 plt.xlabel('x')
 plt.ylabel('y')
 fig13.savefig(join(histo_d, 'both_nan1.png'), bbox_inches='tight')
+plt.close()
 
 fig14 = plt.figure()
 plt.hist(hist_ts_nan2+hist_rate_nan2, 100, range=[0, 100])
@@ -504,6 +573,7 @@ plt.title('ts_nan2')
 plt.xlabel('x')
 plt.ylabel('y')
 fig14.savefig(join(histo_d, 'both_nan2.png'), bbox_inches='tight')
+plt.close()
 
 fig15 = plt.figure()
 plt.hist(hist_ts_nans+hist_rate_nans, 100, range=[0, 100])
@@ -511,6 +581,7 @@ plt.title('ts_nans')
 plt.xlabel('x')
 plt.ylabel('y')
 fig15.savefig(join(histo_d, 'both_nans.png'), bbox_inches='tight')
+plt.close()
 
 fig16 = plt.figure()
 plt.hist(hist_ts_tot+hist_rate_tot, 100, range=[0, 100])
@@ -518,5 +589,6 @@ plt.title('ts_tot')
 plt.xlabel('x')
 plt.ylabel('y')
 fig16.savefig(join(histo_d, 'both_tot.png'), bbox_inches='tight')
+plt.close()
 
 #plt.show()

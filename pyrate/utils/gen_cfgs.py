@@ -28,6 +28,7 @@ if not ('PR_TESTING_DATA' in os.environ):
     sys.exit(0)
 dat_root_d = os.environ['PR_TESTING_DATA']     # check at start of script that this exists
 dat_drs = ['syd_g']                            # manually select specific folders
+#dat_drs = os.listdir(dat_root_d)
 
 # PARAM SWEEPS (YOU MODIFY THESE TO WHAT YOU WANT =====================================================
 # =====================================================================================================
