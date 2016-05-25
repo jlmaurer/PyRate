@@ -82,11 +82,11 @@ PYRATEPATH = os.environ['PYRATEPATH']
 # hard code in for now
 #mcc_exec_pth = '/nas/gemd/insar/pr_testing/mcc/v1_uni/pirate'
 #mcc_exec_pth = '/nas/gemd/insar/pr_testing/mcc/v2_uni/pirate'
-#mcc_exec_pth = '/home/gap/pr_testing/mcc/v2_uni/pirate'
-mcc_exec_pth = '/nas/users/u43382/unix/ih/pr_testing/mcc/v2_uni/pirate'
+mcc_exec_pth = '/home/gap/pr_testing/mcc/v2_uni/pirate'
+#mcc_exec_pth = '/nas/users/u43382/unix/ih/pr_testing/mcc/v2_uni/pirate'
 mcc_env = deepcopy(os.environ)
-mcc_env['LD_LIBRARY_PATH'] = "/nas/users/u43382/unix/ih/MATLAB/MATLAB_Runtime/v85/runtime/glnxa64:/nas/users/u43382/unix/ih/MATLAB/MATLAB_Runtime/v85/bin/glnxa64:/nas/users/u43382/unix/ih/MATLAB/MATLAB_Runtime/v85/sys/os/glnxa64"
-#mcc_env['LD_LIBRARY_PATH'] = "/usr/local/MATLAB/MATLAB_Runtime/v85/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v85/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v85/sys/os/glnxa64"
+#mcc_env['LD_LIBRARY_PATH'] = "/nas/users/u43382/unix/ih/MATLAB/MATLAB_Runtime/v85/runtime/glnxa64:/nas/users/u43382/unix/ih/MATLAB/MATLAB_Runtime/v85/bin/glnxa64:/nas/users/u43382/unix/ih/MATLAB/MATLAB_Runtime/v85/sys/os/glnxa64"
+mcc_env['LD_LIBRARY_PATH'] = "/usr/local/MATLAB/MATLAB_Runtime/v85/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v85/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v85/sys/os/glnxa64"
 
 FRST_PASS, SCND_PASS = 0, 1
 

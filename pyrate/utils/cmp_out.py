@@ -414,7 +414,7 @@ out_fp.write('\n======================\n')
 # -----------------------------------------------------
 met_string = ''
 tot_tested = n_no_ref_fail + n_rate_ref + n_ts_ref
-met_string += '* '+str(tot_tested)+' rate & ts tested = '+str(tot_tested/2)+' equivalent configuration files'+'\n'
+met_string += '* '+str(tot_tested/2)+' equivalent configuration files tested = '+str(tot_tested)+' rate & ts'+'\n'
 temp_val = (float(n_rate_ref)/(tot_tested/2))*100
 met_string += '* reference fails / # equiv. configurations = '+str(n_rate_ref)+'/'+str(tot_tested/2)+' = '+str(temp_val)+'%\n'
 # ------------------------------
@@ -440,7 +440,7 @@ met_string += '* ts nan2 fails / total ts (minus ts ref fails) = '+str(len(hist_
 temp_val = (float(len(hist_ts_nans))/n_ts_total)*100
 met_string += '* ts nan1 or nan2 fails / total ts (minus ts ref fails) = '+str(len(hist_ts_nans))+'/'+str(n_ts_total)+' = '+str(temp_val)+'%\n'
 temp_val = (float(len(hist_ts_tot))/n_ts_total)*100
-met_string += '* rate tolerance or nan1 or nan2 (any) fails / total rate (minus rate ref fails) = '+str(len(hist_ts_tot))+'/'+str(n_ts_total)+' = '+str(temp_val)+'%\n'
+met_string += '* ts tolerance or nan1 or nan2 (any) fails / total ts (minus ts ref fails) = '+str(len(hist_ts_tot))+'/'+str(n_ts_total)+' = '+str(temp_val)+'%\n'
 # ------------------------------
 n1 = hist_ts_tol+hist_rate_tol
 n2 = hist_ts_nan1+hist_rate_nan1
