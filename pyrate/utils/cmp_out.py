@@ -415,7 +415,7 @@ out_fp.write('\n======================\n')
 met_string = ''
 tot_tested = n_no_ref_fail + n_rate_ref + n_ts_ref
 met_string += '* '+str(tot_tested)+' rate & ts tested = '+str(tot_tested/2)+' equivalent configuration files'+'\n'
-temp_val = (float(n_rate_ref)/tot_tested)*100
+temp_val = (float(n_rate_ref)/tot_tested/2)*100
 met_string += '* reference fails / # equiv. configurations = '+str(n_rate_ref)+'/'+str(tot_tested/2)+' = '+str(temp_val)+'%\n'
 # ------------------------------
 met_string += '======================\n'
