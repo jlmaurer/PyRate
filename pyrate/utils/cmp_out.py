@@ -416,14 +416,10 @@ met_string = ''
 tot_tested = n_no_ref_fail + n_rate_ref + n_ts_ref
 met_string += '* '+str(tot_tested)+' rate & ts tested = '+str(tot_tested/2)+' equivalent configuration files'+'\n'
 temp_val = (float(n_rate_ref)/tot_tested)*100
-met_string += '* rate reference fails / total rate & ts = '+str(n_rate_ref)+'/'+str(tot_tested)+' = '+str(temp_val)+'%\n'
-temp_val = (float(n_ts_ref)/tot_tested)*100
-met_string += '* ts reference fails / total rate & ts = '+str(n_ts_ref)+'/'+str(tot_tested)+' = '+str(temp_val)+'%\n'
-temp_val = (float(n_ts_ref+n_rate_ref)/tot_tested)*100
-met_string += '* rate & ts reference fails / total rate & ts = '+str(n_rate_ref+n_ts_ref)+'/'+str(tot_tested)+' = '+str(temp_val)+'%\n'
-temp_val = (float(len(hist_rate_tol))/n_rate_total)*100
+met_string += '* reference fails / # equiv. configurations = '+str(n_rate_ref)+'/'+str(tot_tested/2)+' = '+str(temp_val)+'%\n'
 # ------------------------------
 met_string += '======================\n'
+temp_val = (float(len(hist_rate_tol))/n_rate_total)*100
 met_string += '* rate tol fails / total rate (minus rate ref fails) = '+str(len(hist_rate_tol))+'/'+str(n_rate_total)+' = '+str(temp_val)+'%\n'
 temp_val = (float(len(hist_rate_nan1))/n_rate_total)*100
 met_string += '* rate nan1 fails / total rate (minus rate ref fails) = '+str(len(hist_rate_nan1))+'/'+str(n_rate_total)+' = '+str(temp_val)+'%\n'
@@ -431,6 +427,8 @@ temp_val = (float(len(hist_rate_nan2))/n_rate_total)*100
 met_string += '* rate nan2 fails / total rate (minus rate ref fails) = '+str(len(hist_rate_nan2))+'/'+str(n_rate_total)+' = '+str(temp_val)+'%\n'
 temp_val = (float(len(hist_rate_nans))/n_rate_total)*100
 met_string += '* rate nan1 or nan2 fails / total rate (minus rate ref fails) = '+str(len(hist_rate_nans))+'/'+str(n_rate_total)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(hist_rate_tot))/n_rate_total)*100
+met_string += '* rate tolerance or nan1 or nan2 (any) fails / total rate (minus rate ref fails) = '+str(len(hist_rate_tot))+'/'+str(n_rate_total)+' = '+str(temp_val)+'%\n'
 # ------------------------------
 met_string += '======================\n'
 temp_val = (float(len(hist_ts_tol))/n_ts_total)*100
@@ -441,23 +439,28 @@ temp_val = (float(len(hist_ts_nan2))/n_ts_total)*100
 met_string += '* ts nan2 fails / total ts (minus ts ref fails) = '+str(len(hist_ts_nan2))+'/'+str(n_ts_total)+' = '+str(temp_val)+'%\n'
 temp_val = (float(len(hist_ts_nans))/n_ts_total)*100
 met_string += '* ts nan1 or nan2 fails / total ts (minus ts ref fails) = '+str(len(hist_ts_nans))+'/'+str(n_ts_total)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(hist_ts_tot))/n_ts_total)*100
+met_string += '* rate tolerance or nan1 or nan2 (any) fails / total rate (minus rate ref fails) = '+str(len(hist_ts_tot))+'/'+str(n_ts_total)+' = '+str(temp_val)+'%\n'
 # ------------------------------
 n1 = hist_ts_tol+hist_rate_tol
 n2 = hist_ts_nan1+hist_rate_nan1
 n3 = hist_ts_nan2+hist_rate_nan2
-n4 = n2 + n3
+n4 = hist_ts_nans+hist_rate_nans
+n5 = hist_ts_tot+hist_rate_tot
 # ------------------------------
 d1 = n_ts_total+n_rate_total        # denominator. all the same
 
 met_string += '======================\n'
 temp_val = (float(len(n1))/d1)*100
-met_string += '* all tol fails / total rate & ts (minus rate & ts ref fails) = '+str(len(n1))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
+met_string += '* all (rate or ts) tol fails / total rate & ts (minus rate & ts ref fails) = '+str(len(n1))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
 temp_val = (float(len(n2))/d1)*100
-met_string += '* all nan1 fails / total rate & ts (minus rate & ts ref fails) = '+str(len(n2))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
+met_string += '* all (rate or ts) nan1 fails / total rate & ts (minus rate & ts ref fails) = '+str(len(n2))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
 temp_val = (float(len(n3))/d1)*100
-met_string += '* all nan2 fails / total rate & ts (minus rate & ts ref fails) = '+str(len(n3))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
+met_string += '* all (rate or ts) nan2 fails / total rate & ts (minus rate & ts ref fails) = '+str(len(n3))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
 temp_val = (float(len(n4))/d1)*100
-met_string += '* all nan1 or nan2 fails / total rate & ts (minus rate & ts ref fails) = '+str(len(n4))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
+met_string += '* all (rate or ts) nan1 or nan2 fails / total rate & ts (minus rate & ts ref fails) = '+str(len(n4))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
+temp_val = (float(len(n5))/d1)*100
+met_string += '* all (rate or ts) tolerance or nan1 or nan2 (any) fails / total rate & ts (minus rate & ts ref fails) = '+str(len(n5))+'/'+str(d1)+' = '+str(temp_val)+'%\n'
 
 out_fp.write(met_string)
 
