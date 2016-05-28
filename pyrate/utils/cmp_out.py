@@ -64,7 +64,9 @@ drawer.line((0, MPL_SCALING-1, MPL_SCALING-1, 0), (0, 255, 0, 255))
 # ARRAY CHECKING FUNCTIONS...
 # these could really be made into just 1 function
 # =================================================================
+# create whether actually do it or not. change later
 fig = plt.figure()
+fig2 = plt.figure()
 
 # histogram data (percentages)
 # get the length of these to get the total amount of errors
@@ -90,7 +92,7 @@ n_ts_total = 0
 M1_N = 'py'  # matrix name. should be passed as a function
 M2_N = 'mt'
 def chk_out_mats(m1, m2):
-    global fig # this might not need to be global
+    global fig, fig2 # these might not need to be global
     global n_rate_ref, n_ts_ref, n_no_ref_fail
     global n_rate_total, n_ts_total
     # appending to histograms shouldn't need require them being global?
@@ -175,7 +177,7 @@ def chk_out_mats(m1, m2):
 
     # open up an image to put pixels to
     #img = Image.new('RGB', (n_r, n_c), (255, 255, 255))
-    if fun_mode == 2:
+    if fun_mode == 2 and do_lin:
         #fig = plt.figure()     # this creates a new figure. use below instead.
         fig.clf()
         fig.set_size_inches(m2.shape[1], m2.shape[0])
@@ -189,13 +191,25 @@ def chk_out_mats(m1, m2):
         # open it up in PIL now so we can add our hit markers *pttt* *pttt* <-- mw2. MLG!
         img = Image.open(img_fn)
 
-        '''
-        print m1.shape
-        print img.size
-        while True: pass
-        '''
-
     while it_e < n_e:
+        if fun_mode == 3 and do_ts:
+            #fig = plt.figure()     # this creates a new figure. use below instead.
+            fig.clf()
+            fig.set_size_inches(m2.shape[1], m2.shape[0])
+            ax = plt.Axes(fig, [0., 0., 1., 1.])
+            ax.set_axis_off()
+            fig.add_axes(ax)
+            plt.set_cmap('hot')
+            ax.imshow(m2[:,:,it_e], aspect = 'normal')      # background as matlab epoch
+            this_d = join(image_direct2, cont_fld)
+            if not os.path.isdir(this_d):
+                # create the directory
+                os.mkdir(this_d)
+            img_fn = join(this_d, 'ts_error_epoch'+str(it_e)+'.png')
+            plt.savefig(img_fn, dpi=MPL_SCALING)   # pixels per data point...
+            # open it up in PIL now so we can add our hit markers *pttt* *pttt* <-- mw2. MLG!
+            img = Image.open(img_fn)
+
         it_r = 0
         while it_r < n_r:
             it_c = 0
@@ -209,8 +223,10 @@ def chk_out_mats(m1, m2):
                     if abs(m1[it].item() - m2[it].item()) > relative_tolerance:
                         if fun_mode == 2:
                             n_rate_tol += 1
-                            img.paste(marker_tol, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_tol)
-                        if fun_mode == 3:n_ts_tol += 1
+                            if do_lin: img.paste(marker_tol, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_tol)
+                        if fun_mode == 3:
+                            n_ts_tol += 1
+                            if do_ts: img.paste(marker_tol, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_tol)
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* do not match to tolerance @ '+str(it)+'\n'
                             er_str += '\t'*5+'* '+M1_N+' = '+str(Decimal(m1[it].item()))+'\n'
@@ -219,23 +235,31 @@ def chk_out_mats(m1, m2):
                     if (not np.isnan(m1[it])) and (np.isnan(m2[it])):
                         if fun_mode == 2:
                             n_rate_nan1 += 1
-                            img.paste(marker_nan1, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_nan1)
-                        if fun_mode == 3: n_ts_nan1 += 1
+                            if do_lin: img.paste(marker_nan1, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_nan1)
+                        if fun_mode == 3:
+                            n_ts_nan1 += 1
+                            if do_ts: img.paste(marker_nan1, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_nan1)
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should be NaN (but is not) @ '+str(it)+'\n'
                     if (np.isnan(m1[it])) and (not np.isnan(m2[it])):
                         if fun_mode == 2:
                             n_rate_nan2 += 1
-                            img.paste(marker_nan2, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_nan2)
-                        if fun_mode == 3: n_ts_nan2 += 1
+                            if do_lin: img.paste(marker_nan2, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_nan2)
+                        if fun_mode == 3:
+                            n_ts_nan2 += 1
+                            if do_ts: img.paste(marker_nan2, (it_c*MPL_SCALING, it_r*MPL_SCALING), marker_nan2)
                         if verbosity == 1 or verbosity == 2:
                             er_str += '\t'*4+'* '+M1_N+' should not be NaN (but is) @ '+str(it)+'\n'
                 it_c += 1
             it_r += 1
         it_e += 1
 
-    if fun_mode == 2:
+    # duplication not needed. fix later
+    if fun_mode == 2 and do_lin:
         img.save(img_fn, 'PNG')
+    if fun_mode == 3 and do_ts:
+        img.save(img_fn, 'PNG')
+
 
     er_str_prep = ''
     '''
@@ -282,7 +306,7 @@ def chk_out_mats(m1, m2):
 # =================================================================
 
 import getopt
-opts, args = getopt.getopt(sys.argv[1:], 'd:i:j:v:', ['od=','of='])
+opts, args = getopt.getopt(sys.argv[1:], 'd:i:j:v:htl', ['od=','of='])
 # usage checking
 if opts == [] and args != []:
     print 'read usage'
@@ -294,6 +318,10 @@ jst_list = []
 out_direct = False
 out_fn = False
 verbosity = 3       # default verbosity (don't tell about stripping rows)
+# flags for creating linear rate & ts error images, histograms
+do_lin = False
+do_ts = False
+do_hist = False
 # assiging and checking valid options
 for opt in opts:
     if opt[0] == '-d':
@@ -309,7 +337,18 @@ for opt in opts:
         out_fn = opt[1]
     if opt[0] == '-v':
         verbosity = int(opt[1])
+    if opt[0] == '-h':
+        do_hist = True
+    if opt[0] == '-t':
+        do_ts = True
+    if opt[0] == '-l':
+        do_lin = True
 # checking for valid output options
+'''
+print opts
+print do_lin, do_ts, do_hist
+while True: pass
+'''
 if out_direct != False and out_fn != False:
     print 'can only have one or the other or none of --od and --of'
     sys.exit(0)
@@ -335,11 +374,19 @@ if not os.path.isdir(out_direct):
     # create the directory
     os.mkdir(out_direct)
 
-# check if output image directory exists... if not create it...
-image_direct = join(out_direct, 'error_maps_rate')
-if not os.path.isdir(image_direct):
-    # create the directory
-    os.mkdir(image_direct)
+if do_lin:
+    # check if output image directory exists... if not create it...
+    image_direct = join(out_direct, 'error_maps_rate')
+    if not os.path.isdir(image_direct):
+        # create the directory
+        os.mkdir(image_direct)
+
+if do_ts:
+    # check if output image directory exists... if not create it...
+    image_direct2 = join(out_direct, 'error_maps_ts')
+    if not os.path.isdir(image_direct2):
+        # create the directory
+        os.mkdir(image_direct2)
 
 print 'writing output to '+out_fn
 out_fp = open(name=out_fn, mode='w')
@@ -467,134 +514,135 @@ out_fp.write(met_string)
 # everything that goes in the logfile is done. close it
 out_fp.close()
 
-# plot histograms... store in /histogram folder of out_direct
-histo_d = join(out_direct, 'histograms')
-if not os.path.isdir(histo_d):
-    os.mkdir(histo_d)
+if do_hist:
+    # plot histograms... store in /histogram folder of out_direct
+    histo_d = join(out_direct, 'histograms')
+    if not os.path.isdir(histo_d):
+        os.mkdir(histo_d)
 
-plt.close()     # close overwritten ratemap figure...
+    plt.close()     # close overwritten ratemap figure...
 
-# rate
-fig2 = plt.figure()
-plt.hist(hist_rate_tol, 100, range=[0, 100])
-plt.title('Linear rate tolerance errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of '+str(n_rate_total)+' equiv. configurations (minus ref. mismatches)')
-fig2.savefig(join(histo_d, 'rate_tol.png'), bbox_inches='tight')
-plt.close()
+    # rate
+    fig2 = plt.figure()
+    plt.hist(hist_rate_tol, 100, range=[0, 100])
+    plt.title('Linear rate tolerance errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of '+str(n_rate_total)+' equiv. configurations (minus ref. mismatches)')
+    fig2.savefig(join(histo_d, 'rate_tol.png'), bbox_inches='tight')
+    plt.close()
 
-fig3 = plt.figure()
-plt.hist(hist_rate_nan1, 100, range=[0, 100])
-plt.title('Linear rate NaN1 errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of '+str(n_rate_total)+' equiv. configurations (minus ref. mismatches)')
-fig3.savefig(join(histo_d, 'rate_nan1.png'), bbox_inches='tight')
-plt.close()
+    fig3 = plt.figure()
+    plt.hist(hist_rate_nan1, 100, range=[0, 100])
+    plt.title('Linear rate NaN1 errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of '+str(n_rate_total)+' equiv. configurations (minus ref. mismatches)')
+    fig3.savefig(join(histo_d, 'rate_nan1.png'), bbox_inches='tight')
+    plt.close()
 
-fig4 = plt.figure()
-plt.hist(hist_rate_nan2, 100, range=[0, 100])
-plt.title('Linear rate NaN2 errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of '+str(n_rate_total)+' equiv. configurations (minus ref. mismatches)')
-fig4.savefig(join(histo_d, 'rate_nan2.png'), bbox_inches='tight')
-plt.close()
+    fig4 = plt.figure()
+    plt.hist(hist_rate_nan2, 100, range=[0, 100])
+    plt.title('Linear rate NaN2 errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of '+str(n_rate_total)+' equiv. configurations (minus ref. mismatches)')
+    fig4.savefig(join(histo_d, 'rate_nan2.png'), bbox_inches='tight')
+    plt.close()
 
-fig5 = plt.figure()
-plt.hist(hist_rate_nans, 100, range=[0, 100])
-plt.title('Linear rate NaN1 or NaN2 errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of '+str(n_rate_total)+' equiv. configurations (minus ref. mismatches)')
-fig5.savefig(join(histo_d, 'rate_nans.png'), bbox_inches='tight')
-plt.close()
+    fig5 = plt.figure()
+    plt.hist(hist_rate_nans, 100, range=[0, 100])
+    plt.title('Linear rate NaN1 or NaN2 errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of '+str(n_rate_total)+' equiv. configurations (minus ref. mismatches)')
+    fig5.savefig(join(histo_d, 'rate_nans.png'), bbox_inches='tight')
+    plt.close()
 
-fig6 = plt.figure()
-plt.hist(hist_rate_tot, 100, range=[0, 100])
-plt.title('Linear rate tolerance or NaN1 or NaN2 errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of '+str(n_rate_total)+' equiv. configurations (minus ref. mismatches)')
-fig6.savefig(join(histo_d, 'rate_tot.png'), bbox_inches='tight')
-plt.close()
+    fig6 = plt.figure()
+    plt.hist(hist_rate_tot, 100, range=[0, 100])
+    plt.title('Linear rate tolerance or NaN1 or NaN2 errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of '+str(n_rate_total)+' equiv. configurations (minus ref. mismatches)')
+    fig6.savefig(join(histo_d, 'rate_tot.png'), bbox_inches='tight')
+    plt.close()
 
-# ts algorithm
-fig7 = plt.figure()
-plt.hist(hist_ts_tol, 100, range=[0, 100])
-plt.title('Time series tolerance errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of '+str(n_ts_total)+' equiv. configurations (minus ref. mismatches)')
-fig7.savefig(join(histo_d, 'ts_tol.png'), bbox_inches='tight')
-plt.close()
+    # ts algorithm
+    fig7 = plt.figure()
+    plt.hist(hist_ts_tol, 100, range=[0, 100])
+    plt.title('Time series tolerance errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of '+str(n_ts_total)+' equiv. configurations (minus ref. mismatches)')
+    fig7.savefig(join(histo_d, 'ts_tol.png'), bbox_inches='tight')
+    plt.close()
 
-fig8 = plt.figure()
-plt.hist(hist_ts_nan1, 100, range=[0, 100])
-plt.title('Time series NaN1 errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of '+str(n_ts_total)+' equiv. configurations (minus ref. mismatches)')
-fig8.savefig(join(histo_d, 'ts_nan1.png'), bbox_inches='tight')
-plt.close()
+    fig8 = plt.figure()
+    plt.hist(hist_ts_nan1, 100, range=[0, 100])
+    plt.title('Time series NaN1 errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of '+str(n_ts_total)+' equiv. configurations (minus ref. mismatches)')
+    fig8.savefig(join(histo_d, 'ts_nan1.png'), bbox_inches='tight')
+    plt.close()
 
-fig9 = plt.figure()
-plt.hist(hist_ts_nan2, 100, range=[0, 100])
-plt.title('Time series NaN2 errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of '+str(n_ts_total)+' equiv. configurations (minus ref. mismatches)')
-fig9.savefig(join(histo_d, 'ts_nan2.png'), bbox_inches='tight')
-plt.close()
+    fig9 = plt.figure()
+    plt.hist(hist_ts_nan2, 100, range=[0, 100])
+    plt.title('Time series NaN2 errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of '+str(n_ts_total)+' equiv. configurations (minus ref. mismatches)')
+    fig9.savefig(join(histo_d, 'ts_nan2.png'), bbox_inches='tight')
+    plt.close()
 
-fig10 = plt.figure()
-plt.hist(hist_ts_nans, 100, range=[0, 100])
-plt.title('Time series NaN1 or NaN2 errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of '+str(n_ts_total)+' equiv. configurations (minus ref. mismatches)')
-fig10.savefig(join(histo_d, 'ts_nans.png'), bbox_inches='tight')
-plt.close()
+    fig10 = plt.figure()
+    plt.hist(hist_ts_nans, 100, range=[0, 100])
+    plt.title('Time series NaN1 or NaN2 errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of '+str(n_ts_total)+' equiv. configurations (minus ref. mismatches)')
+    fig10.savefig(join(histo_d, 'ts_nans.png'), bbox_inches='tight')
+    plt.close()
 
-fig11 = plt.figure()
-plt.hist(hist_ts_tot, 100, range=[0, 100])
-plt.title('Time series tolerance or NaN1 or NaN2 errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of '+str(n_ts_total)+' equiv. configurations (minus ref. mismatches)')
-fig11.savefig(join(histo_d, 'ts_tot.png'), bbox_inches='tight')
-plt.close()
+    fig11 = plt.figure()
+    plt.hist(hist_ts_tot, 100, range=[0, 100])
+    plt.title('Time series tolerance or NaN1 or NaN2 errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of '+str(n_ts_total)+' equiv. configurations (minus ref. mismatches)')
+    fig11.savefig(join(histo_d, 'ts_tot.png'), bbox_inches='tight')
+    plt.close()
 
-# both algorithms
-fig12 = plt.figure()
-plt.hist(hist_ts_tol+hist_rate_tol, 100, range=[0, 100])
-plt.title('All tolerance errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of all '+str(n_rate_total+n_ts_total)+' rate & time series tests (minus ref. mismatches)')
-fig12.savefig(join(histo_d, 'both_tol.png'), bbox_inches='tight')
-plt.close()
+    # both algorithms
+    fig12 = plt.figure()
+    plt.hist(hist_ts_tol+hist_rate_tol, 100, range=[0, 100])
+    plt.title('All tolerance errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of all '+str(n_rate_total+n_ts_total)+' rate & time series tests (minus ref. mismatches)')
+    fig12.savefig(join(histo_d, 'both_tol.png'), bbox_inches='tight')
+    plt.close()
 
-fig13 = plt.figure()
-plt.hist(hist_ts_nan1+hist_rate_nan1, 100, range=[0, 100])
-plt.title('All NaN1 errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of all '+str(n_rate_total+n_ts_total)+' rate & time series tests (minus ref. mismatches)')
-fig13.savefig(join(histo_d, 'both_nan1.png'), bbox_inches='tight')
-plt.close()
+    fig13 = plt.figure()
+    plt.hist(hist_ts_nan1+hist_rate_nan1, 100, range=[0, 100])
+    plt.title('All NaN1 errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of all '+str(n_rate_total+n_ts_total)+' rate & time series tests (minus ref. mismatches)')
+    fig13.savefig(join(histo_d, 'both_nan1.png'), bbox_inches='tight')
+    plt.close()
 
-fig14 = plt.figure()
-plt.hist(hist_ts_nan2+hist_rate_nan2, 100, range=[0, 100])
-plt.title('All NaN2 errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of all '+str(n_rate_total+n_ts_total)+' rate & time series tests (minus ref. mismatches)')
-fig14.savefig(join(histo_d, 'both_nan2.png'), bbox_inches='tight')
-plt.close()
+    fig14 = plt.figure()
+    plt.hist(hist_ts_nan2+hist_rate_nan2, 100, range=[0, 100])
+    plt.title('All NaN2 errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of all '+str(n_rate_total+n_ts_total)+' rate & time series tests (minus ref. mismatches)')
+    fig14.savefig(join(histo_d, 'both_nan2.png'), bbox_inches='tight')
+    plt.close()
 
-fig15 = plt.figure()
-plt.hist(hist_ts_nans+hist_rate_nans, 100, range=[0, 100])
-plt.title('All NaN1 or NaN2 errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of all '+str(n_rate_total+n_ts_total)+' rate & time series tests (minus ref. mismatches)')
-fig15.savefig(join(histo_d, 'both_nans.png'), bbox_inches='tight')
-plt.close()
+    fig15 = plt.figure()
+    plt.hist(hist_ts_nans+hist_rate_nans, 100, range=[0, 100])
+    plt.title('All NaN1 or NaN2 errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of all '+str(n_rate_total+n_ts_total)+' rate & time series tests (minus ref. mismatches)')
+    fig15.savefig(join(histo_d, 'both_nans.png'), bbox_inches='tight')
+    plt.close()
 
-fig16 = plt.figure()
-plt.hist(hist_ts_tot+hist_rate_tot, 100, range=[0, 100])
-plt.title('All tolerance or NaN1 or NaN2 (any) errors histogram')
-plt.xlabel('Percentage error')
-plt.ylabel('Quantity out of all '+str(n_rate_total+n_ts_total)+' rate & time series tests (minus ref. mismatches)')
-fig16.savefig(join(histo_d, 'both_tot.png'), bbox_inches='tight')
-plt.close()
+    fig16 = plt.figure()
+    plt.hist(hist_ts_tot+hist_rate_tot, 100, range=[0, 100])
+    plt.title('All tolerance or NaN1 or NaN2 (any) errors histogram')
+    plt.xlabel('Percentage error')
+    plt.ylabel('Quantity out of all '+str(n_rate_total+n_ts_total)+' rate & time series tests (minus ref. mismatches)')
+    fig16.savefig(join(histo_d, 'both_tot.png'), bbox_inches='tight')
+    plt.close()
 
-#plt.show()
+    #plt.show()
