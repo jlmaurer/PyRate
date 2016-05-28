@@ -66,7 +66,7 @@ drawer.line((0, MPL_SCALING-1, MPL_SCALING-1, 0), (0, 255, 0, 255))
 # =================================================================
 # create whether actually do it or not. change later
 fig = plt.figure()
-fig2 = plt.figure()
+#fig2 = plt.figure()
 
 # histogram data (percentages)
 # get the length of these to get the total amount of errors
