@@ -252,14 +252,12 @@ def chk_out_mats(m1, m2):
                             er_str += '\t'*4+'* '+M1_N+' should not be NaN (but is) @ '+str(it)+'\n'
                 it_c += 1
             it_r += 1
+        # duplication not needed. fix later
+        if fun_mode == 2 and do_lin:
+            img.save(img_fn, 'PNG')
+        if fun_mode == 3 and do_ts:
+            img.save(img_fn, 'PNG')
         it_e += 1
-
-    # duplication not needed. fix later
-    if fun_mode == 2 and do_lin:
-        img.save(img_fn, 'PNG')
-    if fun_mode == 3 and do_ts:
-        img.save(img_fn, 'PNG')
-
 
     er_str_prep = ''
     '''
@@ -283,6 +281,8 @@ def chk_out_mats(m1, m2):
         if percent_tot != 0.0: hist_rate_tot.append(percent_tot)
 
     if fun_mode == 3:
+        #print n_ts_tol
+        #print tot_pix
         n_ts_total += 1
         percent_tol = (float(n_ts_tol)/tot_pix)*100
         if percent_tol != 0.0: hist_ts_tol.append(percent_tol)
