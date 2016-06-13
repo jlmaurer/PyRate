@@ -62,21 +62,15 @@ print ifg_2s
 
 # create ifg_2 thumbnails...
 ifg_2s.sort()
-#print ifg_2s
-# write them out as 1/2 of 1920 = 960, then scale to what you want...
-# try 5 per row
+# have to assume they are of the same size...
 
+
+'''
 fig = plt.figure()
 fig_shape = (len(ifg_2s)/5, 5)     # rows, cols
 
-tif_dats = [join(root, fn)  np.array(tif.getdata()).reshape(tif.size[::-1]) for fn in fns]    # reverse shape. works. don't know why
-
 while True: pass
-
-print tifs
-
-# get actual data
-
+'''
 
 '''
 #print tif_dats
