@@ -17,11 +17,7 @@ Contents:
    contributing
    authors
    history
-
-   projectreport
-
    modules
-
    scripts
 
 

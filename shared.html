@@ -1,0 +1,527 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Shared Module &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Time Series Module" href="timeseries.html" />
+    <link rel="prev" title="ROIPAC Module" href="roipac.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyrate.shared">
+<span id="shared-module"></span><h1>Shared Module<a class="headerlink" href="#module-pyrate.shared" title="Permalink to this headline">¶</a></h1>
+<p>This Python module is part of the PyRate software package</p>
+<p>This Python module contains utilities and classes shared by 
+all other PyRate modules</p>
+<p>Copyright 2017 Geoscience Australia</p>
+<blockquote>
+<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+<blockquote>
+<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+</div></blockquote>
+<dl class="class">
+<dt id="pyrate.shared.DEM">
+<em class="property">class </em><code class="descclassname">pyrate.shared.</code><code class="descname">DEM</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#DEM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.DEM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic raster class for ROIPAC single band DEM files.</p>
+<dl class="attribute">
+<dt id="pyrate.shared.DEM.height_band">
+<code class="descname">height_band</code><a class="headerlink" href="#pyrate.shared.DEM.height_band" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the GDALBand for the elevation layer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyrate.shared.EpochList">
+<em class="property">class </em><code class="descclassname">pyrate.shared.</code><code class="descname">EpochList</code><span class="sig-paren">(</span><em>dates=None</em>, <em>repeat=None</em>, <em>spans=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#EpochList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.EpochList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Metadata container for epoch related information.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="pyrate.shared.GeotiffException">
+<em class="property">exception </em><code class="descclassname">pyrate.shared.</code><code class="descname">GeotiffException</code><a class="reference internal" href="_modules/pyrate/shared.html#GeotiffException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.GeotiffException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Geotiff exception class</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyrate.shared.Ifg">
+<em class="property">class </em><code class="descclassname">pyrate.shared.</code><code class="descname">Ifg</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#Ifg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.Ifg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interferrogram class, represents the difference between two acquisitions.
+Ifg objects double as a container for related data.</p>
+<dl class="method">
+<dt id="pyrate.shared.Ifg.convert_to_mm">
+<code class="descname">convert_to_mm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#Ifg.convert_to_mm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.Ifg.convert_to_mm" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ifg</strong> &#8211; ifg file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">convert wavelength from radians to mm</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrate.shared.Ifg.convert_to_nans">
+<code class="descname">convert_to_nans</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#Ifg.convert_to_nans"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.Ifg.convert_to_nans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts given values in phase data to NaNs
+:param val: value to convert, default is 0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrate.shared.Ifg.initialize">
+<code class="descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#Ifg.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.Ifg.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>basic ifg properties read on opening Ifg</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyrate.shared.Ifg.nan_count">
+<code class="descname">nan_count</code><a class="headerlink" href="#pyrate.shared.Ifg.nan_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns number of NaN cells in the phase data.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyrate.shared.Ifg.nan_fraction">
+<code class="descname">nan_fraction</code><a class="headerlink" href="#pyrate.shared.Ifg.nan_fraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns 0-1 (float) proportion of NaN cells for the phase band.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyrate.shared.Ifg.nodata_value">
+<code class="descname">nodata_value</code><a class="headerlink" href="#pyrate.shared.Ifg.nodata_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a GDAL Band object for the phase band.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrate.shared.Ifg.open">
+<code class="descname">open</code><span class="sig-paren">(</span><em>readonly=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#Ifg.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.Ifg.open" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>readonly</strong> (<em>bool</em>) &#8211; True/False, or None to open as underlying file setting</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyrate.shared.Ifg.phase_band">
+<code class="descname">phase_band</code><a class="headerlink" href="#pyrate.shared.Ifg.phase_band" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a GDAL Band object for the phase band.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyrate.shared.Ifg.phase_data">
+<code class="descname">phase_data</code><a class="headerlink" href="#pyrate.shared.Ifg.phase_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns entire phase band as an array.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyrate.shared.Ifg.phase_rows">
+<code class="descname">phase_rows</code><a class="headerlink" href="#pyrate.shared.Ifg.phase_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator returning each row of the phase data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrate.shared.Ifg.save_numpy_phase">
+<code class="descname">save_numpy_phase</code><span class="sig-paren">(</span><em>numpy_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#Ifg.save_numpy_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.Ifg.save_numpy_phase" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>numpy_file: str</dt>
+<dd>file path where phase data is saved</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrate.shared.Ifg.write_modified_phase">
+<code class="descname">write_modified_phase</code><span class="sig-paren">(</span><em>data=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#Ifg.write_modified_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.Ifg.write_modified_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes phase data to disk.
+For this to work, a copy of the original file</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="pyrate.shared.IfgException">
+<em class="property">exception </em><code class="descclassname">pyrate.shared.</code><code class="descname">IfgException</code><a class="reference internal" href="_modules/pyrate/shared.html#IfgException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.IfgException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic exception class for interferogram errors.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyrate.shared.IfgPart">
+<em class="property">class </em><code class="descclassname">pyrate.shared.</code><code class="descname">IfgPart</code><span class="sig-paren">(</span><em>ifg_or_path</em>, <em>tile</em>, <em>ifg_dict=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#IfgPart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.IfgPart" title="Permalink to this definition">¶</a></dt>
+<dd><p>slice of Ifg data object</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyrate.shared.Incidence">
+<em class="property">class </em><code class="descclassname">pyrate.shared.</code><code class="descname">Incidence</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#Incidence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.Incidence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Incidence class</p>
+<dl class="attribute">
+<dt id="pyrate.shared.Incidence.azimuth_band">
+<code class="descname">azimuth_band</code><a class="headerlink" href="#pyrate.shared.Incidence.azimuth_band" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the GDALBand for the azimuth layer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyrate.shared.Incidence.azimuth_data">
+<code class="descname">azimuth_data</code><a class="headerlink" href="#pyrate.shared.Incidence.azimuth_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the entire incidence band as an array.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyrate.shared.Incidence.incidence_band">
+<code class="descname">incidence_band</code><a class="headerlink" href="#pyrate.shared.Incidence.incidence_band" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the GDALBand for the incidence angle layer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyrate.shared.Incidence.incidence_data">
+<code class="descname">incidence_data</code><a class="headerlink" href="#pyrate.shared.Incidence.incidence_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the entire incidence band as an array.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyrate.shared.PrereadIfg">
+<em class="property">class </em><code class="descclassname">pyrate.shared.</code><code class="descname">PrereadIfg</code><span class="sig-paren">(</span><em>path</em>, <em>nan_fraction</em>, <em>master</em>, <em>slave</em>, <em>time_span</em>, <em>nrows</em>, <em>ncols</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#PrereadIfg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.PrereadIfg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience class for handling pre-calculated ifg params</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyrate.shared.RasterBase">
+<em class="property">class </em><code class="descclassname">pyrate.shared.</code><code class="descname">RasterBase</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#RasterBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.RasterBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base class for PyRate GeoTIFF based raster datasets.</p>
+<dl class="method">
+<dt id="pyrate.shared.RasterBase.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#RasterBase.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.RasterBase.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Explicitly closes file opened by gdal.Open()
+This is required in windows, otherwise opened files can not be removed,
+because windows locks opened files.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyrate.shared.RasterBase.is_open">
+<code class="descname">is_open</code><a class="headerlink" href="#pyrate.shared.RasterBase.is_open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the underlying dataset has been opened by GDAL.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrate.shared.RasterBase.open">
+<code class="descname">open</code><span class="sig-paren">(</span><em>readonly=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#RasterBase.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.RasterBase.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens generic raster dataset.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyrate.shared.RasterBase.shape">
+<code class="descname">shape</code><a class="headerlink" href="#pyrate.shared.RasterBase.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns tuple of (Y,X) shape of the raster (as per numpy.shape).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="pyrate.shared.RasterException">
+<em class="property">exception </em><code class="descclassname">pyrate.shared.</code><code class="descname">RasterException</code><a class="reference internal" href="_modules/pyrate/shared.html#RasterException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.RasterException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic exception for raster errors.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyrate.shared.Tile">
+<em class="property">class </em><code class="descclassname">pyrate.shared.</code><code class="descname">Tile</code><span class="sig-paren">(</span><em>index</em>, <em>top_left</em>, <em>bottom_right</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#Tile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.Tile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tile class containing part of the ifgs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.cell_size">
+<code class="descclassname">pyrate.shared.</code><code class="descname">cell_size</code><span class="sig-paren">(</span><em>lat</em>, <em>lon</em>, <em>x_step</em>, <em>y_step</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#cell_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.cell_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Collection of geodesy/pyproj algorithms for PyRate.
+This function depends on PyProj/PROJ4 to replace llh2local.m in MATLAB Pirate.
+Converts X|Y_STEP in degrees to X &amp; Y cell length/width in metres.
+lat: latitude in degrees
+lon: longitude in degrees
+x_step: horizontal step size in degrees
+y_step: vertical step size in degrees</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.convert_radians_to_mm">
+<code class="descclassname">pyrate.shared.</code><code class="descname">convert_radians_to_mm</code><span class="sig-paren">(</span><em>data</em>, <em>wavelength</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#convert_radians_to_mm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.convert_radians_to_mm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translates phase from radians to millimetres
+data: interferogram phase data
+wavelength: radar wavelength; normally included with SAR instrument metadata</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.copytree">
+<code class="descclassname">pyrate.shared.</code><code class="descname">copytree</code><span class="sig-paren">(</span><em>src</em>, <em>dst</em>, <em>symlinks=False</em>, <em>ignore=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#copytree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.copytree" title="Permalink to this definition">¶</a></dt>
+<dd><p>copy contents of src dir into dst dir
+stolen from: <a class="reference external" href="http://stackoverflow.com/questions/1868714/how-do-i-copy-an-entire-directory-of-files-into-an-existing-directory-using-pyth?lq=1">http://stackoverflow.com/questions/1868714/how-do-i-copy-an-entire-directory-of-files-into-an-existing-directory-using-pyth?lq=1</a>
+:param src: source dir to copy from
+:param dst: dst dir to copy to, created if does not exist
+:param symlinks: bool, whether to copy symlink or not
+:param ignore:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.create_tiles">
+<code class="descclassname">pyrate.shared.</code><code class="descname">create_tiles</code><span class="sig-paren">(</span><em>shape</em>, <em>nrows=2</em>, <em>ncols=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#create_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.create_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>shape must be a 2-tuple, i.e., 2d_array.shape.
+The returned list contains nrowsXncols Tiles with each tile preserving the
+&#8220;physical&#8221; layout of original arr.</p>
+<p>The number of rows can be changed (increased) such that  the resulting tiles
+with float32&#8217;s do not exceed 500MB in memory.</p>
+<p>When the array shape (rows, cols) are not divisible by (nrows, ncols) then
+some of the array dimensions can change according to numpy.array_split.</p>
+<dl class="docutils">
+<dt>shape: tuple</dt>
+<dd>shape tuple of ifg</dd>
+<dt>nrows: int</dt>
+<dd>number of rows of tiles</dd>
+<dt>ncols: int</dt>
+<dd>number of columns of tiles</dd>
+</dl>
+<p>list of Tile class instances</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.get_projection_info">
+<code class="descclassname">pyrate.shared.</code><code class="descname">get_projection_info</code><span class="sig-paren">(</span><em>ifg_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#get_projection_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.get_projection_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>return projection information of ifg</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.mkdir_p">
+<code class="descclassname">pyrate.shared.</code><code class="descname">mkdir_p</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#mkdir_p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.mkdir_p" title="Permalink to this definition">¶</a></dt>
+<dd><p>copied from stackoverflow</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.nan_and_mm_convert">
+<code class="descclassname">pyrate.shared.</code><code class="descname">nan_and_mm_convert</code><span class="sig-paren">(</span><em>ifg</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#nan_and_mm_convert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.nan_and_mm_convert" title="Permalink to this definition">¶</a></dt>
+<dd><p>ifg: Ifg class instance
+params: dict</p>
+<blockquote>
+<div>parameters dict</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.nanmedian">
+<code class="descclassname">pyrate.shared.</code><code class="descname">nanmedian</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#nanmedian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.nanmedian" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.output_tiff_filename">
+<code class="descclassname">pyrate.shared.</code><code class="descname">output_tiff_filename</code><span class="sig-paren">(</span><em>inpath</em>, <em>outpath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#output_tiff_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.output_tiff_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the geotiff filename for a given input filename</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.pre_prepare_ifgs">
+<code class="descclassname">pyrate.shared.</code><code class="descname">pre_prepare_ifgs</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#pre_prepare_ifgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.pre_prepare_ifgs" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>ifg_paths: list</dt>
+<dd>list of ifg paths</dd>
+<dt>params: dict</dt>
+<dd>parameters dict</dd>
+</dl>
+<dl class="docutils">
+<dt>ifgs: list</dt>
+<dd>list of Ifg instances</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.prepare_ifg">
+<code class="descclassname">pyrate.shared.</code><code class="descname">prepare_ifg</code><span class="sig-paren">(</span><em>ifg_path</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#prepare_ifg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.prepare_ifg" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>ifg_path: str</dt>
+<dd>ifg path</dd>
+<dt>tiles: list</dt>
+<dd>list of Tile instances</dd>
+<dt>params: dict</dt>
+<dd>config dict</dd>
+</dl>
+<p>ifg: ifg class instance</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.save_numpy_phase">
+<code class="descclassname">pyrate.shared.</code><code class="descname">save_numpy_phase</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>tiles</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#save_numpy_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.save_numpy_phase" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifg_paths</strong> &#8211; </li>
+<li><strong>params</strong> &#8211; </li>
+<li><strong>tiles</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.utm_zone">
+<code class="descclassname">pyrate.shared.</code><code class="descname">utm_zone</code><span class="sig-paren">(</span><em>longitude</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#utm_zone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.utm_zone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns basic UTM zone for given longitude in degrees. Currently does NOT
+handle the sub-zoning around Scandanavian countries.
+See <a class="reference external" href="http://www.dmap.co.uk/utmworld.htm">http://www.dmap.co.uk/utmworld.htm</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.warp_required">
+<code class="descclassname">pyrate.shared.</code><code class="descname">warp_required</code><span class="sig-paren">(</span><em>xlooks</em>, <em>ylooks</em>, <em>crop</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#warp_required"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.warp_required" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if params show rasters need to be cropped and/or resized.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.write_geotiff">
+<code class="descclassname">pyrate.shared.</code><code class="descname">write_geotiff</code><span class="sig-paren">(</span><em>header</em>, <em>data_path</em>, <em>dest</em>, <em>nodata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#write_geotiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.write_geotiff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes input image data (interferograms, DEM, incidence maps etc)
+to GeoTIFF format with PyRate metadata</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.write_output_geotiff">
+<code class="descclassname">pyrate.shared.</code><code class="descname">write_output_geotiff</code><span class="sig-paren">(</span><em>md</em>, <em>gt</em>, <em>wkt</em>, <em>data</em>, <em>dest</em>, <em>nodata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#write_output_geotiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.write_output_geotiff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes PyRate output data to a GeoTIFF file.
+md is a dictionary containing PyRate metadata
+gt is the GDAL geotransform for the data
+wkt is the GDAL projection information for the data</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.shared.write_unw_from_data_or_geotiff">
+<code class="descclassname">pyrate.shared.</code><code class="descname">write_unw_from_data_or_geotiff</code><span class="sig-paren">(</span><em>geotif_or_data</em>, <em>dest_unw</em>, <em>ifg_proc</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#write_unw_from_data_or_geotiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.write_unw_from_data_or_geotiff" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>geotif_or_data</strong> &#8211; data or geotif to covert into unw</li>
+<li><strong>dest_unw</strong> &#8211; destination unw file</li>
+<li><strong>ifg_proc</strong> &#8211; processor type, GAMMA=1, ROIPAC=0</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Python Modules</a><ul>
+      <li>Previous: <a href="roipac.html" title="previous chapter">ROIPAC Module</a></li>
+      <li>Next: <a href="timeseries.html" title="next chapter">Time Series Module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/shared.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/shared.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

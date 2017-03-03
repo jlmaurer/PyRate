@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Time Series Module &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="VCM and Maxvar Module" href="vcm.html" />
+    <link rel="prev" title="Shared Module" href="shared.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyrate.timeseries">
+<span id="time-series-module"></span><h1>Time Series Module<a class="headerlink" href="#module-pyrate.timeseries" title="Permalink to this headline">¶</a></h1>
+<p>This Python module is part of the PyRate software package</p>
+<p>This Python module contains functions for computing a time series 
+inversion in PyRate. It is based on the Matlab codes &#8216;tsinvnosm.m&#8217; 
+and &#8216;tsinvlap.m&#8217; contained in the Pirate package.</p>
+<p>Copyright 2017 Geoscience Australia</p>
+<blockquote>
+<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+<blockquote>
+<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+</div></blockquote>
+<dl class="exception">
+<dt id="pyrate.timeseries.TimeSeriesError">
+<em class="property">exception </em><code class="descclassname">pyrate.timeseries.</code><code class="descname">TimeSeriesError</code><a class="reference internal" href="_modules/pyrate/timeseries.html#TimeSeriesError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.TimeSeriesError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic exception for time series errors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.timeseries.check_time_series_params">
+<code class="descclassname">pyrate.timeseries.</code><code class="descname">check_time_series_params</code><span class="sig-paren">(</span><em>pthresh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#check_time_series_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.check_time_series_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validates time series parameter. head is any Ifg.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.timeseries.plot_timeseries">
+<code class="descclassname">pyrate.timeseries.</code><code class="descname">plot_timeseries</code><span class="sig-paren">(</span><em>tsincr</em>, <em>tscum</em>, <em>tsvel</em>, <em>output_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#plot_timeseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.plot_timeseries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the results of the timeseries analysis.</p>
+<p>A very basic plotting function used in code development</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.timeseries.remove_rank_def_rows">
+<code class="descclassname">pyrate.timeseries.</code><code class="descname">remove_rank_def_rows</code><span class="sig-paren">(</span><em>b_mat</em>, <em>nvelpar</em>, <em>ifgv</em>, <em>sel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#remove_rank_def_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.remove_rank_def_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove rank deficient rows</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.timeseries.solve_ts_svd">
+<code class="descclassname">pyrate.timeseries.</code><code class="descname">solve_ts_svd</code><span class="sig-paren">(</span><em>nvelpar</em>, <em>velflag</em>, <em>ifgv</em>, <em>b_mat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#solve_ts_svd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.solve_ts_svd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Solve the linear least squares system using the SVD method.
+Similar to the SBAS method implemented by Berardino et al. 2002</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.timeseries.time_series">
+<code class="descclassname">pyrate.timeseries.</code><code class="descname">time_series</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em>, <em>vcmt</em>, <em>mst=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#time_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns time series data from the given interferograms.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifgs</strong> &#8211; Network of interferograms.</li>
+<li><strong>params</strong> &#8211; configuration parameters</li>
+<li><strong>vcmt</strong> &#8211; Derived positive definite temporal variance covariance matrix</li>
+<li><strong>mst</strong> &#8211; [optional] array of ifg indexes from the MST-matrix.</li>
+<li><strong>parallel</strong> &#8211; use parallel processing or not.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>Tuple with the elements:</p>
+<ul class="simple">
+<li>incremental displacement time series,</li>
+<li>cumulative displacement time series, and</li>
+<li>velocity for the epoch interval</li>
+</ul>
+<p>these outputs are multi-dimensional arrays of
+size(nrows, ncols, nepochs-1), where:</p>
+<ul class="simple">
+<li><em>nrows</em> is the number of rows in the ifgs,</li>
+<li><em>ncols</em> is the  number of columns in the ifgs, and</li>
+<li><em>nepochs</em> is the number of unique epochs (dates)</li>
+</ul>
+<p>covered by the ifgs.).</p>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.timeseries.time_series_by_pixel">
+<code class="descclassname">pyrate.timeseries.</code><code class="descname">time_series_by_pixel</code><span class="sig-paren">(</span><em>row</em>, <em>col</em>, <em>b0_mat</em>, <em>sm_factor</em>, <em>sm_order</em>, <em>ifg_data</em>, <em>mst</em>, <em>nvelpar</em>, <em>p_thresh</em>, <em>vcmt</em>, <em>method</em>, <em>interp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#time_series_by_pixel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.time_series_by_pixel" title="Permalink to this definition">¶</a></dt>
+<dd><p>time series computation for each pixel</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.timeseries.time_series_by_rows">
+<code class="descclassname">pyrate.timeseries.</code><code class="descname">time_series_by_rows</code><span class="sig-paren">(</span><em>row</em>, <em>b0_mat</em>, <em>sm_factor</em>, <em>sm_order</em>, <em>ifg_data</em>, <em>mst</em>, <em>ncols</em>, <em>nvelpar</em>, <em>p_thresh</em>, <em>vcmt</em>, <em>ts_method</em>, <em>interp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#time_series_by_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.time_series_by_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>time series computation for each row of interferrograms</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.timeseries.time_series_setup">
+<code class="descclassname">pyrate.timeseries.</code><code class="descname">time_series_setup</code><span class="sig-paren">(</span><em>ifgs</em>, <em>mst</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#time_series_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.time_series_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function setting up time series computation parameters</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Python Modules</a><ul>
+      <li>Previous: <a href="shared.html" title="previous chapter">Shared Module</a></li>
+      <li>Next: <a href="vcm.html" title="next chapter">VCM and Maxvar Module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/timeseries.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/timeseries.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

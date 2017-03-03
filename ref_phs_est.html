@@ -1,0 +1,188 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Reference Phase Calculation Module &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reference Pixel Calculation Module" href="refpixel.html" />
+    <link rel="prev" title="Logging Module" href="pyratelog.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyrate.ref_phs_est">
+<span id="reference-phase-calculation-module"></span><h1>Reference Phase Calculation Module<a class="headerlink" href="#module-pyrate.ref_phs_est" title="Permalink to this headline">¶</a></h1>
+<p>This Python module is part of the PyRate software package</p>
+<p>This Python module implements a reference phase estimation algorithm
+and is based on the Matlab code in the &#8216;refphsest.m&#8217; of the Pirate
+package.</p>
+<p>Copyright 2017 Geoscience Australia</p>
+<blockquote>
+<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+<blockquote>
+<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+</div></blockquote>
+<dl class="exception">
+<dt id="pyrate.ref_phs_est.ReferencePhaseError">
+<em class="property">exception </em><code class="descclassname">pyrate.ref_phs_est.</code><code class="descname">ReferencePhaseError</code><a class="reference internal" href="_modules/pyrate/ref_phs_est.html#ReferencePhaseError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.ref_phs_est.ReferencePhaseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic class for errors in reference phase estimation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.ref_phs_est.check_ref_phase_ifgs">
+<code class="descclassname">pyrate.ref_phs_est.</code><code class="descname">check_ref_phase_ifgs</code><span class="sig-paren">(</span><em>ifgs</em>, <em>flags</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/ref_phs_est.html#check_ref_phase_ifgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.ref_phs_est.check_ref_phase_ifgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to check that the ref phase status of all ifgs are the same</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.ref_phs_est.est_ref_phase_method1">
+<code class="descclassname">pyrate.ref_phs_est.</code><code class="descname">est_ref_phase_method1</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/ref_phs_est.html#est_ref_phase_method1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.ref_phs_est.est_ref_phase_method1" title="Permalink to this definition">¶</a></dt>
+<dd><p>ref phs estimate method 1 estimation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.ref_phs_est.est_ref_phase_method2">
+<code class="descclassname">pyrate.ref_phs_est.</code><code class="descname">est_ref_phase_method2</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em>, <em>refpx</em>, <em>refpy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/ref_phs_est.html#est_ref_phase_method2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.ref_phs_est.est_ref_phase_method2" title="Permalink to this definition">¶</a></dt>
+<dd><p>ref phs estimate method 2</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.ref_phs_est.est_ref_phs_method1">
+<code class="descclassname">pyrate.ref_phs_est.</code><code class="descname">est_ref_phs_method1</code><span class="sig-paren">(</span><em>phase_data</em>, <em>comp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/ref_phs_est.html#est_ref_phs_method1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.ref_phs_est.est_ref_phs_method1" title="Permalink to this definition">¶</a></dt>
+<dd><p>convenience function for ref phs estimate method 1 parallelisation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.ref_phs_est.est_ref_phs_method2">
+<code class="descclassname">pyrate.ref_phs_est.</code><code class="descname">est_ref_phs_method2</code><span class="sig-paren">(</span><em>phase_data</em>, <em>half_chip_size</em>, <em>refpx</em>, <em>refpy</em>, <em>thresh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/ref_phs_est.html#est_ref_phs_method2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.ref_phs_est.est_ref_phs_method2" title="Permalink to this definition">¶</a></dt>
+<dd><p>convenience function for ref phs estimate method 2 parallelisation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.ref_phs_est.estimate_ref_phase">
+<code class="descclassname">pyrate.ref_phs_est.</code><code class="descname">estimate_ref_phase</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em>, <em>refpx</em>, <em>refpy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/ref_phs_est.html#estimate_ref_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.ref_phs_est.estimate_ref_phase" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifgs</strong> &#8211; list of interferrograms</li>
+<li><strong>params</strong> &#8211; parameters of the simulation</li>
+<li><strong>refpx</strong> &#8211; reference pixel found by ref pixel method</li>
+<li><strong>refpy</strong> &#8211; reference pixel found by ref pixel method</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">ref_phs:</th><td class="field-body">reference phase correction</td>
+</tr>
+<tr class="field-even field"><th class="field-name">ifgs:</th><td class="field-body">reference phase data removed list of ifgs</td>
+</tr>
+</tbody>
+</table>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Python Modules</a><ul>
+      <li>Previous: <a href="pyratelog.html" title="previous chapter">Logging Module</a></li>
+      <li>Next: <a href="refpixel.html" title="next chapter">Reference Pixel Calculation Module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ref_phs_est.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/ref_phs_est.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

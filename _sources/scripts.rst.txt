@@ -6,8 +6,4 @@ Command Line Scripts
 .. autosummary::
    :toctree: generated/
 
-   converttogtif
    main
-   postprocessing
-   run_pyrate
-   run_prepifg

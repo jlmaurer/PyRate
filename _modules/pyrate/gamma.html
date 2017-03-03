@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyrate.gamma &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyrate.gamma</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This Python module is part of the PyRate software package</span>
+
+<span class="sd">This Python module contains tools for reading GAMMA format input data.</span>
+
+<span class="sd">Copyright 2017 Geoscience Australia</span>
+
+<span class="sd">   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="sd">   you may not use this file except in compliance with the License.</span>
+<span class="sd">   You may obtain a copy of the License at</span>
+
+<span class="sd">       http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="sd">   Unless required by applicable law or agreed to in writing, software</span>
+<span class="sd">   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="sd">   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="sd">   See the License for the specific language governing permissions and</span>
+<span class="sd">   limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pyrate.ifgconstants</span> <span class="k">as</span> <span class="nn">ifc</span>
+
+<span class="c1"># constants</span>
+<span class="n">GAMMA_DATE</span> <span class="o">=</span> <span class="s1">&#39;date&#39;</span>
+<span class="n">GAMMA_WIDTH</span> <span class="o">=</span> <span class="s1">&#39;width&#39;</span>
+<span class="n">GAMMA_NROWS</span> <span class="o">=</span> <span class="s1">&#39;nlines&#39;</span>
+<span class="n">GAMMA_CORNER_LAT</span> <span class="o">=</span> <span class="s1">&#39;corner_lat&#39;</span>
+<span class="n">GAMMA_CORNER_LONG</span> <span class="o">=</span> <span class="s1">&#39;corner_lon&#39;</span>
+<span class="n">GAMMA_Y_STEP</span> <span class="o">=</span> <span class="s1">&#39;post_lat&#39;</span>
+<span class="n">GAMMA_X_STEP</span> <span class="o">=</span> <span class="s1">&#39;post_lon&#39;</span>
+<span class="n">GAMMA_DATUM</span> <span class="o">=</span> <span class="s1">&#39;ellipsoid_name&#39;</span>
+<span class="n">GAMMA_FREQUENCY</span> <span class="o">=</span> <span class="s1">&#39;radar_frequency&#39;</span>
+<span class="n">GAMMA_INCIDENCE</span> <span class="o">=</span> <span class="s1">&#39;incidence_angle&#39;</span>
+<span class="n">RADIANS</span> <span class="o">=</span> <span class="s1">&#39;RADIANS&#39;</span>
+<span class="n">GAMMA</span> <span class="o">=</span> <span class="s1">&#39;GAMMA&#39;</span>
+
+
+<div class="viewcode-block" id="check_raw_data"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.check_raw_data">[docs]</a><span class="k">def</span> <span class="nf">check_raw_data</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">nrows</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data_path: str</span>
+<span class="sd">        path to file</span>
+<span class="sd">    ncols: int</span>
+<span class="sd">        expected number of cols</span>
+<span class="sd">    nrows: int</span>
+<span class="sd">        expectged number of rows</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">size</span> <span class="o">=</span> <span class="n">ncols</span> <span class="o">*</span> <span class="n">nrows</span> <span class="o">*</span> <span class="mi">4</span>  <span class="c1"># DEM and Ifg data are 4 byte floats</span>
+    <span class="n">act_size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span><span class="o">.</span><span class="n">st_size</span>
+    <span class="k">if</span> <span class="n">act_size</span> <span class="o">!=</span> <span class="n">size</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> should have size </span><span class="si">%s</span><span class="s1">, not </span><span class="si">%s</span><span class="s1">. Is the correct file being used?&#39;</span>
+        <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">act_size</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="check_step_mismatch"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.check_step_mismatch">[docs]</a><span class="k">def</span> <span class="nf">check_step_mismatch</span><span class="p">(</span><span class="n">hdr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hdr: dict</span>
+<span class="sd">        dict corresponding to header file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable= invalid-name</span>
+    <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">hdr</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_X_STEP</span><span class="p">],</span> <span class="n">hdr</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_Y_STEP</span><span class="p">]]]</span>
+
+    <span class="k">if</span> <span class="n">xs</span> <span class="o">!=</span> <span class="n">ys</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;X and Y cell sizes do not match: </span><span class="si">%s</span><span class="s1"> &amp; </span><span class="si">%s</span><span class="s1">&#39;</span>
+        <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="parse_header"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.parse_header">[docs]</a><span class="k">def</span> <span class="nf">parse_header</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parses all GAMMA epoch/DEM header file fields into a dictionary&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">raw_segs</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">text</span> <span class="k">if</span> <span class="s1">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">]</span>
+
+    <span class="c1"># convert the content into a giant dict of all key, values</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">((</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">raw_segs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="parse_header_new"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.parse_header_new">[docs]</a><span class="k">def</span> <span class="nf">parse_header_new</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parses all GAMMA epoch/DEM header file fields into a dictionary&quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="n">raw_segs</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">text</span><span class="p">]</span>
+
+    <span class="c1"># convert the content into a giant dict of all key, values</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">((</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">raw_segs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="parse_epoch_header"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.parse_epoch_header">[docs]</a><span class="k">def</span> <span class="nf">parse_epoch_header</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns dict of the minimum required epoch metadata needed for PyRate&quot;&quot;&quot;</span>
+    <span class="n">lookup</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">subset</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">sec</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+                                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_DATE</span><span class="p">][:</span><span class="mi">6</span><span class="p">]]</span>
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_DATE</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_TIME</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">sec</span><span class="p">)</span>
+
+    <span class="c1"># handle conversion of radar frequency to wavelength</span>
+    <span class="n">freq</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_FREQUENCY</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">unit</span> <span class="o">!=</span> <span class="s2">&quot;Hz&quot;</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Unrecognised unit field for radar_frequency: </span><span class="si">%s</span><span class="s1">&#39;</span>
+        <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">unit</span><span class="p">)</span>
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_WAVELENGTH_METRES</span><span class="p">]</span> <span class="o">=</span> <span class="n">frequency_to_wavelength</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">freq</span><span class="p">))</span>
+
+    <span class="n">incidence</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_INCIDENCE</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">unit</span> <span class="o">!=</span> <span class="s2">&quot;degrees&quot;</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Unrecognised unit field for incidence_angle: </span><span class="si">%s</span><span class="s1">&#39;</span>
+        <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">unit</span><span class="p">)</span>
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">incidence</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">subset</span></div>
+
+
+<div class="viewcode-block" id="parse_dem_header"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.parse_dem_header">[docs]</a><span class="k">def</span> <span class="nf">parse_dem_header</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns dict of metadata for converting GAMMA to custom PyRate GeoTIFF&quot;&quot;&quot;</span>
+    <span class="n">lookup</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="c1"># NB: many lookup fields have multiple elements, eg [&#39;1000&#39;, &#39;Hz&#39;]</span>
+    <span class="n">subset</span> <span class="o">=</span> <span class="p">{</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_NCOLS</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_WIDTH</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+              <span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_NROWS</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_NROWS</span><span class="p">][</span><span class="mi">0</span><span class="p">])}</span>
+
+    <span class="n">expected</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;decimal&#39;</span><span class="p">,</span> <span class="s1">&#39;degrees&#39;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="n">GAMMA_CORNER_LAT</span><span class="p">,</span> <span class="n">GAMMA_CORNER_LONG</span><span class="p">,</span> <span class="n">GAMMA_X_STEP</span><span class="p">,</span> <span class="n">GAMMA_Y_STEP</span><span class="p">]:</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_CORNER_LAT</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span>
+        <span class="k">if</span> <span class="n">units</span> <span class="o">!=</span> <span class="n">expected</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Unrecognised units for GAMMA </span><span class="si">%s</span><span class="s2"> field</span><span class="se">\n</span><span class="s2">. Got </span><span class="si">%s</span><span class="s2">, expected </span><span class="si">%s</span><span class="s2">&quot;</span>
+            <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">expected</span><span class="p">))</span>
+
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_LAT</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_CORNER_LAT</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_LONG</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_CORNER_LONG</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_Y_STEP</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_Y_STEP</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_X_STEP</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_X_STEP</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_DATUM</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_DATUM</span><span class="p">])</span>
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INSAR_PROCESSOR</span><span class="p">]</span> <span class="o">=</span> <span class="n">GAMMA</span>
+    <span class="k">return</span> <span class="n">subset</span></div>
+
+
+<div class="viewcode-block" id="frequency_to_wavelength"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.frequency_to_wavelength">[docs]</a><span class="k">def</span> <span class="nf">frequency_to_wavelength</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert radar frequency to wavelength</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">ifc</span><span class="o">.</span><span class="n">SPEED_OF_LIGHT_METRES_PER_SECOND</span> <span class="o">/</span> <span class="n">freq</span></div>
+
+
+<div class="viewcode-block" id="combine_headers"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.combine_headers">[docs]</a><span class="k">def</span> <span class="nf">combine_headers</span><span class="p">(</span><span class="n">hdr0</span><span class="p">,</span> <span class="n">hdr1</span><span class="p">,</span> <span class="n">dem_hdr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Combines both epoch header lookups into single ifg header/dict</span>
+
+<span class="sd">    hdr0: header for the earliest/master ifg</span>
+<span class="sd">    hdr1: header for the latest/slave ifg</span>
+<span class="sd">    dem_hdr: dict of DEM header attributes</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">[</span><span class="n">hdr0</span><span class="p">,</span> <span class="n">hdr1</span><span class="p">,</span> <span class="n">dem_hdr</span><span class="p">]]):</span>
+        <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="s1">&#39;Header args need to be dicts&#39;</span><span class="p">)</span>
+
+    <span class="n">date0</span><span class="p">,</span> <span class="n">date1</span> <span class="o">=</span> <span class="n">hdr0</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_DATE</span><span class="p">],</span> <span class="n">hdr1</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_DATE</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">date0</span> <span class="o">==</span> <span class="n">date1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="s2">&quot;Can&#39;t combine headers for the same day&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">date1</span> <span class="o">&lt;</span> <span class="n">date0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="s2">&quot;Wrong date order&quot;</span><span class="p">)</span>
+
+    <span class="n">chdr</span> <span class="o">=</span> <span class="p">{</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_TIME_SPAN</span><span class="p">:</span> <span class="p">(</span><span class="n">date1</span> <span class="o">-</span> <span class="n">date0</span><span class="p">)</span><span class="o">.</span><span class="n">days</span> <span class="o">/</span> <span class="n">ifc</span><span class="o">.</span><span class="n">DAYS_PER_YEAR</span><span class="p">,</span>
+            <span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_DATE</span><span class="p">:</span> <span class="n">date0</span><span class="p">,</span>
+            <span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_TIME</span><span class="p">:</span> <span class="n">hdr0</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_TIME</span><span class="p">],</span>
+            <span class="n">ifc</span><span class="o">.</span><span class="n">SLAVE_DATE</span><span class="p">:</span> <span class="n">date1</span><span class="p">,</span>
+            <span class="n">ifc</span><span class="o">.</span><span class="n">SLAVE_TIME</span><span class="p">:</span> <span class="n">hdr1</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_TIME</span><span class="p">],</span>
+            <span class="n">ifc</span><span class="o">.</span><span class="n">DATA_UNITS</span><span class="p">:</span> <span class="n">RADIANS</span><span class="p">,</span>
+            <span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INSAR_PROCESSOR</span><span class="p">:</span> <span class="n">GAMMA</span><span class="p">}</span>
+
+    <span class="c1"># set incidence angle to mean of master and slave</span>
+    <span class="n">inc_ang</span> <span class="o">=</span> <span class="n">hdr0</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">inc_ang</span><span class="p">,</span> <span class="n">hdr1</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-1</span><span class="p">):</span>
+        <span class="n">chdr</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">hdr0</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">]</span> 
+                    <span class="o">+</span> <span class="n">hdr1</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Incidence angles differ by more than 1e-1&quot;</span>
+        <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">wavelen</span> <span class="o">=</span> <span class="n">hdr0</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_WAVELENGTH_METRES</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">wavelen</span><span class="p">,</span> <span class="n">hdr1</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_WAVELENGTH_METRES</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
+        <span class="n">chdr</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_WAVELENGTH_METRES</span><span class="p">]</span> <span class="o">=</span> <span class="n">wavelen</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">chdr</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_DATE</span><span class="p">],</span> <span class="n">chdr</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">SLAVE_DATE</span><span class="p">])</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Wavelength mismatch, check both header files for </span><span class="si">%s</span><span class="s2"> &amp; </span><span class="si">%s</span><span class="s2">&quot;</span>
+        <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">args</span><span class="p">)</span>
+    <span class="c1"># non-cropped, non-multilooked geotif process step information added</span>
+    <span class="n">chdr</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">DATA_TYPE</span><span class="p">]</span> <span class="o">=</span> <span class="n">ifc</span><span class="o">.</span><span class="n">ORIG</span>
+
+    <span class="n">chdr</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">dem_hdr</span><span class="p">)</span>  <span class="c1"># add geographic data</span>
+    <span class="k">return</span> <span class="n">chdr</span></div>
+
+
+<div class="viewcode-block" id="manage_headers"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.manage_headers">[docs]</a><span class="k">def</span> <span class="nf">manage_headers</span><span class="p">(</span><span class="n">dem_header_file</span><span class="p">,</span> <span class="n">header_paths</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dem_header_file: str</span>
+<span class="sd">        dem header path</span>
+<span class="sd">    header_paths:</span>
+<span class="sd">        header paths corresponding to the master and slave dates</span>
+<span class="sd">    Return</span>
+<span class="sd">    ------</span>
+<span class="sd">    combined_header: dict</span>
+<span class="sd">        combined dict with dem, header file 1 and 2</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dem_header</span> <span class="o">=</span> <span class="n">parse_dem_header</span><span class="p">(</span><span class="n">dem_header_file</span><span class="p">)</span>
+    <span class="c1"># find param files containing filename dates</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">header_paths</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">[</span><span class="n">parse_epoch_header</span><span class="p">(</span><span class="n">hp</span><span class="p">)</span> <span class="k">for</span> <span class="n">hp</span> <span class="ow">in</span> <span class="n">header_paths</span><span class="p">]</span>
+        <span class="n">combined_header</span> <span class="o">=</span> <span class="n">combine_headers</span><span class="p">(</span><span class="n">headers</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">headers</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">dem_header</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># probably have DEM or incidence file</span>
+        <span class="n">combined_header</span> <span class="o">=</span> <span class="n">dem_header</span>
+        <span class="n">combined_header</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">DATA_TYPE</span><span class="p">]</span> <span class="o">=</span> <span class="n">ifc</span><span class="o">.</span><span class="n">DEM</span>
+
+    <span class="k">return</span> <span class="n">combined_header</span></div>
+
+
+<div class="viewcode-block" id="GammaException"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.GammaException">[docs]</a><span class="k">class</span> <span class="nc">GammaException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gamma generic exception class</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

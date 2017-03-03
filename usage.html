@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Usage &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="Installation" href="installation.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="usage">
+<span id="usage"></span><h1>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pyrate-workflow">
+<span id="pyrate-workflow"></span><h2>PyRate workflow:<a class="headerlink" href="#pyrate-workflow" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">PyRate</span></code> installs an executable <code class="docutils literal"><span class="pre">pyrate</span></code>.</p>
+<p>Use <code class="docutils literal"><span class="pre">help</span></code> for the different command line options:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">pyrate</span> <span class="o">--</span><span class="n">help</span>
+<span class="n">Usage</span><span class="p">:</span> <span class="n">pyrate</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">COMMAND</span> <span class="p">[</span><span class="n">ARGS</span><span class="p">]</span><span class="o">...</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">v</span><span class="p">,</span> <span class="o">--</span><span class="n">verbosity</span> <span class="p">[</span><span class="n">DEBUG</span><span class="o">|</span><span class="n">INFO</span><span class="o">|</span><span class="n">WARNING</span><span class="o">|</span><span class="n">ERROR</span><span class="p">]</span>
+                                  <span class="n">Level</span> <span class="n">of</span> <span class="n">logging</span>
+  <span class="o">--</span><span class="n">help</span>                          <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+
+<span class="n">Commands</span><span class="p">:</span>
+  <span class="n">linrate</span>
+  <span class="n">postprocess</span>
+  <span class="n">prepifg</span>
+</pre></div>
+</div>
+<p>As you can see <code class="docutils literal"><span class="pre">pyrate</span></code> has three command line options.</p>
+<ol class="simple">
+<li>prepifg</li>
+<li>linrate</li>
+<li>postprocess</li>
+</ol>
+<p>Below we discuss these options.</p>
+<div class="section" id="preparing-interferrograms-prepifg">
+<span id="preparing-interferrograms-prepifg"></span><h3>Preparing interferrograms: prepifg<a class="headerlink" href="#preparing-interferrograms-prepifg" title="Permalink to this headline">¶</a></h3>
+<p>The first step of PyRate is to convert the unwrapped interforrograms into
+geotiffs, followed by multilooking and cropping. Both of these operations are
+performed by <code class="docutils literal"><span class="pre">pyrate</span> <span class="pre">prepifg</span></code> command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">pyrate</span> <span class="n">prepifg</span> <span class="o">--</span><span class="n">help</span>
+<span class="n">Usage</span><span class="p">:</span> <span class="n">pyrate</span> <span class="n">prepifg</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">CONFIG_FILE</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">--</span><span class="n">help</span>  <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>So one can use the <code class="docutils literal"><span class="pre">prepfig</span></code> command as the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pyrate</span> <span class="n">prepifg</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">config_file</span>
+</pre></div>
+</div>
+<p>The two major steps during the <code class="docutils literal"><span class="pre">prepifg</span></code> operation are described below.</p>
+<div class="section" id="data-formatting-convert-to-geotiff">
+<span id="data-formatting-convert-to-geotiff"></span><h4>Data formatting: convert to geotiff<a class="headerlink" href="#data-formatting-convert-to-geotiff" title="Permalink to this headline">¶</a></h4>
+<p>The <code class="docutils literal"><span class="pre">prepifg</span></code> command will determine the input format from the value specified
+at the <em>processor:</em> keyword in the config file (0: ROI_PAC; 1: GAMMA)</p>
+<p>A GAMMA translation requires a geographic DEM header file (*.dem.par) and SLC parameter files (*.slc.par) for both master and slave images to extract metadata required for the formatting. Therefore three header files are needed to format each geocoded unwrapped GAMMA interferogram &lt;GAMMA_FILE&gt;. The path and name of the DEM header file are specified in the config file under the <em>demHeaderFile:</em> keyword. The SLC parameter files should be in the same location as the interferogram file and are found automatically by date string pattern matching.</p>
+<p>A ROI_PAC translation requires a header/resource file (<em>.rsc</em> extension) for the geocoded unwrapped ROI_PAC interferogram (in the same directory) and either the geographic projection (e.g. &#8216;WGS84&#8217;) specified as an option or a header/resource file for the geographic DEM containing the geographic projection in the parameter DATUM:</p>
+</div>
+<div class="section" id="image-transformations-multilooking-and-cropping">
+<span id="image-transformations-multilooking-and-cropping"></span><h4>Image transformations: multilooking and cropping<a class="headerlink" href="#image-transformations-multilooking-and-cropping" title="Permalink to this headline">¶</a></h4>
+<p>This <code class="docutils literal"><span class="pre">prepifg</span></code> command will also perform multi-looking (resampling) and
+cropping the images.</p>
+<p>Two examples of the config files are provided in <code class="docutils literal"><span class="pre">configs</span></code> directory,
+with examples of the <code class="docutils literal"><span class="pre">roipac</span></code> and <code class="docutils literal"><span class="pre">gamma</span></code> prepifg configuration.
+Both config files can be used with <code class="docutils literal"><span class="pre">prepifg</span></code>.</p>
+</div>
+</div>
+<div class="section" id="linear-rate-and-time-series-analysis-linrate">
+<span id="linear-rate-and-time-series-analysis-linrate"></span><h3>Linear rate and time series analysis: linrate<a class="headerlink" href="#linear-rate-and-time-series-analysis-linrate" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">pyrate</span> <span class="n">linrate</span> <span class="o">--</span><span class="n">help</span>
+<span class="n">Usage</span><span class="p">:</span> <span class="n">pyrate</span> <span class="n">linrate</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">CONFIG_FILE</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">r</span><span class="p">,</span> <span class="o">--</span><span class="n">rows</span> <span class="n">INTEGER</span>  <span class="n">divide</span> <span class="n">ifgs</span> <span class="n">into</span> <span class="n">this</span> <span class="n">many</span> <span class="n">rows</span>
+  <span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="o">--</span><span class="n">cols</span> <span class="n">INTEGER</span>  <span class="n">divide</span> <span class="n">ifgs</span> <span class="n">into</span> <span class="n">this</span> <span class="n">many</span> <span class="n">columns</span>
+  <span class="o">--</span><span class="n">help</span>              <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+</pre></div>
+</div>
+<p>This is the core of the processing tools, handled by the <code class="docutils literal"><span class="pre">linrate</span></code> command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pyrate</span> <span class="n">linrate</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">config_file</span> <span class="o">-</span><span class="n">c</span> <span class="mi">3</span> <span class="o">-</span><span class="n">r</span> <span class="mi">4</span>
+</pre></div>
+</div>
+<p>This command will does the time series and linear rate analysis, but has the
+options to break the interferrograms into tiles of <code class="docutils literal"><span class="pre">r</span></code> rows and <code class="docutils literal"><span class="pre">c</span></code> columns.
+So this above command will break the interferrograms into 12 tiles and will
+produce 12 linear rate and time series predictions corresponding to each tile.</p>
+<p>The optional rows and columns help us create smaller <code class="docutils literal"><span class="pre">tiles</span></code> of the
+interferrograms that can be accommodated in the memory. The number of tiles
+chosen should be as small as possible that fits in the system memory.</p>
+</div>
+<div class="section" id="putting-it-back-together-postprocess">
+<span id="putting-it-back-together-postprocess"></span><h3>Putting it back together: postprocess<a class="headerlink" href="#putting-it-back-together-postprocess" title="Permalink to this headline">¶</a></h3>
+<p>The last step in <code class="docutils literal"><span class="pre">pyrate</span></code> is to put all the tiles back together from the
+<code class="docutils literal"><span class="pre">linrate</span></code> part.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">pyrate</span> <span class="n">postprocess</span> <span class="o">--</span><span class="n">help</span>
+<span class="n">Usage</span><span class="p">:</span> <span class="n">pyrate</span> <span class="n">postprocess</span> <span class="p">[</span><span class="n">OPTIONS</span><span class="p">]</span> <span class="n">CONFIG_FILE</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">r</span><span class="p">,</span> <span class="o">--</span><span class="n">rows</span> <span class="n">INTEGER</span>  <span class="n">divide</span> <span class="n">ifgs</span> <span class="n">into</span> <span class="n">this</span> <span class="n">many</span> <span class="n">rows</span>
+  <span class="o">-</span><span class="n">c</span><span class="p">,</span> <span class="o">--</span><span class="n">cols</span> <span class="n">INTEGER</span>  <span class="n">divide</span> <span class="n">ifgs</span> <span class="n">into</span> <span class="n">this</span> <span class="n">many</span> <span class="n">columns</span>
+  <span class="o">--</span><span class="n">help</span>              <span class="n">Show</span> <span class="n">this</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Make sure to use the same number of rows and columns with <code class="docutils literal"><span class="pre">postprocess</span></code> as
+with <code class="docutils literal"><span class="pre">linrate</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pyrate</span> <span class="n">postprocess</span> <span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">config_file</span> <span class="o">-</span><span class="n">c</span> <span class="mi">3</span> <span class="o">-</span><span class="n">r</span> <span class="mi">4</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="mpi-support">
+<span id="mpi-support"></span><h2>MPI Support<a class="headerlink" href="#mpi-support" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">PyRate</span></code> has been designed for supercomputers and instructions to use an HPC
+cluster can be found in the <a class="reference external" href="pbs">pbs directory</a>.</p>
+</div>
+<div class="section" id="python-multiprocessing-support">
+<span id="python-multiprocessing-support"></span><h2>Python multiprocessing support<a class="headerlink" href="#python-multiprocessing-support" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the MPI support for HPC, <code class="docutils literal"><span class="pre">PyRate</span></code> can be use standard
+multiprocessing simply by turning <code class="docutils literal"><span class="pre">parallel:</span> <span class="pre">1</span></code> in the config file to take
+advantage of multiple cores on a single PC.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Usage</a><ul>
+<li><a class="reference internal" href="#pyrate-workflow">PyRate workflow:</a><ul>
+<li><a class="reference internal" href="#preparing-interferrograms-prepifg">Preparing interferrograms: prepifg</a><ul>
+<li><a class="reference internal" href="#data-formatting-convert-to-geotiff">Data formatting: convert to geotiff</a></li>
+<li><a class="reference internal" href="#image-transformations-multilooking-and-cropping">Image transformations: multilooking and cropping</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#linear-rate-and-time-series-analysis-linrate">Linear rate and time series analysis: linrate</a></li>
+<li><a class="reference internal" href="#putting-it-back-together-postprocess">Putting it back together: postprocess</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#mpi-support">MPI Support</a></li>
+<li><a class="reference internal" href="#python-multiprocessing-support">Python multiprocessing support</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="installation.html" title="previous chapter">Installation</a></li>
+      <li>Next: <a href="contributing.html" title="next chapter">Contributing</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/usage.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/usage.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Matlab MST Module &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MST Module" href="mst.html" />
+    <link rel="prev" title="Linrate Module" href="linrate.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyrate.matlab_mst">
+<span id="matlab-mst-module"></span><h1>Matlab MST Module<a class="headerlink" href="#module-pyrate.matlab_mst" title="Permalink to this headline">¶</a></h1>
+<p>This Python module is part of the PyRate software package</p>
+<p>This Python module implements the minimum spanning tree matrix algorithm 
+of the Matlab code in &#8216;make_mstmat.m&#8217; of the Pirate package.</p>
+<p>Copyright 2017 Geoscience Australia</p>
+<blockquote>
+<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+<blockquote>
+<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+</div></blockquote>
+<dl class="class">
+<dt id="pyrate.matlab_mst.IfGMeta">
+<em class="property">class </em><code class="descclassname">pyrate.matlab_mst.</code><code class="descname">IfGMeta</code><a class="reference internal" href="_modules/pyrate/matlab_mst.html#IfGMeta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.IfGMeta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Metaclass for matlab mst calculation</p>
+<dl class="method">
+<dt id="pyrate.matlab_mst.IfGMeta.get_ifgs_list">
+<code class="descname">get_ifgs_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/matlab_mst.html#IfGMeta.get_ifgs_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.IfGMeta.get_ifgs_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this method to get the difgs from the datafiles.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyrate.matlab_mst.IfGMeta.get_nml_list">
+<code class="descname">get_nml_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/matlab_mst.html#IfGMeta.get_nml_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.IfGMeta.get_nml_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Override this method to get the data files.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyrate.matlab_mst.IfgListPyRate">
+<em class="property">class </em><code class="descclassname">pyrate.matlab_mst.</code><code class="descname">IfgListPyRate</code><span class="sig-paren">(</span><em>datafiles=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/matlab_mst.html#IfgListPyRate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.IfgListPyRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>copy of matlab ifglist in getnml.m.
+Please note that we don&#8217;t need BaseT unless we are using variance in ifg
+data as cost.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.matlab_mst.calculate_connect_and_ntrees">
+<code class="descclassname">pyrate.matlab_mst.</code><code class="descname">calculate_connect_and_ntrees</code><span class="sig-paren">(</span><em>connect</em>, <em>mst_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/matlab_mst.html#calculate_connect_and_ntrees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.calculate_connect_and_ntrees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Count isolated trees</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.matlab_mst.data_setup">
+<code class="descclassname">pyrate.matlab_mst.</code><code class="descname">data_setup</code><span class="sig-paren">(</span><em>datafiles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/matlab_mst.html#data_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.data_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns Ifg objs for the files in the sydney test dir
+input phase data is in radians;
+these ifgs are in radians - not converted to mm</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.matlab_mst.get_nml">
+<code class="descclassname">pyrate.matlab_mst.</code><code class="descname">get_nml</code><span class="sig-paren">(</span><em>ifg_list_instance</em>, <em>nodata_value</em>, <em>nan_conversion=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/matlab_mst.html#get_nml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.get_nml" title="Permalink to this definition">¶</a></dt>
+<dd><p>A reproduction of getnml.m, the matlab function in pi-rate.
+Note: the matlab version tested does not have nan&#8217;s.
+replaces the ifg_list_instance in place</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.matlab_mst.get_sub_structure">
+<code class="descclassname">pyrate.matlab_mst.</code><code class="descname">get_sub_structure</code><span class="sig-paren">(</span><em>ifg_list</em>, <em>nan_v</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/matlab_mst.html#get_sub_structure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.get_sub_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the getsucstruct.m in pi-rate/matlab.
+:param ifg_list: original ifg_list class instance.
+:param nan_v: all ifg values at this location.
+Returns list of tuples (id, master, slave, nan_frac)
+corresponding to the chosen ifgs.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.matlab_mst.matlab_mst">
+<code class="descclassname">pyrate.matlab_mst.</code><code class="descname">matlab_mst</code><span class="sig-paren">(</span><em>ifg_object</em>, <em>p_threshold=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/matlab_mst.html#matlab_mst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.matlab_mst" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is an implementation of matlab/pirate make_mstmat.m.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.matlab_mst.matlab_mst_bool">
+<code class="descclassname">pyrate.matlab_mst.</code><code class="descname">matlab_mst_bool</code><span class="sig-paren">(</span><em>ifg_list_instance</em>, <em>p_threshold=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/matlab_mst.html#matlab_mst_bool"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.matlab_mst_bool" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ifg_instance</strong> &#8211; IfgListPyRate instance</li>
+<li><strong>p_threshold</strong> &#8211; minimum number of non-nan values at any pixel for selection</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This should have the same output as matlab_mst. Should be tested.
+Please note that the generator version is more memory efficient.
+If memory was not a concern we could have found the entire mst matrix in the
+previous function and this would have been unnecessary.
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.matlab_mst.matlab_mst_gen">
+<code class="descclassname">pyrate.matlab_mst.</code><code class="descname">matlab_mst_gen</code><span class="sig-paren">(</span><em>ifg_instance</em>, <em>p_threshold=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/matlab_mst.html#matlab_mst_gen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.matlab_mst_gen" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ifg_instance</strong> &#8211; IfgListPyRate instance</li>
+<li><strong>p_threshold</strong> &#8211; minimum number of non-nan values at any pixel for selection</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This is an implementation of matlab/pirate make_mstmat.m.
+This we will be able to call from mst.py and the rest of the
+python framework setup so far.</p>
+<p>Please note that the generator version is more memory efficient.
+If memory was not a concern we could have found the entire mst matrix in the
+previous function and this would have been unnecessary.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.matlab_mst.matlab_mst_kruskal">
+<code class="descclassname">pyrate.matlab_mst.</code><code class="descname">matlab_mst_kruskal</code><span class="sig-paren">(</span><em>edges</em>, <em>ntrees=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/matlab_mst.html#matlab_mst_kruskal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.matlab_mst.matlab_mst_kruskal" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is an implementation of the pi-rate mst_kruskal.m
+:param edges: list of edges, list of tuples (id, master, slave, nan_frac)
+:return:</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Python Modules</a><ul>
+      <li>Previous: <a href="linrate.html" title="previous chapter">Linrate Module</a></li>
+      <li>Next: <a href="mst.html" title="next chapter">MST Module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/matlab_mst.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/matlab_mst.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

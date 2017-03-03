@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Reference Pixel Calculation Module &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ROIPAC Module" href="roipac.html" />
+    <link rel="prev" title="Reference Phase Calculation Module" href="ref_phs_est.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyrate.refpixel">
+<span id="reference-pixel-calculation-module"></span><h1>Reference Pixel Calculation Module<a class="headerlink" href="#module-pyrate.refpixel" title="Permalink to this headline">¶</a></h1>
+<p>This Python module is part of the PyRate software package</p>
+<p>This Python module implements an algorithm to search for the location 
+of the interferometric reference pixel</p>
+<p>Copyright 2017 Geoscience Australia</p>
+<blockquote>
+<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+<blockquote>
+<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+</div></blockquote>
+<dl class="exception">
+<dt id="pyrate.refpixel.RefPixelError">
+<em class="property">exception </em><code class="descclassname">pyrate.refpixel.</code><code class="descname">RefPixelError</code><a class="reference internal" href="_modules/pyrate/refpixel.html#RefPixelError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.RefPixelError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic exception for reference pixel errors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.filter_means">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">filter_means</code><span class="sig-paren">(</span><em>mean_sds</em>, <em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#filter_means"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.filter_means" title="Permalink to this definition">¶</a></dt>
+<dd><p>filter the mean standard deviations from each ref pixel block
+Parameters
+&#8212;&#8212;&#8212;-
+mean_sds: list</p>
+<blockquote>
+<div>list of mean standard deviations from each ref pixel grid</div></blockquote>
+<dl class="docutils">
+<dt>grid: list</dt>
+<dd>list of grid tuples</dd>
+</dl>
+<p>tuple of (refy, refx)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.ref_pixel">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns (y,x) reference pixel coordinate from given ifgs.</p>
+<p>If the config file REFX or REFY values are empty or subzero, the search for
+the reference pixel is performed. If the REFX|Y values are within the
+bounds of the raster, a search is not performed. REFX|Y values outside
+the upper bounds cause an exception.</p>
+<dl class="docutils">
+<dt>ifgs: list</dt>
+<dd>sequence of interferograms.</dd>
+<dt>params: dict</dt>
+<dd>parameters dictionary</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.ref_pixel_mpi">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel_mpi</code><span class="sig-paren">(</span><em>process_grid</em>, <em>half_patch_size</em>, <em>ifgs</em>, <em>thresh</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel_mpi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel_mpi" title="Permalink to this definition">¶</a></dt>
+<dd><p>convenience function for ref pixel calculation for each process</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.ref_pixel_multi">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel_multi</code><span class="sig-paren">(</span><em>g</em>, <em>half_patch_size</em>, <em>phase_data_or_ifg_paths</em>, <em>thresh</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel_multi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel_multi" title="Permalink to this definition">¶</a></dt>
+<dd><p>convenience function for for ref pixel optimisation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.ref_pixel_setup">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel_setup</code><span class="sig-paren">(</span><em>ifgs_or_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets up the grid for reference pixel computation
+Also saves numpy files for later use during ref pixel computation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.step">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">step</code><span class="sig-paren">(</span><em>dim</em>, <em>ref</em>, <em>radius</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper func: returns xrange obj of axis indicies for a search window.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>dim</strong> &#8211; total length of the grid dimension.</li>
+<li><strong>ref</strong> &#8211; the desired number of steps.</li>
+<li><strong>radius</strong> &#8211; the number of cells from the centre of the chip eg.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>(chipsize / 2).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.validate_chipsize">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">validate_chipsize</code><span class="sig-paren">(</span><em>chipsize</em>, <em>head</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#validate_chipsize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.validate_chipsize" title="Permalink to this definition">¶</a></dt>
+<dd><p>sanity check min chipsize</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.validate_minimum_fraction">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">validate_minimum_fraction</code><span class="sig-paren">(</span><em>min_frac</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#validate_minimum_fraction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.validate_minimum_fraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>sanity check min fraction</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.validate_search_win">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">validate_search_win</code><span class="sig-paren">(</span><em>refnx</em>, <em>refny</em>, <em>chipsize</em>, <em>head</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#validate_search_win"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.validate_search_win" title="Permalink to this definition">¶</a></dt>
+<dd><p>sanity check X|Y steps</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Python Modules</a><ul>
+      <li>Previous: <a href="ref_phs_est.html" title="previous chapter">Reference Phase Calculation Module</a></li>
+      <li>Next: <a href="roipac.html" title="next chapter">ROIPAC Module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/refpixel.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/refpixel.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
