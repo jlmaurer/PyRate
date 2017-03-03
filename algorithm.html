@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>PyRate Algorithm Module &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Command Line Scripts" href="scripts.html" />
+    <link rel="prev" title="Python Modules" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyrate.algorithm">
+<span id="pyrate-algorithm-module"></span><h1>PyRate Algorithm Module<a class="headerlink" href="#module-pyrate.algorithm" title="Permalink to this headline">¶</a></h1>
+<p>Collection of algorithms used in PyRate.</p>
+<dl class="function">
+<dt id="pyrate.algorithm.get_all_epochs">
+<code class="descclassname">pyrate.algorithm.</code><code class="descname">get_all_epochs</code><span class="sig-paren">(</span><em>ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/algorithm.html#get_all_epochs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.algorithm.get_all_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns sequence of all master and slave dates in given ifgs.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.algorithm.get_epochs">
+<code class="descclassname">pyrate.algorithm.</code><code class="descname">get_epochs</code><span class="sig-paren">(</span><em>ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/algorithm.html#get_epochs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.algorithm.get_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an EpochList derived from all given interferograms.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.algorithm.ifg_date_index_lookup">
+<code class="descclassname">pyrate.algorithm.</code><code class="descname">ifg_date_index_lookup</code><span class="sig-paren">(</span><em>ifgs</em>, <em>date_pair</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/algorithm.html#ifg_date_index_lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.algorithm.ifg_date_index_lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an Ifg index which has a master/slave dates given in &#8216;date_pair&#8217;.
+ifgs - list of Ifg objects to search in
+date_pair - a (datetime.date, datetime.date) tuple</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.algorithm.ifg_date_lookup">
+<code class="descclassname">pyrate.algorithm.</code><code class="descname">ifg_date_lookup</code><span class="sig-paren">(</span><em>ifgs</em>, <em>date_pair</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/algorithm.html#ifg_date_lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.algorithm.ifg_date_lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an Ifg which has a master/slave dates given in &#8216;date_pair&#8217;.
+ifgs - list of Ifg objects to search in
+date_pair - a (datetime.date, datetime.date) tuple</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.algorithm.is_square">
+<code class="descclassname">pyrate.algorithm.</code><code class="descname">is_square</code><span class="sig-paren">(</span><em>arr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/algorithm.html#is_square"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.algorithm.is_square" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>arr: ndarray</dt>
+<dd>numpy array</dd>
+</dl>
+<p>whether arr is square or not</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.algorithm.least_squares_covariance">
+<code class="descclassname">pyrate.algorithm.</code><code class="descname">least_squares_covariance</code><span class="sig-paren">(</span><em>A</em>, <em>b</em>, <em>v</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/algorithm.html#least_squares_covariance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.algorithm.least_squares_covariance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Least squares solution in the presence of known covariance.</p>
+<p>This function is known as lscov() in MATLAB.
+A: design matrix
+b: observations (vector of phase values)
+v: covariances (weights) in vector form</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.algorithm.los_conversion">
+<code class="descclassname">pyrate.algorithm.</code><code class="descname">los_conversion</code><span class="sig-paren">(</span><em>phase_data</em>, <em>unit_vec</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/algorithm.html#los_conversion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.algorithm.los_conversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts phase from line-of-sight (LOS) to horizontal/vertical components.
+phase_data - phase band data array (eg. ifg.phase_data)
+unit_vec - 3 component sequence, eg. [EW, NS, vertical]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.algorithm.master_slave_ids">
+<code class="descclassname">pyrate.algorithm.</code><code class="descname">master_slave_ids</code><span class="sig-paren">(</span><em>dates</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/algorithm.html#master_slave_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.algorithm.master_slave_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns dict of &#8216;date:unique ID&#8217; for each date in &#8216;dates&#8217;. IDs are ordered
+from oldest to newest, starting at 0.
+Replaces ifglist.mas|slvnum in Pirate.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.algorithm.unit_vector">
+<code class="descclassname">pyrate.algorithm.</code><code class="descname">unit_vector</code><span class="sig-paren">(</span><em>incidence</em>, <em>azimuth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/algorithm.html#unit_vector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.algorithm.unit_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns unit vector tuple (east_west, north_south, vertical).</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Python Modules</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">Python Modules</a></li>
+      <li>Next: <a href="scripts.html" title="next chapter">Command Line Scripts</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/algorithm.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/algorithm.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
