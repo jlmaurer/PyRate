@@ -5,5 +5,3 @@ Command Line Scripts
 
 .. autosummary::
    :toctree: generated/
-
-   main
