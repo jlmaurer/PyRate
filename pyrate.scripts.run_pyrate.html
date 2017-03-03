@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Run PyRate Module &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Convert to GeoTiff Module" href="pyrate.scripts.converttogtif.html" />
+    <link rel="prev" title="Run Prepifg Module" href="pyrate.scripts.run_prepifg.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyrate.scripts.run_pyrate">
+<span id="run-pyrate-module"></span><h1>Run PyRate Module<a class="headerlink" href="#module-pyrate.scripts.run_pyrate" title="Permalink to this headline">¶</a></h1>
+<p>This Python script is part of the PyRate software package</p>
+<p>This Python script runs the main PyRate processing workflow</p>
+<p>Copyright 2017 Geoscience Australia</p>
+<blockquote>
+<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+<blockquote>
+<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+</div></blockquote>
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.create_ifg_dict">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">create_ifg_dict</code><span class="sig-paren">(</span><em>dest_tifs</em>, <em>params</em>, <em>tiles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#create_ifg_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.create_ifg_dict" title="Permalink to this definition">¶</a></dt>
+<dd><ol class="arabic simple">
+<li>Convert ifg phase data into numpy binary files.</li>
+</ol>
+<p>2. Save the preread_ifgs dict with information about the ifgs that are
+later used for fast loading of Ifg files in IfgPart class</p>
+<dl class="docutils">
+<dt>dest_tifs: list</dt>
+<dd>list of destination tifs</dd>
+<dt>params: dict</dt>
+<dd>config dict</dd>
+<dt>tiles: list</dt>
+<dd>list of all Tile instances</dd>
+</dl>
+<dl class="docutils">
+<dt>ifgs_dict: dict</dt>
+<dd>dict containing information regarding ifgs that are used downstream</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.find_ref_pixel">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">find_ref_pixel</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#find_ref_pixel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.find_ref_pixel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find reference pixel using mpi
+Parameters
+&#8212;&#8212;&#8212;-
+ifg_paths: list</p>
+<blockquote>
+<div>list of ifg paths</div></blockquote>
+<dl class="docutils">
+<dt>params: dict</dt>
+<dd>parameters dict corresponding to config file</dd>
+</dl>
+<p>tuple of (refy, refx)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.get_tiles">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">get_tiles</code><span class="sig-paren">(</span><em>ifg_path</em>, <em>rows</em>, <em>cols</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#get_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.get_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Break up the ifgs into tiles based on user supplied rows and cols</p>
+<dl class="docutils">
+<dt>ifg_path: str</dt>
+<dd>list of destination tifs</dd>
+<dt>rows: int</dt>
+<dd>number of rows to break each ifg into</dd>
+<dt>cols: int</dt>
+<dd>number of cols to break each ifg into</dd>
+</dl>
+<dl class="docutils">
+<dt>tiles: dict</dt>
+<dd>list of shared.Tile instances</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.linrate_calc">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">linrate_calc</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em>, <em>vcmt</em>, <em>tiles</em>, <em>preread_ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#linrate_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.linrate_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>mpi capable linrate calculation</p>
+<dl class="docutils">
+<dt>ifg_paths: list</dt>
+<dd>list of ifg paths</dd>
+<dt>params: dict</dt>
+<dd>parameters dict corresponding to config file</dd>
+<dt>vcmt: ndarrray</dt>
+<dd>vcmt array</dd>
+<dt>tiles: list</dt>
+<dd>list of all tiles used during mpi processes</dd>
+<dt>preread_ifgs: dict</dt>
+<dd>dict containing ifg characteristics for efficient computing</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.main">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">main</code><span class="sig-paren">(</span><em>config_file</em>, <em>rows</em>, <em>cols</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>linear rate and timeseries execution starts here</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.maxvar_vcm_calc">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">maxvar_vcm_calc</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em>, <em>preread_ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#maxvar_vcm_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.maxvar_vcm_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>mpi capable maxvar and vcmt computation</p>
+<dl class="docutils">
+<dt>ifg_paths: list</dt>
+<dd>list of ifg paths</dd>
+<dt>params: dict</dt>
+<dd>parameters dict corresponding to config file</dd>
+<dt>preread_ifgs: dict</dt>
+<dd>dict containing ifg characteristics for efficient computing</dd>
+</dl>
+<dl class="docutils">
+<dt>maxvar: ndarray</dt>
+<dd>array of shape (nifgs, 1)</dd>
+<dt>vcmt: ndarray</dt>
+<dd>array of shape (nifgs, nifgs)</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.mst_calc">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">mst_calc</code><span class="sig-paren">(</span><em>dest_tifs</em>, <em>params</em>, <em>tiles</em>, <em>preread_ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#mst_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.mst_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>MPI function that control each process during MPI run
+Reference phase computation using method 2
+Parameters
+&#8212;&#8212;&#8212;-
+dest_tifs: list</p>
+<blockquote>
+<div>list of ifg paths</div></blockquote>
+<dl class="docutils">
+<dt>params: dict</dt>
+<dd>parameters dict corresponding to config file</dd>
+<dt>tiles: list</dt>
+<dd>list of all tiles used during mpi processes</dd>
+<dt>preread_ifgs: dict</dt>
+<dd>dict containing ifg characteristics for efficient computing</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.orb_fit_calc">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">orb_fit_calc</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#orb_fit_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.orb_fit_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Orbital fit correction</p>
+<dl class="docutils">
+<dt>ifg_paths: list</dt>
+<dd>list of ifg paths</dd>
+<dt>params: dict</dt>
+<dd>parameters dict corresponding to config file</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.phase_sum">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">phase_sum</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#phase_sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.phase_sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>save phase data and phs_sum used in the reference phase estimation
+Parameters
+&#8212;&#8212;&#8212;-
+ifg_paths: list:</p>
+<blockquote>
+<div>list of paths to ifgs</div></blockquote>
+<dl class="docutils">
+<dt>params: dict</dt>
+<dd>config dict</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.process_ifgs">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">process_ifgs</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em>, <em>rows</em>, <em>cols</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#process_ifgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.process_ifgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Top level function to perform PyRate correction steps on given ifgs</p>
+<dl class="docutils">
+<dt>ifg_paths: list</dt>
+<dd>list of ifg paths</dd>
+<dt>params: dict</dt>
+<dd>parameters dict corresponding to config file</dd>
+<dt>rows: int</dt>
+<dd>number of rows to break each ifg into</dd>
+<dt>cols: int</dt>
+<dd>number of cols to break each ifg into</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.ref_phase_estimation">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">ref_phase_estimation</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em>, <em>refpx</em>, <em>refpy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#ref_phase_estimation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.ref_phase_estimation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference phase estimation</p>
+<dl class="docutils">
+<dt>ifg_paths: list</dt>
+<dd>list of ifg paths</dd>
+<dt>params: dict</dt>
+<dd>parameters dict corresponding to config file</dd>
+<dt>refpx: float</dt>
+<dd>reference pixel x-coordinate</dd>
+<dt>refpy: float</dt>
+<dd>reference pixel y-coordinate</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.ref_phs_method1">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">ref_phs_method1</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>comp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#ref_phs_method1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.ref_phs_method1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference phase computation using method 1</p>
+<dl class="docutils">
+<dt>ifg_paths: list</dt>
+<dd>list of ifg paths</dd>
+<dt>comp: ndarray</dt>
+<dd>array of phase sum of all ifgs of shape ifg.shape</dd>
+</dl>
+<dl class="docutils">
+<dt>ref_phs: ndarray</dt>
+<dd>array of reference phase of shape ifg.shape</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.ref_phs_method2">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">ref_phs_method2</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em>, <em>refpx</em>, <em>refpy</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#ref_phs_method2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.ref_phs_method2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference phase computation using method 2
+Parameters
+&#8212;&#8212;&#8212;-
+ifg_paths: list</p>
+<blockquote>
+<div>list of ifg paths</div></blockquote>
+<dl class="docutils">
+<dt>params: dict</dt>
+<dd>parameters dict corresponding to config file</dd>
+<dt>refpx: float</dt>
+<dd>reference pixel x-coordinate</dd>
+<dt>refpy: float</dt>
+<dd>reference pixel y-coordinate</dd>
+</dl>
+<dl class="docutils">
+<dt>ref_phs: ndarray</dt>
+<dd>array of reference phase of shape ifg.shape</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.ref_pixel_calc">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">ref_pixel_calc</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#ref_pixel_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.ref_pixel_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reference pixel calculation setup</p>
+<dl class="docutils">
+<dt>ifg_paths: list</dt>
+<dd>list of ifg paths</dd>
+<dt>params: dict</dt>
+<dd>parameters dict corresponding to config file</dd>
+</dl>
+<dl class="docutils">
+<dt>refx: float</dt>
+<dd>reference pixel x-coordinate</dd>
+<dt>refy: float</dt>
+<dd>reference pixel y-coordinate</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.save_ref_pixel_blocks">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">save_ref_pixel_blocks</code><span class="sig-paren">(</span><em>grid</em>, <em>half_patch_size</em>, <em>ifg_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#save_ref_pixel_blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.save_ref_pixel_blocks" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>grid: list</dt>
+<dd>list of tuples (y, x) corresponding reference pixel grids</dd>
+<dt>half_patch_size: int</dt>
+<dd>patch size in pixels corresponding to ref pixel grids</dd>
+<dt>ifg_paths: list</dt>
+<dd>list of ifg paths</dd>
+<dt>params: dict</dt>
+<dd>parameters dict corresponding to config file</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.scripts.run_pyrate.timeseries_calc">
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">timeseries_calc</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em>, <em>vcmt</em>, <em>tiles</em>, <em>preread_ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#timeseries_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.timeseries_calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time series calculation.</p>
+<dl class="docutils">
+<dt>ifg_paths: list</dt>
+<dd>list of ifg paths</dd>
+<dt>params: dict</dt>
+<dd>parameters dict corresponding to config file</dd>
+<dt>vcmt: ndarrray</dt>
+<dd>vcmt array</dd>
+<dt>tiles: list</dt>
+<dd>list of all tiles used during mpi processes</dd>
+<dt>preread_ifgs: dict</dt>
+<dd>dict containing ifg characteristics for efficient computing</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="scripts.html">Pyrate Scripts Module</a><ul>
+      <li>Previous: <a href="pyrate.scripts.run_prepifg.html" title="previous chapter">Run Prepifg Module</a></li>
+      <li>Next: <a href="pyrate.scripts.converttogtif.html" title="next chapter">Convert to GeoTiff Module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/pyrate.scripts.run_pyrate.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/pyrate.scripts.run_pyrate.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
