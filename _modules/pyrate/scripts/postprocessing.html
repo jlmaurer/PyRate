@@ -42,25 +42,24 @@
           <div class="body" role="main">
             
   <h1>Source code for pyrate.scripts.postprocessing</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This Python module is part of the PyRate software package</span>
-
-<span class="sd">This Python module does post-processing steps to assemble the linear </span>
+<span></span><span class="c1">#   This Python module is part of the PyRate software package.</span>
+<span class="c1">#</span>
+<span class="c1">#   Copyright 2017 Geoscience Australia</span>
+<span class="c1">#</span>
+<span class="c1">#   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#   you may not use this file except in compliance with the License.</span>
+<span class="c1">#   You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#       http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#   Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#   See the License for the specific language governing permissions and</span>
+<span class="c1">#   limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This Python module does post-processing steps to assemble the linear</span>
 <span class="sd">rate and time series outputs and save as geotiff files</span>
-
-<span class="sd">Copyright 2017 Geoscience Australia</span>
-
-<span class="sd">   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="sd">   you may not use this file except in compliance with the License.</span>
-<span class="sd">   You may obtain a copy of the License at</span>
-
-<span class="sd">       http://www.apache.org/licenses/LICENSE-2.0</span>
-
-<span class="sd">   Unless required by applicable law or agreed to in writing, software</span>
-<span class="sd">   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
-<span class="sd">   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="sd">   See the License for the specific language governing permissions and</span>
-<span class="sd">   limitations under the License.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">join</span>
@@ -125,13 +124,13 @@
     <span class="n">ifgs</span> <span class="o">=</span> <span class="p">[</span><span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ifgs_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">PrereadIfg</span><span class="p">)]</span>
     <span class="n">dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">OUT_DIR</span><span class="p">],</span> <span class="n">out_type</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span><span class="p">)</span>
     <span class="n">md</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">EPOCH_DATE</span><span class="p">]</span> <span class="o">=</span> <span class="n">epochlist</span><span class="o">.</span><span class="n">dates</span>
-    <span class="k">if</span> <span class="n">out_type</span> <span class="o">==</span> <span class="s1">&#39;linrate&#39;</span><span class="p">:</span>    
+    <span class="k">if</span> <span class="n">out_type</span> <span class="o">==</span> <span class="s1">&#39;linrate&#39;</span><span class="p">:</span>
         <span class="n">md</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">DATA_TYPE</span><span class="p">]</span> <span class="o">=</span> <span class="n">ifc</span><span class="o">.</span><span class="n">LINRATE</span>
     <span class="k">elif</span> <span class="n">out_type</span> <span class="o">==</span> <span class="s1">&#39;linerror&#39;</span><span class="p">:</span>
         <span class="n">md</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">DATA_TYPE</span><span class="p">]</span> <span class="o">=</span> <span class="n">ifc</span><span class="o">.</span><span class="n">LINERROR</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">md</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">DATA_TYPE</span><span class="p">]</span> <span class="o">=</span> <span class="n">ifc</span><span class="o">.</span><span class="n">LINSAMP</span>
-        
+
     <span class="n">rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">ifgs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tiles</span><span class="p">:</span>
         <span class="n">rate_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">OUT_DIR</span><span class="p">],</span> <span class="n">out_type</span> <span class="o">+</span>
@@ -189,7 +188,8 @@
                 <span class="n">tscum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">tscum_file</span><span class="p">)</span>
 
                 <span class="n">md</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">EPOCH_DATE</span><span class="p">]</span> <span class="o">=</span> <span class="n">epochlist</span><span class="o">.</span><span class="n">dates</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-                <span class="n">md</span><span class="p">[</span><span class="s1">&#39;SEQUENCE_POSITION&#39;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">i</span><span class="o">+</span><span class="mi">1</span>  <span class="c1"># sequence position; first time slice is #0</span>
+                <span class="c1"># sequence position; first time slice is #0</span>
+                <span class="n">md</span><span class="p">[</span><span class="s1">&#39;SEQUENCE_POSITION&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
                 <span class="n">tscum_g</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">top_left_y</span><span class="p">:</span><span class="n">t</span><span class="o">.</span><span class="n">bottom_right_y</span><span class="p">,</span>
                         <span class="n">t</span><span class="o">.</span><span class="n">top_left_x</span><span class="p">:</span><span class="n">t</span><span class="o">.</span><span class="n">bottom_right_x</span><span class="p">]</span> <span class="o">=</span> <span class="n">tscum</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span>
                 <span class="n">dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">OUT_DIR</span><span class="p">],</span>
@@ -206,7 +206,8 @@
                 <span class="n">tsincr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">tsincr_file</span><span class="p">)</span>
 
                 <span class="n">md</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">EPOCH_DATE</span><span class="p">]</span> <span class="o">=</span> <span class="n">epochlist</span><span class="o">.</span><span class="n">dates</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-                <span class="n">md</span><span class="p">[</span><span class="s1">&#39;SEQUENCE_POSITION&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>  <span class="c1"># sequence position; first time slice is #0</span>
+                <span class="c1"># sequence position; first time slice is #0</span>
+                <span class="n">md</span><span class="p">[</span><span class="s1">&#39;SEQUENCE_POSITION&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
                 <span class="n">tsincr_g</span><span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">top_left_y</span><span class="p">:</span><span class="n">t</span><span class="o">.</span><span class="n">bottom_right_y</span><span class="p">,</span>
                          <span class="n">t</span><span class="o">.</span><span class="n">top_left_x</span><span class="p">:</span><span class="n">t</span><span class="o">.</span><span class="n">bottom_right_x</span><span class="p">]</span> <span class="o">=</span> <span class="n">tsincr</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span>
                 <span class="n">dest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">OUT_DIR</span><span class="p">],</span>

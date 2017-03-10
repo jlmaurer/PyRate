@@ -42,25 +42,24 @@
           <div class="body" role="main">
             
   <h1>Source code for pyrate.shared</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This Python module is part of the PyRate software package</span>
-
-<span class="sd">This Python module contains utilities and classes shared by </span>
+<span></span><span class="c1">#   This Python module is part of the PyRate software package.</span>
+<span class="c1">#</span>
+<span class="c1">#   Copyright 2017 Geoscience Australia</span>
+<span class="c1">#</span>
+<span class="c1">#   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#   you may not use this file except in compliance with the License.</span>
+<span class="c1">#   You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#       http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#   Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#   See the License for the specific language governing permissions and</span>
+<span class="c1">#   limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This Python module contains utilities and classes shared by</span>
 <span class="sd">all other PyRate modules</span>
-
-<span class="sd">Copyright 2017 Geoscience Australia</span>
-
-<span class="sd">   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="sd">   you may not use this file except in compliance with the License.</span>
-<span class="sd">   You may obtain a copy of the License at</span>
-
-<span class="sd">       http://www.apache.org/licenses/LICENSE-2.0</span>
-
-<span class="sd">   Unless required by applicable law or agreed to in writing, software</span>
-<span class="sd">   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
-<span class="sd">   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="sd">   See the License for the specific language governing permissions and</span>
-<span class="sd">   limitations under the License.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># pylint: disable=too-many-lines</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
@@ -73,7 +72,6 @@
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">stat</span>
 <span class="kn">import</span> <span class="nn">struct</span>
-<span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">date</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -167,19 +165,7 @@
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Cannot open write protected file for writing&quot;</span><span class="p">)</span>
 
         <span class="n">flag</span> <span class="o">=</span> <span class="n">GA_ReadOnly</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readonly</span> <span class="k">else</span> <span class="n">GA_Update</span>
-
-        <span class="c1"># The while loop helps in situations when a geotiff is read by multiple</span>
-        <span class="c1"># processes. If one process has the file open, then delaying read from</span>
-        <span class="c1"># another process improves stability of the MPI processs</span>
-        <span class="n">attempts</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">while</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">attempts</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">):</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">attempts</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">need to read </span><span class="si">{ifg}</span><span class="s1"> again&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ifg</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">))</span>
-                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">RasterException</span><span class="p">(</span><span class="s2">&quot;Error opening </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_path</span><span class="p">)</span>
 
@@ -680,6 +666,7 @@
 
 
 <div class="viewcode-block" id="write_geotiff"><a class="viewcode-back" href="../../shared.html#pyrate.shared.write_geotiff">[docs]</a><span class="k">def</span> <span class="nf">write_geotiff</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">nodata</span><span class="p">):</span>
+    <span class="c1"># pylint: disable=too-many-statements</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes input image data (interferograms, DEM, incidence maps etc)</span>
 <span class="sd">    to GeoTIFF format with PyRate metadata</span>
@@ -1013,7 +1000,7 @@
     <span class="c1"># pylint: disable=too-many-arguments</span>
     <span class="c1"># pylint: disable=too-many-instance-attributes</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">nan_fraction</span><span class="p">,</span> <span class="n">master</span><span class="p">,</span> <span class="n">slave</span><span class="p">,</span> <span class="n">time_span</span><span class="p">,</span>
-                 <span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">):</span>
+                 <span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nan_fraction</span> <span class="o">=</span> <span class="n">nan_fraction</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">master</span> <span class="o">=</span> <span class="n">master</span>
@@ -1021,7 +1008,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">time_span</span> <span class="o">=</span> <span class="n">time_span</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nrows</span> <span class="o">=</span> <span class="n">nrows</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span> <span class="o">=</span> <span class="n">ncols</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span></div>
 
 
 <div class="viewcode-block" id="prepare_ifg"><a class="viewcode-back" href="../../shared.html#pyrate.shared.prepare_ifg">[docs]</a><span class="k">def</span> <span class="nf">prepare_ifg</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
@@ -1046,10 +1034,16 @@
 
 <div class="viewcode-block" id="save_numpy_phase"><a class="viewcode-back" href="../../shared.html#pyrate.shared.save_numpy_phase">[docs]</a><span class="k">def</span> <span class="nf">save_numpy_phase</span><span class="p">(</span><span class="n">ifg_paths</span><span class="p">,</span> <span class="n">tiles</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :param ifg_paths:</span>
-<span class="sd">    :param params:</span>
-<span class="sd">    :param tiles:</span>
-<span class="sd">    :return:</span>
+<span class="sd">    Save ifg phase data as numpy array.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ifg_paths: list</span>
+<span class="sd">        list of strings corresponding to ifg paths</span>
+<span class="sd">    params: dict</span>
+<span class="sd">        config dict</span>
+<span class="sd">    tiles: list</span>
+<span class="sd">        list of Shared.Tile instances</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">process_ifgs</span> <span class="o">=</span> <span class="n">mpiops</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">ifg_paths</span><span class="p">)</span>
     <span class="n">outdir</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">OUT_DIR</span><span class="p">]</span>
@@ -1069,7 +1063,14 @@
 
 
 <div class="viewcode-block" id="get_projection_info"><a class="viewcode-back" href="../../shared.html#pyrate.shared.get_projection_info">[docs]</a><span class="k">def</span> <span class="nf">get_projection_info</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; return projection information of ifg&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    return projection information of ifg</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ifg_path: str</span>
+<span class="sd">        ifg path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">)</span>
     <span class="n">md</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetMetadata</span><span class="p">()</span>  <span class="c1"># get metadata for writing on output tifs</span>
     <span class="n">gt</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>  <span class="c1"># get geographical bounds of data</span>
@@ -1081,6 +1082,17 @@
 <div class="viewcode-block" id="warp_required"><a class="viewcode-back" href="../../shared.html#pyrate.shared.warp_required">[docs]</a><span class="k">def</span> <span class="nf">warp_required</span><span class="p">(</span><span class="n">xlooks</span><span class="p">,</span> <span class="n">ylooks</span><span class="p">,</span> <span class="n">crop</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns True if params show rasters need to be cropped and/or resized.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    xlooks: int</span>
+<span class="sd">        resampling/multilooking in x dir</span>
+
+<span class="sd">    ylooks: int</span>
+<span class="sd">        resampling/multilooking in y dir</span>
+
+<span class="sd">    crop: int</span>
+<span class="sd">        ifg crop option</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">xlooks</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">ylooks</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
@@ -1090,6 +1102,7 @@
         <span class="k">return</span> <span class="kc">False</span>
 
     <span class="k">return</span> <span class="kc">True</span></div>
+
 
 <div class="viewcode-block" id="output_tiff_filename"><a class="viewcode-back" href="../../shared.html#pyrate.shared.output_tiff_filename">[docs]</a><span class="k">def</span> <span class="nf">output_tiff_filename</span><span class="p">(</span><span class="n">inpath</span><span class="p">,</span> <span class="n">outpath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>

@@ -45,21 +45,7 @@
             
   <div class="section" id="module-pyrate.gamma">
 <span id="gamma-module"></span><h1>GAMMA Module<a class="headerlink" href="#module-pyrate.gamma" title="Permalink to this headline">¶</a></h1>
-<p>This Python module is part of the PyRate software package</p>
 <p>This Python module contains tools for reading GAMMA format input data.</p>
-<p>Copyright 2017 Geoscience Australia</p>
-<blockquote>
-<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at</p>
-<blockquote>
-<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
-<p>Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.</p>
-</div></blockquote>
 <dl class="exception">
 <dt id="pyrate.gamma.GammaException">
 <em class="property">exception </em><code class="descclassname">pyrate.gamma.</code><code class="descname">GammaException</code><a class="reference internal" href="_modules/pyrate/gamma.html#GammaException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gamma.GammaException" title="Permalink to this definition">¶</a></dt>
@@ -116,6 +102,12 @@ dem_hdr: dict of DEM header attributes</p>
 <dt>combined_header: dict</dt>
 <dd>combined dict with dem, header file 1 and 2</dd>
 </dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.gamma.parse_date_time">
+<code class="descclassname">pyrate.gamma.</code><code class="descname">parse_date_time</code><span class="sig-paren">(</span><em>lookup</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gamma.html#parse_date_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gamma.parse_date_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grab date and time information and convert to datetime objects</p>
 </dd></dl>
 
 <dl class="function">

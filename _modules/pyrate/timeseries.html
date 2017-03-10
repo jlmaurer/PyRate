@@ -42,26 +42,25 @@
           <div class="body" role="main">
             
   <h1>Source code for pyrate.timeseries</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This Python module is part of the PyRate software package</span>
-
-<span class="sd">This Python module contains functions for computing a time series </span>
-<span class="sd">inversion in PyRate. It is based on the Matlab codes &#39;tsinvnosm.m&#39; </span>
+<span></span><span class="c1">#   This Python module is part of the PyRate software package.</span>
+<span class="c1">#</span>
+<span class="c1">#   Copyright 2017 Geoscience Australia</span>
+<span class="c1">#</span>
+<span class="c1">#   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#   you may not use this file except in compliance with the License.</span>
+<span class="c1">#   You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#       http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#   Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#   See the License for the specific language governing permissions and</span>
+<span class="c1">#   limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This Python module contains functions for computing a time series</span>
+<span class="sd">inversion in PyRate. It is based on the Matlab codes &#39;tsinvnosm.m&#39;</span>
 <span class="sd">and &#39;tsinvlap.m&#39; contained in the Pirate package.</span>
-
-<span class="sd">Copyright 2017 Geoscience Australia</span>
-
-<span class="sd">   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="sd">   you may not use this file except in compliance with the License.</span>
-<span class="sd">   You may obtain a copy of the License at</span>
-
-<span class="sd">       http://www.apache.org/licenses/LICENSE-2.0</span>
-
-<span class="sd">   Unless required by applicable law or agreed to in writing, software</span>
-<span class="sd">   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
-<span class="sd">   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="sd">   See the License for the specific language governing permissions and</span>
-<span class="sd">   limitations under the License.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># pylint: disable=too-many-locals</span>
 <span class="c1"># pylint: disable=too-many-arguments</span>
@@ -86,26 +85,37 @@
         <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Time series requires 2+ interferograms&#39;</span>
         <span class="k">raise</span> <span class="n">TimeSeriesError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="c1"># check if mst is not a tree, then do interpolate</span>
+    <span class="c1"># if mst is not a single tree then do interpolation</span>
     <span class="k">if</span> <span class="n">mst_module</span><span class="o">.</span><span class="n">mst_from_ifgs</span><span class="p">(</span><span class="n">ifgs</span><span class="p">)[</span><span class="mi">1</span><span class="p">]:</span>
-        <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_INTERP</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">interp</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_INTERP</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-
-    <span class="c1"># make sure by now we have the time series interpolation parameter</span>
-    <span class="k">assert</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_INTERP</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">interp</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="c1"># Parallel Processing parameters</span>
     <span class="n">parallel</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">PARALLEL</span><span class="p">]</span>
     <span class="c1"># Time Series parameters</span>
     <span class="n">tsmethod</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_METHOD</span><span class="p">]</span>
-    <span class="n">interp</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_INTERP</span><span class="p">]</span>
-    <span class="c1"># interp = 1</span>
-    <span class="n">smorder</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_SM_ORDER</span><span class="p">]</span>
-    <span class="n">smfactor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_SM_FACTOR</span><span class="p">])</span>
-    <span class="n">pthresh</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_PTHRESH</span><span class="p">]</span>
-    <span class="c1"># head = ifgs[0]</span>
-    <span class="n">check_time_series_params</span><span class="p">(</span><span class="n">pthresh</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">tsmethod</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_SM_ORDER</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">missing_option_error</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_SM_ORDER</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">smorder</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_SM_ORDER</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">tsmethod</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_SM_FACTOR</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">missing_option_error</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_SM_FACTOR</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">smfactor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_SM_FACTOR</span><span class="p">])</span>   
+
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_PTHRESH</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">missing_option_error</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_PTHRESH</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pthresh</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_PTHRESH</span><span class="p">]</span>
+        
+    <span class="k">if</span> <span class="n">pthresh</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">pthresh</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;minimum number of coherent observations for a pixel&quot;</span>
+            <span class="s2">&quot; TIME_SERIES_PTHRESH setting must be &gt;= 0.0 and &lt;= 1000&quot;</span><span class="p">)</span>
+
     <span class="n">epochlist</span> <span class="o">=</span> <span class="n">get_epochs</span><span class="p">(</span><span class="n">ifgs</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">nrows</span> <span class="o">=</span> <span class="n">ifgs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">nrows</span>
     <span class="n">ncols</span> <span class="o">=</span> <span class="n">ifgs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">ncols</span>
@@ -237,8 +247,7 @@
             <span class="n">rmrow</span> <span class="o">=</span> <span class="n">asarray</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># dummy</span>
 
             <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">rmrow</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="c1"># the if else is introduced to prevent the following:</span>
-                <span class="c1"># https://github.com/GeoscienceAustralia/PyRate/issues/69</span>
+                <span class="c1"># if b_mat.shape[0] &lt;=1 then we return nans</span>
                 <span class="k">if</span> <span class="n">b_mat</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">b_mat</span><span class="p">,</span> <span class="n">ifgv</span><span class="p">,</span> <span class="n">sel</span><span class="p">,</span> <span class="n">rmrow</span> <span class="o">=</span> <span class="n">remove_rank_def_rows</span><span class="p">(</span>
                         <span class="n">b_mat</span><span class="p">,</span> <span class="n">nvelpar</span><span class="p">,</span> <span class="n">ifgv</span><span class="p">,</span> <span class="n">sel</span><span class="p">)</span>
@@ -379,26 +388,12 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="check_time_series_params"><a class="viewcode-back" href="../../timeseries.html#pyrate.timeseries.check_time_series_params">[docs]</a><span class="k">def</span> <span class="nf">check_time_series_params</span><span class="p">(</span><span class="n">pthresh</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Validates time series parameter. head is any Ifg.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="k">def</span> <span class="nf">missing_option_error</span><span class="p">(</span><span class="n">option</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">        Internal convenience function for raising similar errors.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Missing &#39;</span><span class="si">%s</span><span class="s2">&#39; in configuration options&quot;</span> <span class="o">%</span> <span class="n">option</span>
-        <span class="k">raise</span> <span class="n">ConfigException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">pthresh</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">missing_option_error</span><span class="p">(</span><span class="n">cf</span><span class="o">.</span><span class="n">TIME_SERIES_PTHRESH</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">pthresh</span> <span class="o">&lt;</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">pthresh</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;minimum number of coherent observations for a pixel&quot;</span>
-            <span class="s2">&quot; TIME_SERIES_PTHRESH setting must be &gt;= 0.0 and &lt;= 1000&quot;</span><span class="p">)</span></div>
-
+<div class="viewcode-block" id="missing_option_error"><a class="viewcode-back" href="../../timeseries.html#pyrate.timeseries.missing_option_error">[docs]</a><span class="k">def</span> <span class="nf">missing_option_error</span><span class="p">(</span><span class="n">option</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Internal convenience function for raising similar missing option errors.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Missing &#39;</span><span class="si">%s</span><span class="s2">&#39; option in config file&quot;</span> <span class="o">%</span> <span class="n">option</span>
+    <span class="k">raise</span> <span class="n">ConfigException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="TimeSeriesError"><a class="viewcode-back" href="../../timeseries.html#pyrate.timeseries.TimeSeriesError">[docs]</a><span class="k">class</span> <span class="nc">TimeSeriesError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>

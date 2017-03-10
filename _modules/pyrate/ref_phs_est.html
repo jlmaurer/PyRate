@@ -42,26 +42,25 @@
           <div class="body" role="main">
             
   <h1>Source code for pyrate.ref_phs_est</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This Python module is part of the PyRate software package</span>
-
+<span></span><span class="c1">#   This Python module is part of the PyRate software package.</span>
+<span class="c1">#</span>
+<span class="c1">#   Copyright 2017 Geoscience Australia</span>
+<span class="c1">#</span>
+<span class="c1">#   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#   you may not use this file except in compliance with the License.</span>
+<span class="c1">#   You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#       http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#   Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#   See the License for the specific language governing permissions and</span>
+<span class="c1">#   limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This Python module implements a reference phase estimation algorithm</span>
 <span class="sd">and is based on the Matlab code in the &#39;refphsest.m&#39; of the Pirate</span>
 <span class="sd">package.</span>
-
-<span class="sd">Copyright 2017 Geoscience Australia</span>
-
-<span class="sd">   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="sd">   you may not use this file except in compliance with the License.</span>
-<span class="sd">   You may obtain a copy of the License at</span>
-
-<span class="sd">       http://www.apache.org/licenses/LICENSE-2.0</span>
-
-<span class="sd">   Unless required by applicable law or agreed to in writing, software</span>
-<span class="sd">   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
-<span class="sd">   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="sd">   See the License for the specific language governing permissions and</span>
-<span class="sd">   limitations under the License.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -132,16 +131,29 @@
                        <span class="n">refpx</span> <span class="o">-</span> <span class="n">half_chip_size</span><span class="p">:</span> <span class="n">refpx</span> <span class="o">+</span> <span class="n">half_chip_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">patch</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">patch</span><span class="p">,</span> <span class="n">newshape</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">patch</span><span class="p">))</span> <span class="o">&lt;</span> <span class="n">thresh</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">ReferencePhaseError</span><span class="p">(</span><span class="s1">&#39;The reference pixel&#39;</span>
-                                  <span class="s1">&#39;is not in high coherent area!&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ReferencePhaseError</span><span class="p">(</span><span class="s1">&#39;The data window at the reference pixel &#39;</span>
+                                  <span class="s1">&#39;does not have enough valid observations&#39;</span><span class="p">)</span>
     <span class="n">ref_ph</span> <span class="o">=</span> <span class="n">nanmedian</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">ref_ph</span></div>
 
 
 <div class="viewcode-block" id="est_ref_phase_method1"><a class="viewcode-back" href="../../ref_phs_est.html#pyrate.ref_phs_est.est_ref_phase_method1">[docs]</a><span class="k">def</span> <span class="nf">est_ref_phase_method1</span><span class="p">(</span><span class="n">ifgs</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;ref phs estimate method 1 estimation&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ref phs estimate method 1 estimation</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ifgs: list</span>
+<span class="sd">        list of interferograms or shared.IfgPart class instances</span>
+<span class="sd">    params: dict</span>
+<span class="sd">        parameter dict corresponding to config file</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ref_phs: ndarray</span>
+<span class="sd">        numpy array of size (nifgs, 1)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ifg_phase_data_sum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ifgs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-    <span class="c1"># TODO: revisit as this will likely hit memory limit in NCI</span>
     <span class="n">phase_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">phase_data</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ifgs</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">ifg</span> <span class="ow">in</span> <span class="n">ifgs</span><span class="p">:</span>
         <span class="n">ifg_phase_data_sum</span> <span class="o">+=</span> <span class="n">ifg</span><span class="o">.</span><span class="n">phase_data</span>

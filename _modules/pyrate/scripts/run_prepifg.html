@@ -42,25 +42,24 @@
           <div class="body" role="main">
             
   <h1>Source code for pyrate.scripts.run_prepifg</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This Python script is part of the PyRate software package</span>
-
-<span class="sd">This Python script converts ROI_PAC or GAMMA format unwrapped </span>
+<span></span><span class="c1">#   This Python module is part of the PyRate software package.</span>
+<span class="c1">#</span>
+<span class="c1">#   Copyright 2017 Geoscience Australia</span>
+<span class="c1">#</span>
+<span class="c1">#   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#   you may not use this file except in compliance with the License.</span>
+<span class="c1">#   You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#       http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#   Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#   See the License for the specific language governing permissions and</span>
+<span class="c1">#   limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This Python script converts ROI_PAC or GAMMA format unwrapped</span>
 <span class="sd">interferograms into geotiffs and applies optional multilooking and cropping.</span>
-
-<span class="sd">Copyright 2017 Geoscience Australia</span>
-
-<span class="sd">   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="sd">   you may not use this file except in compliance with the License.</span>
-<span class="sd">   You may obtain a copy of the License at</span>
-
-<span class="sd">       http://www.apache.org/licenses/LICENSE-2.0</span>
-
-<span class="sd">   Unless required by applicable law or agreed to in writing, software</span>
-<span class="sd">   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
-<span class="sd">   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="sd">   See the License for the specific language governing permissions and</span>
-<span class="sd">   limitations under the License.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
@@ -100,7 +99,7 @@
 <span class="sd">    important pyrate stuff anyway, but might affect gen_thumbs.py</span>
 <span class="sd">    going to assume base_ifg_paths is ordered correcly</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">usage</span> <span class="o">=</span> <span class="s1">&#39;Usage: python run_prepifg.py &lt;config file&gt;&#39;</span>
+    <span class="n">usage</span> <span class="o">=</span> <span class="s1">&#39;Usage: pyrate prepifg &lt;config_file&gt;&#39;</span>
 
     <span class="k">def</span> <span class="nf">_convert_dem_inc_ele</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">base_ifg_paths</span><span class="p">):</span>
         <span class="n">processor</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">PROCESSOR</span><span class="p">]</span>  <span class="c1"># roipac or gamma</span>
@@ -121,14 +120,12 @@
             <span class="k">raise</span> <span class="n">cf</span><span class="o">.</span><span class="n">ConfigException</span><span class="p">(</span><span class="s1">&#39;params can not be provided with luigi&#39;</span><span class="p">)</span>
         <span class="n">base_ifg_paths</span> <span class="o">=</span> <span class="n">_convert_dem_inc_ele</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">base_ifg_paths</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># if params not provided read from config file</span>
-        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">params</span><span class="p">)</span> <span class="ow">and</span> <span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
-                             <span class="ow">or</span> <span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;-h&#39;</span>
-                                 <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;--help&#39;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">params</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">usage</span><span class="p">)</span>
             <span class="k">return</span>
-        <span class="n">base_ifg_paths</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">get_ifg_paths</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">base_ifg_paths</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">get_ifg_paths</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="n">use_luigi</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">LUIGI</span><span class="p">]</span>  <span class="c1"># luigi or no luigi</span>
-        <span class="n">raw_config_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">raw_config_file</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">base_ifg_paths</span> <span class="o">=</span> <span class="n">_convert_dem_inc_ele</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">base_ifg_paths</span><span class="p">)</span>
 
     <span class="n">gamma_or_roipac</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">PROCESSOR</span><span class="p">]</span>  <span class="c1"># roipac or gamma</span>
@@ -169,10 +166,10 @@
     <span class="n">xlooks</span><span class="p">,</span> <span class="n">ylooks</span><span class="p">,</span> <span class="n">crop</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">transform_params</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
     <span class="n">dem_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">ROIPAC_RESOURCE_HEADER</span><span class="p">])</span>
     <span class="n">projection</span> <span class="o">=</span> <span class="n">roipac</span><span class="o">.</span><span class="n">parse_header</span><span class="p">(</span><span class="n">dem_file</span><span class="p">)[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_DATUM</span><span class="p">]</span>
-    <span class="n">dest_base_ifgs</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">OUT_DIR</span><span class="p">],</span> 
-                                  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> 
-                                  <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.tif&#39;</span><span class="p">)</span>
-                                  <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">base_ifg_paths</span><span class="p">]</span>
+    <span class="n">dest_base_ifgs</span> <span class="o">=</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">OUT_DIR</span><span class="p">],</span>
+                                   <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span>
+                                   <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.tif&#39;</span><span class="p">)</span>
+                      <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">base_ifg_paths</span><span class="p">]</span>
 
     <span class="k">for</span> <span class="n">b</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">base_ifg_paths</span><span class="p">,</span> <span class="n">dest_base_ifgs</span><span class="p">):</span>
         <span class="n">header_file</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">ROI_PAC_HEADER_FILE_EXT</span><span class="p">)</span>
@@ -201,7 +198,7 @@
     <span class="c1"># dest_base_ifgs: location of geo_tif&#39;s</span>
     <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
         <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running prepifg in parallel with </span><span class="si">{}</span><span class="s2"> &quot;</span>
-              <span class="s2">&quot;processes&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">PROCESSES</span><span class="p">]))</span>
+                 <span class="s2">&quot;processes&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">PROCESSES</span><span class="p">]))</span>
         <span class="n">dest_base_ifgs</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">PROCESSES</span><span class="p">],</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">50</span><span class="p">)(</span>
             <span class="n">delayed</span><span class="p">(</span><span class="n">gamma_multiprocessing</span><span class="p">)(</span><span class="n">p</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">base_unw_paths</span><span class="p">)</span>
@@ -243,12 +240,12 @@
     <span class="n">combined_headers</span> <span class="o">=</span> <span class="n">gamma</span><span class="o">.</span><span class="n">manage_headers</span><span class="p">(</span><span class="n">dem_hdr_path</span><span class="p">,</span> <span class="n">header_paths</span><span class="p">)</span>
 
     <span class="n">dest</span> <span class="o">=</span> <span class="n">output_tiff_filename</span><span class="p">(</span><span class="n">unw_path</span><span class="p">,</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">OUT_DIR</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">unw_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">APS_INCIDENCE_EXT</span><span class="p">]</span> 
-            <span class="ow">or</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">APS_ELEVATION_EXT</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">unw_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> \
+            <span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">APS_INCIDENCE_EXT</span><span class="p">]</span> <span class="ow">or</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">APS_ELEVATION_EXT</span><span class="p">]):</span>
         <span class="c1"># TODO: implement incidence class here</span>
         <span class="n">combined_headers</span><span class="p">[</span><span class="s1">&#39;FILE_TYPE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Incidence&#39;</span>
-        
-    <span class="n">write_geotiff</span><span class="p">(</span><span class="n">combined_headers</span><span class="p">,</span> <span class="n">unw_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> 
+
+    <span class="n">write_geotiff</span><span class="p">(</span><span class="n">combined_headers</span><span class="p">,</span> <span class="n">unw_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span>
                   <span class="n">nodata</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">NO_DATA_VALUE</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">dest</span></div>
 </pre></div>

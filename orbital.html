@@ -45,21 +45,7 @@
             
   <div class="section" id="module-pyrate.orbital">
 <span id="orbital-error-correction-module"></span><h1>Orbital Error Correction Module<a class="headerlink" href="#module-pyrate.orbital" title="Permalink to this headline">¶</a></h1>
-<p>This Python module is part of the PyRate software package</p>
 <p>This Python module implements residual orbital corrections for interferograms.</p>
-<p>Copyright 2017 Geoscience Australia</p>
-<blockquote>
-<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at</p>
-<blockquote>
-<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
-<p>Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.</p>
-</div></blockquote>
 <dl class="exception">
 <dt id="pyrate.orbital.OrbitalError">
 <em class="property">exception </em><code class="descclassname">pyrate.orbital.</code><code class="descname">OrbitalError</code><a class="reference internal" href="_modules/pyrate/orbital.html#OrbitalError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.OrbitalError" title="Permalink to this definition">¶</a></dt>
@@ -97,14 +83,53 @@ limitations under the License.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="pyrate.orbital.get_num_params">
-<code class="descclassname">pyrate.orbital.</code><code class="descname">get_num_params</code><span class="sig-paren">(</span><em>degree</em>, <em>offset=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#get_num_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.get_num_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns number of model parameters</p>
+<dt id="pyrate.orbital.independent_correction">
+<code class="descclassname">pyrate.orbital.</code><code class="descname">independent_correction</code><span class="sig-paren">(</span><em>ifg</em>, <em>degree</em>, <em>offset</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#independent_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.independent_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates and removes orbital correction from an ifg.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ifg</strong> &#8211; the ifg to remove remove the orbital error from</li>
+<li><strong>degree</strong> &#8211; type of model to use PLANAR, QUADRATIC etc</li>
+<li><strong>offset</strong> &#8211; boolean</li>
+<li><strong>params</strong> &#8211; parameter dictionary</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.orbital.network_correction">
+<code class="descclassname">pyrate.orbital.</code><code class="descname">network_correction</code><span class="sig-paren">(</span><em>ifgs</em>, <em>degree</em>, <em>offset</em>, <em>params</em>, <em>m_ifgs=None</em>, <em>preread_ifgs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#network_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.network_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates orbital correction model, removing this from the ifgs.
+.. warn:: This will write orbital error corrected phase_data in the ifgs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ifgs</strong> &#8211; interferograms reduced to a minimum tree from prior
+MST calculations</li>
+<li><strong>degree</strong> &#8211; PLANAR, QUADRATIC or PART_CUBIC</li>
+<li><strong>offset</strong> &#8211; True to calculate the model using offsets</li>
+<li><strong>params</strong> &#8211; dict, parameter dictionary</li>
+<li><strong>m_ifgs</strong> &#8211; multilooked orbfit ifgs (sequence must be mlooked
+versions of &#8216;ifgs&#8217; arg)</li>
+<li><strong>preread_ifgs</strong> &#8211; dict, parameters dict corresponding to config file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyrate.orbital.orbital_correction">
-<code class="descclassname">pyrate.orbital.</code><code class="descname">orbital_correction</code><span class="sig-paren">(</span><em>ifgs_or_ifg_paths</em>, <em>params</em>, <em>mlooked=None</em>, <em>offset=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#orbital_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.orbital_correction" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyrate.orbital.</code><code class="descname">orbital_correction</code><span class="sig-paren">(</span><em>ifgs_or_ifg_paths</em>, <em>params</em>, <em>mlooked=None</em>, <em>offset=True</em>, <em>preread_ifgs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#orbital_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.orbital_correction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Removes orbital error from given Ifgs.</p>
 <p>NB: the ifg data is modified in situ, rather than create intermediate files.
 The network method assumes the given ifgs have already been reduced to a
@@ -127,13 +152,17 @@ minimum set from an MST type operation.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="pyrate.orbital.save_orbital_error_corrected_phase">
-<code class="descclassname">pyrate.orbital.</code><code class="descname">save_orbital_error_corrected_phase</code><span class="sig-paren">(</span><em>ifg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#save_orbital_error_corrected_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.save_orbital_error_corrected_phase" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenceince function to update metadata and save latest phase after
-orbital fit correction
-Parameters
-&#8212;&#8212;&#8212;-
-ifg: Ifg class instance</p>
+<dt id="pyrate.orbital.remove_orbital_error">
+<code class="descclassname">pyrate.orbital.</code><code class="descname">remove_orbital_error</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em>, <em>preread_ifgs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#remove_orbital_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.remove_orbital_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for orbital error removal functionality.</p>
+<dl class="docutils">
+<dt>ifgs: list</dt>
+<dd>list of ifgs or ifg paths</dd>
+<dt>params: dict</dt>
+<dd>dict corresponding to config parameters</dd>
+<dt>preread_ifgs: dict, optional</dt>
+<dd>dict containing information regarding MPI jobs</dd>
+</dl>
 </dd></dl>
 
 </div>

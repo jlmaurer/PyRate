@@ -45,31 +45,10 @@
             
   <div class="section" id="module-pyrate.linrate">
 <span id="linrate-module"></span><h1>Linrate Module<a class="headerlink" href="#module-pyrate.linrate" title="Permalink to this headline">¶</a></h1>
-<p>This Python module is part of the PyRate software package</p>
-<p>This Python module implements pixel-by-pixel linear rate 
-(velocity) estimation using an iterative weighted least-squares 
-method. The algorithm is based on the Pirate package &#8216;stack.m&#8217; 
+<p>This Python module implements pixel-by-pixel linear rate
+(velocity) estimation using an iterative weighted least-squares
+method. The algorithm is based on the Pirate package &#8216;stack.m&#8217;
 and Matlab &#8216;lscov.m&#8217; functions.</p>
-<p>Copyright 2017 Geoscience Australia</p>
-<blockquote>
-<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at</p>
-<blockquote>
-<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
-<p>Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.</p>
-</div></blockquote>
-<dl class="function">
-<dt id="pyrate.linrate.is_pos_def">
-<code class="descclassname">pyrate.linrate.</code><code class="descname">is_pos_def</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/linrate.html#is_pos_def"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.linrate.is_pos_def" title="Permalink to this definition">¶</a></dt>
-<dd><p>Can be used to check if matrix x is +ve def.
-Works on the basis that all eigenvalues should be +ve</p>
-</dd></dl>
-
 <dl class="function">
 <dt id="pyrate.linrate.linear_rate">
 <code class="descclassname">pyrate.linrate.</code><code class="descname">linear_rate</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em>, <em>vcmt</em>, <em>mst=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/linrate.html#linear_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.linrate.linear_rate" title="Permalink to this definition">¶</a></dt>

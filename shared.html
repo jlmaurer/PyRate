@@ -45,22 +45,8 @@
             
   <div class="section" id="module-pyrate.shared">
 <span id="shared-module"></span><h1>Shared Module<a class="headerlink" href="#module-pyrate.shared" title="Permalink to this headline">¶</a></h1>
-<p>This Python module is part of the PyRate software package</p>
-<p>This Python module contains utilities and classes shared by 
+<p>This Python module contains utilities and classes shared by
 all other PyRate modules</p>
-<p>Copyright 2017 Geoscience Australia</p>
-<blockquote>
-<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at</p>
-<blockquote>
-<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
-<p>Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.</p>
-</div></blockquote>
 <dl class="class">
 <dt id="pyrate.shared.DEM">
 <em class="property">class </em><code class="descclassname">pyrate.shared.</code><code class="descname">DEM</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#DEM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.DEM" title="Permalink to this definition">¶</a></dt>
@@ -229,7 +215,7 @@ For this to work, a copy of the original file</p>
 
 <dl class="class">
 <dt id="pyrate.shared.PrereadIfg">
-<em class="property">class </em><code class="descclassname">pyrate.shared.</code><code class="descname">PrereadIfg</code><span class="sig-paren">(</span><em>path</em>, <em>nan_fraction</em>, <em>master</em>, <em>slave</em>, <em>time_span</em>, <em>nrows</em>, <em>ncols</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#PrereadIfg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.PrereadIfg" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pyrate.shared.</code><code class="descname">PrereadIfg</code><span class="sig-paren">(</span><em>path</em>, <em>nan_fraction</em>, <em>master</em>, <em>slave</em>, <em>time_span</em>, <em>nrows</em>, <em>ncols</em>, <em>metadata</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#PrereadIfg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.PrereadIfg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience class for handling pre-calculated ifg params</p>
 </dd></dl>
 
@@ -333,6 +319,10 @@ some of the array dimensions can change according to numpy.array_split.</p>
 <dt id="pyrate.shared.get_projection_info">
 <code class="descclassname">pyrate.shared.</code><code class="descname">get_projection_info</code><span class="sig-paren">(</span><em>ifg_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#get_projection_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.get_projection_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>return projection information of ifg</p>
+<dl class="docutils">
+<dt>ifg_path: str</dt>
+<dd>ifg path</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -403,22 +393,15 @@ params: dict</p>
 <dl class="function">
 <dt id="pyrate.shared.save_numpy_phase">
 <code class="descclassname">pyrate.shared.</code><code class="descname">save_numpy_phase</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>tiles</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#save_numpy_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.save_numpy_phase" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ifg_paths</strong> &#8211; </li>
-<li><strong>params</strong> &#8211; </li>
-<li><strong>tiles</strong> &#8211; </li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
-</td>
-</tr>
-</tbody>
-</table>
+<dd><p>Save ifg phase data as numpy array.</p>
+<dl class="docutils">
+<dt>ifg_paths: list</dt>
+<dd>list of strings corresponding to ifg paths</dd>
+<dt>params: dict</dt>
+<dd>config dict</dd>
+<dt>tiles: list</dt>
+<dd>list of Shared.Tile instances</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -433,6 +416,14 @@ See <a class="reference external" href="http://www.dmap.co.uk/utmworld.htm">http
 <dt id="pyrate.shared.warp_required">
 <code class="descclassname">pyrate.shared.</code><code class="descname">warp_required</code><span class="sig-paren">(</span><em>xlooks</em>, <em>ylooks</em>, <em>crop</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/shared.html#warp_required"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.shared.warp_required" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if params show rasters need to be cropped and/or resized.</p>
+<dl class="docutils">
+<dt>xlooks: int</dt>
+<dd>resampling/multilooking in x dir</dd>
+<dt>ylooks: int</dt>
+<dd>resampling/multilooking in y dir</dd>
+<dt>crop: int</dt>
+<dd>ifg crop option</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">

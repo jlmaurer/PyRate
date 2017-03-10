@@ -45,23 +45,9 @@
             
   <div class="section" id="module-pyrate.ref_phs_est">
 <span id="reference-phase-calculation-module"></span><h1>Reference Phase Calculation Module<a class="headerlink" href="#module-pyrate.ref_phs_est" title="Permalink to this headline">¶</a></h1>
-<p>This Python module is part of the PyRate software package</p>
 <p>This Python module implements a reference phase estimation algorithm
 and is based on the Matlab code in the &#8216;refphsest.m&#8217; of the Pirate
 package.</p>
-<p>Copyright 2017 Geoscience Australia</p>
-<blockquote>
-<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at</p>
-<blockquote>
-<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
-<p>Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.</p>
-</div></blockquote>
 <dl class="exception">
 <dt id="pyrate.ref_phs_est.ReferencePhaseError">
 <em class="property">exception </em><code class="descclassname">pyrate.ref_phs_est.</code><code class="descname">ReferencePhaseError</code><a class="reference internal" href="_modules/pyrate/ref_phs_est.html#ReferencePhaseError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.ref_phs_est.ReferencePhaseError" title="Permalink to this definition">¶</a></dt>
@@ -78,6 +64,16 @@ limitations under the License.</p>
 <dt id="pyrate.ref_phs_est.est_ref_phase_method1">
 <code class="descclassname">pyrate.ref_phs_est.</code><code class="descname">est_ref_phase_method1</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/ref_phs_est.html#est_ref_phase_method1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.ref_phs_est.est_ref_phase_method1" title="Permalink to this definition">¶</a></dt>
 <dd><p>ref phs estimate method 1 estimation</p>
+<dl class="docutils">
+<dt>ifgs: list</dt>
+<dd>list of interferograms or shared.IfgPart class instances</dd>
+<dt>params: dict</dt>
+<dd>parameter dict corresponding to config file</dd>
+</dl>
+<dl class="docutils">
+<dt>ref_phs: ndarray</dt>
+<dd>numpy array of size (nifgs, 1)</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">

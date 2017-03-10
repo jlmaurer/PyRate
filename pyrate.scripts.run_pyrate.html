@@ -45,21 +45,7 @@
             
   <div class="section" id="module-pyrate.scripts.run_pyrate">
 <span id="run-pyrate-module"></span><h1>Run PyRate Module<a class="headerlink" href="#module-pyrate.scripts.run_pyrate" title="Permalink to this headline">¶</a></h1>
-<p>This Python script is part of the PyRate software package</p>
-<p>This Python script runs the main PyRate processing workflow</p>
-<p>Copyright 2017 Geoscience Australia</p>
-<blockquote>
-<div><p>Licensed under the Apache License, Version 2.0 (the &#8220;License&#8221;);
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at</p>
-<blockquote>
-<div><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></div></blockquote>
-<p>Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an &#8220;AS IS&#8221; BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.</p>
-</div></blockquote>
+<p>This Python module runs the main PyRate processing workflow</p>
 <dl class="function">
 <dt id="pyrate.scripts.run_pyrate.create_ifg_dict">
 <code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">create_ifg_dict</code><span class="sig-paren">(</span><em>dest_tifs</em>, <em>params</em>, <em>tiles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#create_ifg_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.create_ifg_dict" title="Permalink to this definition">¶</a></dt>
@@ -77,7 +63,7 @@ later used for fast loading of Ifg files in IfgPart class</p>
 <dd>list of all Tile instances</dd>
 </dl>
 <dl class="docutils">
-<dt>ifgs_dict: dict</dt>
+<dt>preread_ifgs: dict</dt>
 <dd>dict containing information regarding ifgs that are used downstream</dd>
 </dl>
 </dd></dl>
@@ -111,7 +97,7 @@ ifg_paths: list</p>
 <dd>number of cols to break each ifg into</dd>
 </dl>
 <dl class="docutils">
-<dt>tiles: dict</dt>
+<dt>tiles: list</dt>
 <dd>list of shared.Tile instances</dd>
 </dl>
 </dd></dl>
@@ -182,7 +168,7 @@ dest_tifs: list</p>
 
 <dl class="function">
 <dt id="pyrate.scripts.run_pyrate.orb_fit_calc">
-<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">orb_fit_calc</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#orb_fit_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.orb_fit_calc" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyrate.scripts.run_pyrate.</code><code class="descname">orb_fit_calc</code><span class="sig-paren">(</span><em>ifg_paths</em>, <em>params</em>, <em>preread_ifgs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/scripts/run_pyrate.html#orb_fit_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.scripts.run_pyrate.orb_fit_calc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Orbital fit correction</p>
 <dl class="docutils">
 <dt>ifg_paths: list</dt>

@@ -42,24 +42,23 @@
           <div class="body" role="main">
             
   <h1>Source code for pyrate.gamma</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This Python module is part of the PyRate software package</span>
-
+<span></span><span class="c1">#   This Python module is part of the PyRate software package.</span>
+<span class="c1">#</span>
+<span class="c1">#   Copyright 2017 Geoscience Australia</span>
+<span class="c1">#</span>
+<span class="c1">#   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#   you may not use this file except in compliance with the License.</span>
+<span class="c1">#   You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#       http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#   Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#   See the License for the specific language governing permissions and</span>
+<span class="c1">#   limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This Python module contains tools for reading GAMMA format input data.</span>
-
-<span class="sd">Copyright 2017 Geoscience Australia</span>
-
-<span class="sd">   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="sd">   you may not use this file except in compliance with the License.</span>
-<span class="sd">   You may obtain a copy of the License at</span>
-
-<span class="sd">       http://www.apache.org/licenses/LICENSE-2.0</span>
-
-<span class="sd">   Unless required by applicable law or agreed to in writing, software</span>
-<span class="sd">   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
-<span class="sd">   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="sd">   See the License for the specific language governing permissions and</span>
-<span class="sd">   limitations under the License.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># coding: utf-8</span>
 
@@ -140,11 +139,7 @@
 <div class="viewcode-block" id="parse_epoch_header"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.parse_epoch_header">[docs]</a><span class="k">def</span> <span class="nf">parse_epoch_header</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Returns dict of the minimum required epoch metadata needed for PyRate&quot;&quot;&quot;</span>
     <span class="n">lookup</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
-    <span class="n">subset</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">sec</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
-                                         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_DATE</span><span class="p">][:</span><span class="mi">6</span><span class="p">]]</span>
-    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_DATE</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
-    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_TIME</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">sec</span><span class="p">)</span>
+    <span class="n">subset</span> <span class="o">=</span> <span class="n">parse_date_time</span><span class="p">(</span><span class="n">lookup</span><span class="p">)</span>
 
     <span class="c1"># handle conversion of radar frequency to wavelength</span>
     <span class="n">freq</span><span class="p">,</span> <span class="n">unit</span> <span class="o">=</span> <span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_FREQUENCY</span><span class="p">]</span>
@@ -158,6 +153,26 @@
         <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Unrecognised unit field for incidence_angle: </span><span class="si">%s</span><span class="s1">&#39;</span>
         <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">unit</span><span class="p">)</span>
     <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">incidence</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">subset</span></div>
+
+
+<div class="viewcode-block" id="parse_date_time"><a class="viewcode-back" href="../../gamma.html#pyrate.gamma.parse_date_time">[docs]</a><span class="k">def</span> <span class="nf">parse_date_time</span><span class="p">(</span><span class="n">lookup</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Grab date and time information and convert to datetime objects&quot;&quot;&quot;</span>
+    <span class="n">subset</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_DATE</span><span class="p">])</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_DATE</span><span class="p">][:</span><span class="mi">3</span><span class="p">]]</span>
+        <span class="c1"># Occasionally GAMMA header has no time information - default to midnight</span>
+        <span class="n">hour</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">sec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_DATE</span><span class="p">])</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+        <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">sec</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+                                             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">lookup</span><span class="p">[</span><span class="n">GAMMA_DATE</span><span class="p">][:</span><span class="mi">6</span><span class="p">]]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Date and time information not complete in GAMMA headers&quot;</span>
+        <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_DATE</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+    <span class="n">subset</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">MASTER_TIME</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="n">hour</span><span class="p">,</span> <span class="n">mins</span><span class="p">,</span> <span class="n">sec</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">subset</span></div>
 
@@ -221,8 +236,9 @@
     <span class="c1"># set incidence angle to mean of master and slave</span>
     <span class="n">inc_ang</span> <span class="o">=</span> <span class="n">hdr0</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">inc_ang</span><span class="p">,</span> <span class="n">hdr1</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">],</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-1</span><span class="p">):</span>
-        <span class="n">chdr</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">hdr0</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">]</span> 
-                    <span class="o">+</span> <span class="n">hdr1</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">chdr</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="p">(</span><span class="n">hdr0</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">]</span> <span class="o">+</span>
+             <span class="n">hdr1</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INCIDENCE_DEGREES</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Incidence angles differ by more than 1e-1&quot;</span>
         <span class="k">raise</span> <span class="n">GammaException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>

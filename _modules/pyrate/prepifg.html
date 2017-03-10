@@ -42,28 +42,26 @@
           <div class="body" role="main">
             
   <h1>Source code for pyrate.prepifg</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">This Python module is part of the PyRate software package</span>
-
-<span class="sd">This Python module converts interferogram input files to a common geotiff </span>
+<span></span><span class="c1">#   This Python module is part of the PyRate software package</span>
+<span class="c1">#</span>
+<span class="c1">#   Copyright 2017 Geoscience Australia</span>
+<span class="c1">#</span>
+<span class="c1">#   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="c1">#   you may not use this file except in compliance with the License.</span>
+<span class="c1">#   You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#       http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#   Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#   See the License for the specific language governing permissions and</span>
+<span class="c1">#   limitations under the License.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This Python module converts interferogram input files to a common geotiff</span>
 <span class="sd">format with PyRate specific metadata headers. The module also implements</span>
-<span class="sd">multilooking/downsampling and cropping operations to reduce the size of </span>
+<span class="sd">multilooking/downsampling and cropping operations to reduce the size of</span>
 <span class="sd">the computational problem.</span>
-
-<span class="sd">Copyright 2017 Geoscience Australia</span>
-
-<span class="sd">   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
-<span class="sd">   you may not use this file except in compliance with the License.</span>
-<span class="sd">   You may obtain a copy of the License at</span>
-
-<span class="sd">       http://www.apache.org/licenses/LICENSE-2.0</span>
-
-<span class="sd">   Unless required by applicable law or agreed to in writing, software</span>
-<span class="sd">   distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
-<span class="sd">   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
-<span class="sd">   See the License for the specific language governing permissions and</span>
-<span class="sd">   limitations under the License.</span>
-
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># pylint: disable=too-many-arguments,invalid-name</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -176,7 +174,7 @@
     <span class="sd">&quot;&quot;&quot; convenience dummy operation &quot;&quot;&quot;</span>
     <span class="n">ifg</span> <span class="o">=</span> <span class="n">dem_or_ifg</span><span class="p">(</span><span class="n">renamed_path</span><span class="p">)</span>
     <span class="n">ifg</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
-    <span class="n">ifg</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">SetMetadataItem</span><span class="p">(</span><span class="n">ifc</span><span class="o">.</span><span class="n">DATA_TYPE</span><span class="p">,</span> <span class="n">ifc</span><span class="o">.</span><span class="n">MULTILOOKED</span><span class="p">)</span>    
+    <span class="n">ifg</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">SetMetadataItem</span><span class="p">(</span><span class="n">ifc</span><span class="o">.</span><span class="n">DATA_TYPE</span><span class="p">,</span> <span class="n">ifc</span><span class="o">.</span><span class="n">MULTILOOKED</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">ifg</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">ifg</span><span class="o">.</span><span class="n">dataset</span></div>
 
@@ -340,8 +338,8 @@
         <span class="n">output_file</span><span class="o">=</span><span class="n">looks_path</span><span class="p">,</span>
         <span class="n">thresh</span><span class="o">=</span><span class="n">thresh</span><span class="p">,</span>
         <span class="n">out_driver_type</span><span class="o">=</span><span class="n">driver_type</span><span class="p">)</span>
+
     <span class="k">if</span> <span class="ow">not</span> <span class="n">write_to_disc</span><span class="p">:</span>
-        <span class="c1"># this is used in orbfit correction when looks!=1</span>
         <span class="k">return</span> <span class="n">resampled_data</span><span class="p">,</span> <span class="n">out_ds</span></div>
 
 
