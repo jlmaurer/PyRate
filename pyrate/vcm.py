@@ -20,6 +20,8 @@ are based on functions 'cvdcalc.m' and 'vcmt.m' from
 the Matlab Pirate package.
 """
 from __future__ import print_function
+import logging
+from os.path import join, basename
 from numpy import array, where, isnan, real, imag, sqrt, meshgrid
 from numpy import zeros, vstack, ceil, mean, exp, reshape
 from numpy.linalg import norm
@@ -28,13 +30,17 @@ from scipy.fftpack import fft2, ifft2, fftshift
 from scipy.optimize import fmin
 
 from pyrate import shared
-from pyrate.shared import PrereadIfg
+from pyrate import ifgconstants as ifc
+from pyrate import config as cf
+from pyrate.shared import PrereadIfg, Ifg
 from pyrate.algorithm import master_slave_ids
 
+log = logging.getLogger(__name__)
 
 def pendiffexp(alphamod, cvdav):
     """
-    Fits an exponential model to data.
+    Exponential function for fitting the 1D covariance after Parsons et al.,
+    Geophys. J. Int., 2006.
 
     :param float alphamod: Exponential decay exponent.
     :param array cvdav: Function magnitude at 0 radius (2 col array of radius,
@@ -48,7 +54,7 @@ def pendiffexp(alphamod, cvdav):
 
 
 # this is not used any more
-def unique_points(points):
+def _unique_points(points):
     """
     Returns unique points from a list of coordinates.
 
@@ -57,38 +63,46 @@ def unique_points(points):
     return vstack([array(u) for u in set(points)])
 
 
-def cvd(ifg_path, params, calc_alpha=False):
+def cvd(ifg_path, params, calc_alpha=False, write_vals=False, save_acg=False):
     """
-    Calculate average covariance versus distance (autocorrelation) and its
-    best fitting exponential function
+    Calculate the 1D covariance function of an entire interferogram as the
+    radial average of its 2D autocorrelation.
 
     :param ifg_path: An interferogram.
         ifg: :py:class:`pyrate.shared.Ifg`.
-    :param: params: dict
-        dict of config params
+    :param params: dict
+        dictionary of configuration parameters
     :param calc_alpha: bool
-        whether you calculate alpha.
+        calculate alpha, the exponential length-scale of decay factor.
+    :param write_vals: bool
+        write maxvar and alpha values to interferogram metadata.
+    :param save_acg: bool
+        write acg and radial distance data to numpy array
     """
     # pylint: disable=invalid-name
     # pylint: disable=too-many-locals
     if isinstance(ifg_path, str):  # used during MPI
-        ifg = shared.Ifg(ifg_path)
-        ifg.open()
+        ifg = Ifg(ifg_path)
+        if write_vals:
+            ifg.open(readonly=False)
+        else:
+            ifg.open()
     else:
         ifg = ifg_path
     # assert isinstance(ifg_path, shared.Ifg)
     # ifg = ifg_path
     shared.nan_and_mm_convert(ifg, params)
-    # calculate 2D auto-correlation of image using the
-    # spectral method (Wiener-Khinchin theorem)
+
     if ifg.nan_converted:  # saves heaps of time with no-nan conversion
         phase = where(isnan(ifg.phase_data), 0, ifg.phase_data)
     else:
         phase = ifg.phase_data
     # distance division factor of 1000 converts to km and is needed to match
-    # Matlab code output
+    # Matlab Pirate code output
     distfact = 1000
 
+    # calculate 2D auto-correlation of image using the
+    # spectral method (Wiener-Khinchin theorem)
     nrows, ncols = phase.shape
     fft_phase = fft2(phase)
     pspec = real(fft_phase)**2 + imag(fft_phase)**2
@@ -96,12 +110,12 @@ def cvd(ifg_path, params, calc_alpha=False):
     nzc = np.sum(np.sum(phase != 0))
     autocorr_grid = fftshift(real(autocorr_grid)) / nzc
 
-    # pixel distances from pixel at zero lag (image centre).
+    # pixel distances from zero lag (image centre).
     xx, yy = meshgrid(range(ncols), range(nrows))
 
-    # r_dist is distance from the center
+    # r_dist is radial distance from the centre
     # doing np.divide and np.sqrt will improve performance as it keeps
-    # calculations in the numpy land
+    # calculations in the numpy space
     r_dist = np.divide(np.sqrt(((xx-ifg.x_centre) * ifg.x_size)**2 +
                                ((yy-ifg.y_centre) * ifg.y_size)**2), distfact)
 
@@ -136,16 +150,19 @@ def cvd(ifg_path, params, calc_alpha=False):
     else:
         maxdist = ifg.y_centre * ifg.y_size/ distfact
 
-    # filter out data where the of lag distance is greater than maxdist
+    # Here we use data at all radial distances.
+    # Otherwise filter out data where the distance is greater than maxdist
     # r_dist = array([e for e in rorig if e <= maxdist]) #
-    # MG: prefers to use all the data
     # acg = array([e for e in rorig if e <= maxdist])
     indices_to_keep = r_dist < maxdist
     r_dist = r_dist[indices_to_keep]
     acg = acg[indices_to_keep]
 
-    if isinstance(ifg_path, str):
-        ifg.close()
+    # save acg vs dist observations to disk
+    if save_acg:
+        _save_cvd_data(acg, r_dist, ifg_path, params[cf.TMPDIR])
+    # NOTE maximum variance usually at the zero lag: max(acg[:len(r_dist)])
+    maxvar = np.max(acg)
 
     if calc_alpha:
         # classify values of r_dist according to bin number
@@ -164,16 +181,51 @@ def cvd(ifg_path, params, calc_alpha=False):
         alphaguess = 2 / (maxbin * bin_width)
         alpha = fmin(pendiffexp, x0=alphaguess, args=(cvdav,), disp=0,
                      xtol=1e-6, ftol=1e-6)
-        print("1st guess alpha", alphaguess, 'converged alpha:', alpha)
-        # maximum variance usually at the zero lag: max(acg[:len(r_dist)])
-        return np.max(acg), alpha[0]
+        #print("1st guess alpha", alphaguess, 'converged alpha:', alpha)
+        alpha = alpha[0]
     else:
-        return np.max(acg), None
+        alpha = None
+
+    log.info('Best fit Maxvar = {}, Alpha = {}'.format(maxvar, alpha))
+    if write_vals:
+        _add_metadata(ifg, maxvar, alpha)
+
+    if isinstance(ifg_path, str):
+        ifg.close()
+    return maxvar, alpha
+
+
+def _add_metadata(ifg, maxvar, alpha):
+    """convenience function for saving metadata to ifg"""
+    md = ifg.meta_data
+    md[ifc.PYRATE_MAXVAR] = str(maxvar) #.astype('str')
+    md[ifc.PYRATE_ALPHA] = str(alpha) #.astype('str')
+    ifg.write_modified_phase()
+
+
+def _save_cvd_data(acg, r_dist, ifg_path, outdir):
+    """ function to save numpy array of autocorrelation data to disk"""
+    data = np.column_stack((acg, r_dist))
+    data_file = join(outdir, 'cvd_data_{b}.npy'.format(
+        b=basename(ifg_path).split('.')[0]))
+    np.save(file=data_file, arr=data)
 
 
 def get_vcmt(ifgs, maxvar):
     """
-    Returns the temporal variance/covariance matrix.
+    Assembles a temporal variance/covariance matrix using the method
+    described by Biggs et al., Geophys. J. Int, 2007. Matrix elements are
+    evaluated according to sig_i * sig_j * C_ij where i and j are two
+    interferograms and C is a matrix of coefficients:
+        C = 1 if the master and slave epochs of i and j are equal
+        C = 0.5 if have i and j share either a common master or slave epoch
+        C = -0.5 if the master of i or j equals the slave of the other
+        C = 0 otherwise
+
+    :param ifgs: A stack of interferograms.
+        ifg: :py:class:`pyrate.shared.Ifg`.
+    :param maxvar: ndarray
+        numpy array of maximum variance values for each interferogram.
     """
     # pylint: disable=too-many-locals
     # c=0.5 for common master or slave; c=-0.5 if master
@@ -204,7 +256,7 @@ def get_vcmt(ifgs, maxvar):
                 vcm_pat[i, j] = -0.5
 
             if mas1 == mas2 and slv1 == slv2:
-                vcm_pat[i, j] = 1.0  # handle testing ifg against itself
+                vcm_pat[i, j] = 1.0  # diagonal elements
 
     # make covariance matrix in time domain
     std = sqrt(maxvar).reshape((nifgs, 1))
