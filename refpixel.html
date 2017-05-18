@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -54,92 +54,114 @@ of the interferometric reference pixel</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="pyrate.refpixel.filter_means">
-<code class="descclassname">pyrate.refpixel.</code><code class="descname">filter_means</code><span class="sig-paren">(</span><em>mean_sds</em>, <em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#filter_means"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.filter_means" title="Permalink to this definition">¶</a></dt>
-<dd><p>filter the mean standard deviations from each ref pixel block
-Parameters
-&#8212;&#8212;&#8212;-
-mean_sds: list</p>
-<blockquote>
-<div>list of mean standard deviations from each ref pixel grid</div></blockquote>
-<dl class="docutils">
-<dt>grid: list</dt>
-<dd>list of grid tuples</dd>
-</dl>
-<p>tuple of (refy, refx)</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.refpixel.ref_pixel">
-<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns (y,x) reference pixel coordinate from given ifgs.</p>
-<p>If the config file REFX or REFY values are empty or subzero, the search for
-the reference pixel is performed. If the REFX|Y values are within the
-bounds of the raster, a search is not performed. REFX|Y values outside
-the upper bounds cause an exception.</p>
-<dl class="docutils">
-<dt>ifgs: list</dt>
-<dd>sequence of interferograms.</dd>
-<dt>params: dict</dt>
-<dd>parameters dictionary</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.refpixel.ref_pixel_mpi">
-<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel_mpi</code><span class="sig-paren">(</span><em>process_grid</em>, <em>half_patch_size</em>, <em>ifgs</em>, <em>thresh</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel_mpi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel_mpi" title="Permalink to this definition">¶</a></dt>
-<dd><p>convenience function for ref pixel calculation for each process</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.refpixel.ref_pixel_multi">
-<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel_multi</code><span class="sig-paren">(</span><em>g</em>, <em>half_patch_size</em>, <em>phase_data_or_ifg_paths</em>, <em>thresh</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel_multi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel_multi" title="Permalink to this definition">¶</a></dt>
-<dd><p>convenience function for for ref pixel optimisation</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.refpixel.ref_pixel_setup">
-<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel_setup</code><span class="sig-paren">(</span><em>ifgs_or_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel_setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>sets up the grid for reference pixel computation
-Also saves numpy files for later use during ref pixel computation</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.refpixel.step">
-<code class="descclassname">pyrate.refpixel.</code><code class="descname">step</code><span class="sig-paren">(</span><em>dim</em>, <em>ref</em>, <em>radius</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.step" title="Permalink to this definition">¶</a></dt>
-<dd><p>Helper func: returns xrange obj of axis indicies for a search window.</p>
+<dt id="pyrate.refpixel.find_min_mean">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">find_min_mean</code><span class="sig-paren">(</span><em>mean_sds</em>, <em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#find_min_mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.find_min_mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the ref pixel block with minimum mean value</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>dim</strong> &#8211; total length of the grid dimension.</li>
-<li><strong>ref</strong> &#8211; the desired number of steps.</li>
-<li><strong>radius</strong> &#8211; the number of cells from the centre of the chip eg.</li>
+<li><strong>mean_sds</strong> (<em>list</em>) – List of mean standard deviations from each
+reference pixel grid</li>
+<li><strong>grid</strong> (<em>list</em>) – List of ref pixel coordinates tuples</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
-<p>(chipsize / 2).</p>
+<p>:return Tuple of (refy, refx) with minimum mean
+:rtype: tuple</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="pyrate.refpixel.validate_chipsize">
-<code class="descclassname">pyrate.refpixel.</code><code class="descname">validate_chipsize</code><span class="sig-paren">(</span><em>chipsize</em>, <em>head</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#validate_chipsize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.validate_chipsize" title="Permalink to this definition">¶</a></dt>
-<dd><p>sanity check min chipsize</p>
+<dt id="pyrate.refpixel.ref_pixel">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the most appropriate reference pixel coordinate by conducting
+a grid search and calculating the mean standard deviation with patches
+around candidate pixels from the given interferograms.</p>
+<p>If the config file REFX or REFY values are empty or negative, the search
+for the reference pixel is performed. If the REFX|Y values are within the
+bounds of the raster, a search is not performed. REFX|Y values outside
+the upper bounds cause an exception.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifgs</strong> (<em>list</em>) – List of interferogram objects</li>
+<li><strong>params</strong> (<em>dict</em>) – Dictionary of configuration parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple of best REFX and REFY coordinates</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="pyrate.refpixel.validate_minimum_fraction">
-<code class="descclassname">pyrate.refpixel.</code><code class="descname">validate_minimum_fraction</code><span class="sig-paren">(</span><em>min_frac</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#validate_minimum_fraction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.validate_minimum_fraction" title="Permalink to this definition">¶</a></dt>
-<dd><p>sanity check min fraction</p>
+<dt id="pyrate.refpixel.ref_pixel_setup">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel_setup</code><span class="sig-paren">(</span><em>ifgs_or_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up the grid for reference pixel computation and saves numpy files
+to disk for later use during ref pixel computation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifgs_or_paths</strong> (<em>list</em>) – List of interferogram filenames or Ifg objects</li>
+<li><strong>params</strong> (<em>dict</em>) – Dictionary of configuration parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">half_patch_size: size of patch</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">thresh</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list(product(ysteps, xsteps))</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
-<dt id="pyrate.refpixel.validate_search_win">
-<code class="descclassname">pyrate.refpixel.</code><code class="descname">validate_search_win</code><span class="sig-paren">(</span><em>refnx</em>, <em>refny</em>, <em>chipsize</em>, <em>head</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#validate_search_win"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.validate_search_win" title="Permalink to this definition">¶</a></dt>
-<dd><p>sanity check X|Y steps</p>
+<dt id="pyrate.refpixel.save_ref_pixel_blocks">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">save_ref_pixel_blocks</code><span class="sig-paren">(</span><em>grid</em>, <em>half_patch_size</em>, <em>ifg_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#save_ref_pixel_blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.save_ref_pixel_blocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save reference pixel grid blocks to numpy array files on disk</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> (<em>list</em>) – List of tuples (y, x) corresponding to ref pixel grids</li>
+<li><strong>half_patch_size</strong> (<em>int</em>) – patch size in pixels</li>
+<li><strong>ifg_paths</strong> (<em>list</em>) – list of interferogram paths</li>
+<li><strong>params</strong> (<em>dict</em>) – Dictionary of configuration parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None, file saved to disk</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -185,7 +207,7 @@ Also saves numpy files for later use during ref pixel computation</p>
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

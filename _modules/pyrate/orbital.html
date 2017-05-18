@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -33,7 +33,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -75,7 +75,6 @@
 <span class="kn">from</span> <span class="nn">pyrate.shared</span> <span class="k">import</span> <span class="n">nanmedian</span><span class="p">,</span> <span class="n">Ifg</span>
 <span class="kn">from</span> <span class="nn">pyrate</span> <span class="k">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">cf</span>
 <span class="kn">from</span> <span class="nn">pyrate</span> <span class="k">import</span> <span class="n">ifgconstants</span> <span class="k">as</span> <span class="n">ifc</span>
-<span class="kn">from</span> <span class="nn">pyrate</span> <span class="k">import</span> <span class="n">mpiops</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -90,14 +89,14 @@
 
 
 <span class="c1"># Design notes:</span>
-<span class="c1"># The orbital correction code is based on MATLAB Pirate, but includes several</span>
+<span class="c1"># The orbital correction code is based on Matlab Pirate, but includes several</span>
 <span class="c1"># enhancements. Pirate creates sparse arrays for the linear inversion, which</span>
 <span class="c1"># contain many empty cells. This is unnecessary for the independent method, and</span>
 <span class="c1"># temporarily wastes potentially a lot of memory.</span>
 <span class="c1">#</span>
 <span class="c1"># For the independent method, PyRate makes individual small design matrices and</span>
 <span class="c1"># corrects the Ifgs one by one. If required in the correction, the offsets</span>
-<span class="c1"># option adds an extra colum of ones to include in the inversion.</span>
+<span class="c1"># option adds an extra column of ones to include in the inversion.</span>
 <span class="c1">#</span>
 <span class="c1"># Network method design matrices are mostly empty, and offsets are handled</span>
 <span class="c1"># differently. Individual design matrices (== independent method DMs) are</span>
@@ -115,20 +114,53 @@
 <span class="n">PART_CUBIC</span> <span class="o">=</span> <span class="n">cf</span><span class="o">.</span><span class="n">PART_CUBIC</span>
 
 
-<div class="viewcode-block" id="orbital_correction"><a class="viewcode-back" href="../../orbital.html#pyrate.orbital.orbital_correction">[docs]</a><span class="k">def</span> <span class="nf">orbital_correction</span><span class="p">(</span><span class="n">ifgs_or_ifg_paths</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">mlooked</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                       <span class="n">preread_ifgs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="remove_orbital_error"><a class="viewcode-back" href="../../orbital.html#pyrate.orbital.remove_orbital_error">[docs]</a><span class="k">def</span> <span class="nf">remove_orbital_error</span><span class="p">(</span><span class="n">ifgs</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">preread_ifgs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Removes orbital error from given Ifgs.</span>
+<span class="sd">    Wrapper function for PyRate orbital error removal functionality.</span>
 
-<span class="sd">    NB: the ifg data is modified in situ, rather than create intermediate files.</span>
-<span class="sd">    The network method assumes the given ifgs have already been reduced to a</span>
-<span class="sd">    minimum set from an MST type operation.</span>
+<span class="sd">    NB: the ifg data is modified in situ, rather than create intermediate</span>
+<span class="sd">    files. The network method assumes the given ifgs have already been reduced</span>
+<span class="sd">    to a minimum spanning tree network.</span>
 
-<span class="sd">    :param ifgs: sequence of Ifg objs to correct</span>
-<span class="sd">    :param degree: PLANAR, QUADRATIC or PART_CUBIC</span>
-<span class="sd">    :param method: INDEPENDENT_METHOD or NETWORK_METHOD</span>
-<span class="sd">    :param mlooked: sequence of multilooked ifgs (must correspond to &#39;ifgs&#39; arg)</span>
-<span class="sd">    :param bool offset: True/False to include the constant/offset component</span>
+<span class="sd">    :param list ifgs: List of interferograms class objects</span>
+<span class="sd">    :param dict params: Dictionary containing configuration parameters</span>
+<span class="sd">    :param dict preread_ifgs: Dictionary containing information specifically</span>
+<span class="sd">        for MPI jobs (optional)</span>
+
+<span class="sd">    :return: None - interferogram phase data is updated and saved to disk</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ifg_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">data_path</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ifgs</span><span class="p">]</span> \
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ifgs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Ifg</span><span class="p">)</span> <span class="k">else</span> <span class="n">ifgs</span>
+
+    <span class="n">mlooked</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># mlooking is not necessary for independent correction</span>
+    <span class="c1"># can use multiple procesing if write_to_disc=True</span>
+    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">ORBITAL_FIT_METHOD</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">mlooked_dataset</span> <span class="o">=</span> <span class="n">prepifg</span><span class="o">.</span><span class="n">prepare_ifgs</span><span class="p">(</span>
+            <span class="n">ifg_paths</span><span class="p">,</span>
+            <span class="n">crop_opt</span><span class="o">=</span><span class="n">prepifg</span><span class="o">.</span><span class="n">ALREADY_SAME_SIZE</span><span class="p">,</span>
+            <span class="n">xlooks</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">ORBITAL_FIT_LOOKS_X</span><span class="p">],</span>
+            <span class="n">ylooks</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">ORBITAL_FIT_LOOKS_Y</span><span class="p">],</span>
+            <span class="n">thresh</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">NO_DATA_AVERAGING_THRESHOLD</span><span class="p">],</span>
+            <span class="n">write_to_disc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">mlooked</span> <span class="o">=</span> <span class="p">[</span><span class="n">Ifg</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mlooked_dataset</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mlooked</span><span class="p">:</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">nodata_value</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">NO_DATA_VALUE</span><span class="p">]</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">convert_to_nans</span><span class="p">()</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">convert_to_mm</span><span class="p">()</span>
+
+    <span class="n">_orbital_correction</span><span class="p">(</span><span class="n">ifgs</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">mlooked</span><span class="o">=</span><span class="n">mlooked</span><span class="p">,</span>
+                        <span class="n">preread_ifgs</span><span class="o">=</span><span class="n">preread_ifgs</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_orbital_correction</span><span class="p">(</span><span class="n">ifgs_or_ifg_paths</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">mlooked</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">preread_ifgs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convenience function to perform orbital correction.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">degree</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">ORBITAL_FIT_DEGREE</span><span class="p">]</span>
     <span class="n">method</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">ORBITAL_FIT_METHOD</span><span class="p">]</span>
@@ -138,15 +170,18 @@
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Invalid degree of </span><span class="si">%s</span><span class="s2"> for orbital correction&quot;</span> <span class="o">%</span> <span class="n">degree</span>
         <span class="k">raise</span> <span class="n">OrbitalError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
+    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Removing orbital error using orbital method correction </span><span class="si">{}</span><span class="s1">&#39;</span>
+             <span class="s1">&#39; and degree=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">degree</span><span class="p">))</span>
+
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="n">NETWORK_METHOD</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">mlooked</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">network_correction</span><span class="p">(</span><span class="n">ifgs_or_ifg_paths</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>
-                               <span class="n">m_ifgs</span><span class="o">=</span><span class="n">mlooked</span><span class="p">,</span>
-                               <span class="n">preread_ifgs</span><span class="o">=</span><span class="n">preread_ifgs</span><span class="p">)</span>
+            <span class="n">network_orbital_correction</span><span class="p">(</span><span class="n">ifgs_or_ifg_paths</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span>
+                                       <span class="n">params</span><span class="p">,</span> <span class="n">m_ifgs</span><span class="o">=</span><span class="n">mlooked</span><span class="p">,</span>
+                                       <span class="n">preread_ifgs</span><span class="o">=</span><span class="n">preread_ifgs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">_validate_mlooked</span><span class="p">(</span><span class="n">mlooked</span><span class="p">,</span> <span class="n">ifgs_or_ifg_paths</span><span class="p">)</span>
-            <span class="n">network_correction</span><span class="p">(</span><span class="n">ifgs_or_ifg_paths</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span>
-                               <span class="n">mlooked</span><span class="p">,</span> <span class="n">preread_ifgs</span><span class="p">)</span>
+            <span class="n">network_orbital_correction</span><span class="p">(</span><span class="n">ifgs_or_ifg_paths</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span>
+                                       <span class="n">params</span><span class="p">,</span> <span class="n">mlooked</span><span class="p">,</span> <span class="n">preread_ifgs</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="n">INDEPENDENT_METHOD</span><span class="p">:</span>
         <span class="c1"># not running in parallel</span>
@@ -155,10 +190,10 @@
         <span class="c1">#     delayed(_independent_correction)(ifg, degree, offset, params)</span>
         <span class="c1">#     for ifg in ifgs)</span>
         <span class="k">for</span> <span class="n">ifg</span> <span class="ow">in</span> <span class="n">ifgs_or_ifg_paths</span><span class="p">:</span>
-            <span class="n">independent_correction</span><span class="p">(</span><span class="n">ifg</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+            <span class="n">independent_orbital_correction</span><span class="p">(</span><span class="n">ifg</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Unknown method: &#39;</span><span class="si">%s</span><span class="s2">&#39;, need INDEPENDENT or NETWORK method&quot;</span>
-        <span class="k">raise</span> <span class="n">OrbitalError</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">method</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="n">OrbitalError</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">method</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_validate_mlooked</span><span class="p">(</span><span class="n">mlooked</span><span class="p">,</span> <span class="n">ifgs</span><span class="p">):</span>
@@ -177,7 +212,7 @@
 
 <span class="k">def</span> <span class="nf">_get_num_params</span><span class="p">(</span><span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Returns number of model parameters</span>
+<span class="sd">    Returns number of model parameters from string parameter</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">if</span> <span class="n">degree</span> <span class="o">==</span> <span class="n">PLANAR</span><span class="p">:</span>
@@ -196,16 +231,19 @@
     <span class="k">return</span> <span class="n">nparams</span>
 
 
-<div class="viewcode-block" id="independent_correction"><a class="viewcode-back" href="../../orbital.html#pyrate.orbital.independent_correction">[docs]</a><span class="k">def</span> <span class="nf">independent_correction</span><span class="p">(</span><span class="n">ifg</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<div class="viewcode-block" id="independent_orbital_correction"><a class="viewcode-back" href="../../orbital.html#pyrate.orbital.independent_orbital_correction">[docs]</a><span class="k">def</span> <span class="nf">independent_orbital_correction</span><span class="p">(</span><span class="n">ifg</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculates and removes orbital correction from an ifg.</span>
+<span class="sd">    Calculates and removes an orbital error surface from a single independent</span>
+<span class="sd">    interferogram.</span>
 
-<span class="sd">    .. warn:: This will write orbital error corrected phase_data in the ifgs.</span>
+<span class="sd">    Warning: This will write orbital error corrected phase_data to the ifg.</span>
 
-<span class="sd">    :param ifg: the ifg to remove remove the orbital error from</span>
-<span class="sd">    :param degree: type of model to use PLANAR, QUADRATIC etc</span>
-<span class="sd">    :param offset: boolean</span>
-<span class="sd">    :param params: parameter dictionary</span>
+<span class="sd">    :param Ifg class instance ifg: the interferogram to be corrected</span>
+<span class="sd">    :param str degree: model to fit (PLANAR / QUADRATIC / PART_CUBIC)</span>
+<span class="sd">    :param bool offset: True to calculate the model using an offset</span>
+<span class="sd">    :param dict params: dictionary of configuration parameters</span>
+
+<span class="sd">    :return: None - interferogram phase data is updated and saved to disk</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ifg</span> <span class="o">=</span> <span class="n">shared</span><span class="o">.</span><span class="n">Ifg</span><span class="p">(</span><span class="n">ifg</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ifg</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="n">ifg</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ifg</span><span class="o">.</span><span class="n">is_open</span><span class="p">:</span>
@@ -227,27 +265,33 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fullorb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">dm</span><span class="p">,</span> <span class="n">model</span><span class="p">),</span> <span class="n">ifg</span><span class="o">.</span><span class="n">phase_data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">offset_removal</span> <span class="o">=</span> <span class="n">nanmedian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">ifg</span><span class="o">.</span><span class="n">phase_data</span> <span class="o">-</span> <span class="n">fullorb</span><span class="p">))</span>
+    <span class="c1"># subtract orbital error from the ifg</span>
     <span class="n">ifg</span><span class="o">.</span><span class="n">phase_data</span> <span class="o">-=</span> <span class="p">(</span><span class="n">fullorb</span> <span class="o">-</span> <span class="n">offset_removal</span><span class="p">)</span>
-    <span class="c1"># set orbfit tags after orbital error correction</span>
+    <span class="c1"># set orbfit meta tag and save phase to file</span>
     <span class="n">_save_orbital_error_corrected_phase</span><span class="p">(</span><span class="n">ifg</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ifg</span><span class="o">.</span><span class="n">open</span><span class="p">():</span>
         <span class="n">ifg</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="network_correction"><a class="viewcode-back" href="../../orbital.html#pyrate.orbital.network_correction">[docs]</a><span class="k">def</span> <span class="nf">network_correction</span><span class="p">(</span><span class="n">ifgs</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">m_ifgs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">preread_ifgs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="network_orbital_correction"><a class="viewcode-back" href="../../orbital.html#pyrate.orbital.network_orbital_correction">[docs]</a><span class="k">def</span> <span class="nf">network_orbital_correction</span><span class="p">(</span><span class="n">ifgs</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">m_ifgs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                               <span class="n">preread_ifgs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculates orbital correction model, removing this from the ifgs.</span>
-<span class="sd">    .. warn:: This will write orbital error corrected phase_data in the ifgs.</span>
+<span class="sd">    This algorithm implements a network inversion to determine orbital</span>
+<span class="sd">    corrections for a set of interferograms forming a connected network.</span>
 
-<span class="sd">    :param ifgs: interferograms reduced to a minimum tree from prior</span>
-<span class="sd">        MST calculations</span>
-<span class="sd">    :param degree: PLANAR, QUADRATIC or PART_CUBIC</span>
-<span class="sd">    :param offset: True to calculate the model using offsets</span>
-<span class="sd">    :param params: dict, parameter dictionary</span>
-<span class="sd">    :param m_ifgs: multilooked orbfit ifgs (sequence must be mlooked</span>
-<span class="sd">        versions of &#39;ifgs&#39; arg)</span>
-<span class="sd">    :param preread_ifgs: dict, parameters dict corresponding to config file</span>
+<span class="sd">    Warning: This will write orbital error corrected phase_data to the ifgs.</span>
+
+<span class="sd">    :param list ifgs: List of Ifg class objects reduced to a minimum spanning</span>
+<span class="sd">        tree network</span>
+<span class="sd">    :param str degree: model to fit (PLANAR / QUADRATIC / PART_CUBIC)</span>
+<span class="sd">    :param bool offset: True to calculate the model using offsets</span>
+<span class="sd">    :param dict params: dictionary of configuration parameters</span>
+<span class="sd">    :param list m_ifgs: list of multilooked Ifg class objects</span>
+<span class="sd">        (sequence must be multilooked versions of &#39;ifgs&#39; arg)</span>
+<span class="sd">    :param dict preread_ifgs: Dictionary containing information specifically</span>
+<span class="sd">        for MPI jobs (optional)</span>
+
+<span class="sd">    :return: None - interferogram phase data is updated and saved to disk</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># pylint: disable=too-many-locals, too-many-arguments</span>
     <span class="n">src_ifgs</span> <span class="o">=</span> <span class="n">ifgs</span> <span class="k">if</span> <span class="n">m_ifgs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">m_ifgs</span>
@@ -282,37 +326,37 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">dm</span> <span class="o">=</span> <span class="n">get_design_matrix</span><span class="p">(</span><span class="n">ifgs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="c1"># TODO: remove this import from tests suite</span>
-    <span class="kn">from</span> <span class="nn">tests.common</span> <span class="k">import</span> <span class="n">MockIfg</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ifgs</span><span class="p">:</span>
         <span class="c1"># open if not Ifg instance</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">Ifg</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">MockIfg</span><span class="p">)):</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
             <span class="c1"># are paths</span>
             <span class="n">i</span> <span class="o">=</span> <span class="n">Ifg</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
             <span class="n">i</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="n">shared</span><span class="o">.</span><span class="n">nan_and_mm_convert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-        <span class="n">_remove_networkx_error</span><span class="p">(</span><span class="n">coefs</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span></div>
+        <span class="n">_remove_network_orb_error</span><span class="p">(</span><span class="n">coefs</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_remove_networkx_error</span><span class="p">(</span><span class="n">coefs</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span> <span class="n">ifg</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_remove_network_orb_error</span><span class="p">(</span><span class="n">coefs</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span> <span class="n">ifg</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convenience function to remove network orbital error from input</span>
+<span class="sd">    interferograms</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">orb</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">coefs</span><span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">ifg</span><span class="o">.</span><span class="n">slave</span><span class="p">]]</span> <span class="o">-</span> <span class="n">coefs</span><span class="p">[</span><span class="n">ids</span><span class="p">[</span><span class="n">ifg</span><span class="o">.</span><span class="n">master</span><span class="p">]])</span>
     <span class="n">orb</span> <span class="o">=</span> <span class="n">orb</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ifg</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="c1"># offset estimation</span>
     <span class="k">if</span> <span class="n">offset</span><span class="p">:</span>
         <span class="c1"># bring all ifgs to same base level</span>
         <span class="n">orb</span> <span class="o">-=</span> <span class="n">nanmedian</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">ifg</span><span class="o">.</span><span class="n">phase_data</span> <span class="o">-</span> <span class="n">orb</span><span class="p">))</span>
-    <span class="n">ifg</span><span class="o">.</span><span class="n">phase_data</span> <span class="o">-=</span> <span class="n">orb</span>  <span class="c1"># remove orbital error from the ifg</span>
-    <span class="c1"># set orbfit tags after orbital error correction</span>
+    <span class="c1"># subtract orbital error from the ifg</span>
+    <span class="n">ifg</span><span class="o">.</span><span class="n">phase_data</span> <span class="o">-=</span> <span class="n">orb</span>
+    <span class="c1"># set orbfit meta tag and save phase to file</span>
     <span class="n">_save_orbital_error_corrected_phase</span><span class="p">(</span><span class="n">ifg</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_save_orbital_error_corrected_phase</span><span class="p">(</span><span class="n">ifg</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Convenceince function to update metadata and save latest phase after</span>
+<span class="sd">    Convenience function to update metadata and save latest phase after</span>
 <span class="sd">    orbital fit correction</span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    ifg: Ifg class instance</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># set orbfit tags after orbital error correction</span>
     <span class="n">ifg</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">SetMetadataItem</span><span class="p">(</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_ORBITAL_ERROR</span><span class="p">,</span> <span class="n">ifc</span><span class="o">.</span><span class="n">ORB_REMOVED</span><span class="p">)</span>
@@ -323,12 +367,16 @@
 <span class="c1"># TODO: subtract reference pixel coordinate from x and y</span>
 <div class="viewcode-block" id="get_design_matrix"><a class="viewcode-back" href="../../orbital.html#pyrate.orbital.get_design_matrix">[docs]</a><span class="k">def</span> <span class="nf">get_design_matrix</span><span class="p">(</span><span class="n">ifg</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">100.0</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns simple design matrix with columns for model parameters.</span>
+<span class="sd">    Returns orbital error design matrix with columns for model parameters.</span>
 
-<span class="sd">    :param ifg: interferogram to base the DM on</span>
-<span class="sd">    :param degree: PLANAR, QUADRATIC or PART_CUBIC</span>
-<span class="sd">    :param offset: True to include offset cols, otherwise False.</span>
-<span class="sd">    :param scale: amount to divide cell size by for improving inversion robustness</span>
+<span class="sd">    :param Ifg class instance ifg: interferogram to get design matrix for</span>
+<span class="sd">    :param str degree: model to fit (PLANAR / QUADRATIC / PART_CUBIC)</span>
+<span class="sd">    :param bool offset: True to include offset column, otherwise False.</span>
+<span class="sd">    :param float scale: Scale factor to divide cell size by in order to</span>
+<span class="sd">        improve inversion robustness</span>
+
+<span class="sd">    :return: dm: design matrix</span>
+<span class="sd">    :rtype: ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">degree</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PLANAR</span><span class="p">,</span> <span class="n">QUADRATIC</span><span class="p">,</span> <span class="n">PART_CUBIC</span><span class="p">]:</span>
@@ -373,12 +421,15 @@
 <div class="viewcode-block" id="get_network_design_matrix"><a class="viewcode-back" href="../../orbital.html#pyrate.orbital.get_network_design_matrix">[docs]</a><span class="k">def</span> <span class="nf">get_network_design_matrix</span><span class="p">(</span><span class="n">ifgs</span><span class="p">,</span> <span class="n">degree</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
     <span class="c1"># pylint: disable=too-many-locals</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns larger format design matrix for networked error correction.</span>
+<span class="sd">    Returns larger-format design matrix for network error correction. The</span>
+<span class="sd">    network design matrix includes rows which relate to those of NaN cells.</span>
 
-<span class="sd">    The network design matrix includes rows which relate to those of NaN cells.</span>
-<span class="sd">    :param ifgs: sequence of interferograms</span>
-<span class="sd">    :param degree: PLANAR, QUADRATIC or PART_CUBIC</span>
-<span class="sd">    :param offset: True to include offset cols, otherwise False.</span>
+<span class="sd">    :param list ifgs: List of Ifg class objects</span>
+<span class="sd">    :param str degree: model to fit (PLANAR / QUADRATIC / PART_CUBIC)</span>
+<span class="sd">    :param bool offset: True to include offset cols, otherwise False.</span>
+
+<span class="sd">    :return: netdm: network design matrix</span>
+<span class="sd">    :rtype: ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">degree</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">PLANAR</span><span class="p">,</span> <span class="n">QUADRATIC</span><span class="p">,</span> <span class="n">PART_CUBIC</span><span class="p">]:</span>
@@ -426,82 +477,6 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generic class for errors in orbital correction.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="remove_orbital_error"><a class="viewcode-back" href="../../orbital.html#pyrate.orbital.remove_orbital_error">[docs]</a><span class="k">def</span> <span class="nf">remove_orbital_error</span><span class="p">(</span><span class="n">ifgs</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">preread_ifgs</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wrapper for orbital error removal functionality.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    ifgs: list</span>
-<span class="sd">        list of ifgs or ifg paths</span>
-<span class="sd">    params: dict</span>
-<span class="sd">        dict corresponding to config parameters</span>
-<span class="sd">    preread_ifgs: dict, optional</span>
-<span class="sd">        dict containing information regarding MPI jobs</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Calculating orbital error correction&#39;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">ORBITAL_FIT</span><span class="p">]:</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Orbital correction not required&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-
-    <span class="k">if</span> <span class="n">preread_ifgs</span><span class="p">:</span>  <span class="c1"># don&#39;t check except for mpi tests</span>
-        <span class="c1"># remove non ifg keys</span>
-        <span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">preread_ifgs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;gt&#39;</span><span class="p">,</span> <span class="s1">&#39;epochlist&#39;</span><span class="p">,</span> <span class="s1">&#39;md&#39;</span><span class="p">,</span> <span class="s1">&#39;wkt&#39;</span><span class="p">]]</span>
-        <span class="c1"># perform some general error/sanity checks</span>
-        <span class="k">if</span> <span class="n">mpiops</span><span class="o">.</span><span class="n">rank</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">_check_orbital_ifgs</span><span class="p">(</span><span class="n">preread_ifgs</span><span class="p">)</span>
-
-    <span class="n">ifg_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">data_path</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ifgs</span><span class="p">]</span> \
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ifgs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">Ifg</span><span class="p">)</span> <span class="k">else</span> <span class="n">ifgs</span>
-
-    <span class="n">mlooked</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="c1"># mlooking is not necessary for independent correction</span>
-    <span class="c1"># can use multiple procesing if write_to_disc=True</span>
-    <span class="k">if</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">ORBITAL_FIT_METHOD</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">mlooked_dataset</span> <span class="o">=</span> <span class="n">prepifg</span><span class="o">.</span><span class="n">prepare_ifgs</span><span class="p">(</span>
-            <span class="n">ifg_paths</span><span class="p">,</span>
-            <span class="n">crop_opt</span><span class="o">=</span><span class="n">prepifg</span><span class="o">.</span><span class="n">ALREADY_SAME_SIZE</span><span class="p">,</span>
-            <span class="n">xlooks</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">ORBITAL_FIT_LOOKS_X</span><span class="p">],</span>
-            <span class="n">ylooks</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">ORBITAL_FIT_LOOKS_Y</span><span class="p">],</span>
-            <span class="n">thresh</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">NO_DATA_AVERAGING_THRESHOLD</span><span class="p">],</span>
-            <span class="n">write_to_disc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">mlooked</span> <span class="o">=</span> <span class="p">[</span><span class="n">Ifg</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mlooked_dataset</span><span class="p">]</span>
-
-        <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">mlooked</span><span class="p">:</span>
-            <span class="n">m</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
-            <span class="n">m</span><span class="o">.</span><span class="n">nodata_value</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">NO_DATA_VALUE</span><span class="p">]</span>
-            <span class="n">m</span><span class="o">.</span><span class="n">convert_to_nans</span><span class="p">()</span>
-            <span class="n">m</span><span class="o">.</span><span class="n">convert_to_mm</span><span class="p">()</span>
-
-    <span class="n">orbital_correction</span><span class="p">(</span><span class="n">ifgs</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">mlooked</span><span class="o">=</span><span class="n">mlooked</span><span class="p">,</span>
-                       <span class="n">preread_ifgs</span><span class="o">=</span><span class="n">preread_ifgs</span><span class="p">)</span></div>
-
-
-<span class="k">def</span> <span class="nf">_check_orbital_ifgs</span><span class="p">(</span><span class="n">preread_ifgs</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
-
-    <span class="n">ifg_paths</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">preread_ifgs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="c1"># preread_ifgs[i].metadata contains ifg metadata</span>
-    <span class="n">flags</span> <span class="o">=</span> <span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_ORBITAL_ERROR</span> <span class="ow">in</span> <span class="n">preread_ifgs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span>
-             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ifg_paths</span><span class="p">]</span>
-    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">flags</span><span class="p">):</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Skipped orbital correction, ifgs already corrected&#39;</span><span class="p">)</span>
-        <span class="k">return</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">flags</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Detected mix of corrected and uncorrected &#39;</span>
-                  <span class="s1">&#39;orbital error in ifgs&#39;</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">flag</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ifg_paths</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: prior orbital error correction detected&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: no orbital correction detected&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-            <span class="k">raise</span> <span class="n">OrbitalError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Orbital error status checked&#39;</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -535,7 +510,7 @@
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
     </div>

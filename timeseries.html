@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="VCM and Maxvar Module" href="vcm.html" />
+    <link rel="next" title="Covariance Module" href="covariance.html" />
     <link rel="prev" title="Shared Module" href="shared.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -46,8 +46,8 @@
   <div class="section" id="module-pyrate.timeseries">
 <span id="time-series-module"></span><h1>Time Series Module<a class="headerlink" href="#module-pyrate.timeseries" title="Permalink to this headline">¶</a></h1>
 <p>This Python module contains functions for computing a time series
-inversion in PyRate. It is based on the Matlab codes &#8216;tsinvnosm.m&#8217;
-and &#8216;tsinvlap.m&#8217; contained in the Pirate package.</p>
+inversion in PyRate. It is based on the Matlab codes ‘tsinvnosm.m’
+and ‘tsinvlap.m’ contained in the Pirate package.</p>
 <dl class="exception">
 <dt id="pyrate.timeseries.TimeSeriesError">
 <em class="property">exception </em><code class="descclassname">pyrate.timeseries.</code><code class="descname">TimeSeriesError</code><a class="reference internal" href="_modules/pyrate/timeseries.html#TimeSeriesError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.TimeSeriesError" title="Permalink to this definition">¶</a></dt>
@@ -55,49 +55,26 @@ and &#8216;tsinvlap.m&#8217; contained in the Pirate package.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="pyrate.timeseries.missing_option_error">
-<code class="descclassname">pyrate.timeseries.</code><code class="descname">missing_option_error</code><span class="sig-paren">(</span><em>option</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#missing_option_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.missing_option_error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Internal convenience function for raising similar missing option errors.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.timeseries.plot_timeseries">
-<code class="descclassname">pyrate.timeseries.</code><code class="descname">plot_timeseries</code><span class="sig-paren">(</span><em>tsincr</em>, <em>tscum</em>, <em>tsvel</em>, <em>output_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#plot_timeseries"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.plot_timeseries" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plot the results of the timeseries analysis.</p>
-<p>A very basic plotting function used in code development</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.timeseries.remove_rank_def_rows">
-<code class="descclassname">pyrate.timeseries.</code><code class="descname">remove_rank_def_rows</code><span class="sig-paren">(</span><em>b_mat</em>, <em>nvelpar</em>, <em>ifgv</em>, <em>sel</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#remove_rank_def_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.remove_rank_def_rows" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove rank deficient rows</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.timeseries.solve_ts_svd">
-<code class="descclassname">pyrate.timeseries.</code><code class="descname">solve_ts_svd</code><span class="sig-paren">(</span><em>nvelpar</em>, <em>velflag</em>, <em>ifgv</em>, <em>b_mat</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#solve_ts_svd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.solve_ts_svd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Solve the linear least squares system using the SVD method.
-Similar to the SBAS method implemented by Berardino et al. 2002</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="pyrate.timeseries.time_series">
-<code class="descclassname">pyrate.timeseries.</code><code class="descname">time_series</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em>, <em>vcmt</em>, <em>mst=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#time_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.time_series" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns time series data from the given interferograms.</p>
+<code class="descclassname">pyrate.timeseries.</code><code class="descname">time_series</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em>, <em>vcmt=None</em>, <em>mst=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#time_series"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.time_series" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the displacement time series from the given interferogram
+network. Solves the linear least squares system using either the SVD
+method (similar to the SBAS method implemented by Berardino et al. 2002)
+or a Finite Difference method using a Laplacian Smoothing operator
+(similar to the method implemented by Schmidt and Burgmann 2003)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ifgs</strong> &#8211; Network of interferograms.</li>
-<li><strong>params</strong> &#8211; configuration parameters</li>
-<li><strong>vcmt</strong> &#8211; Derived positive definite temporal variance covariance matrix</li>
-<li><strong>mst</strong> &#8211; [optional] array of ifg indexes from the MST-matrix.</li>
-<li><strong>parallel</strong> &#8211; use parallel processing or not.</li>
+<li><strong>ifgs</strong> (<em>list</em>) – list of interferogram class objects.</li>
+<li><strong>params</strong> (<em>dict</em>) – Dictionary of configuration parameters</li>
+<li><strong>vcmt</strong> (<em>ndarray</em>) – Positive definite temporal variance covariance matrix</li>
+<li><strong>mst</strong> (<em>ndarray</em>) – [optional] Minimum spanning tree array.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>Tuple with the elements:</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><p>Tuple with the elements:</p>
 <ul class="simple">
 <li>incremental displacement time series,</li>
 <li>cumulative displacement time series, and</li>
@@ -110,30 +87,14 @@ size(nrows, ncols, nepochs-1), where:</p>
 <li><em>ncols</em> is the  number of columns in the ifgs, and</li>
 <li><em>nepochs</em> is the number of unique epochs (dates)</li>
 </ul>
-<p>covered by the ifgs.).</p>
 </p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
 </td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.timeseries.time_series_by_pixel">
-<code class="descclassname">pyrate.timeseries.</code><code class="descname">time_series_by_pixel</code><span class="sig-paren">(</span><em>row</em>, <em>col</em>, <em>b0_mat</em>, <em>sm_factor</em>, <em>sm_order</em>, <em>ifg_data</em>, <em>mst</em>, <em>nvelpar</em>, <em>p_thresh</em>, <em>vcmt</em>, <em>method</em>, <em>interp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#time_series_by_pixel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.time_series_by_pixel" title="Permalink to this definition">¶</a></dt>
-<dd><p>time series computation for each pixel</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.timeseries.time_series_by_rows">
-<code class="descclassname">pyrate.timeseries.</code><code class="descname">time_series_by_rows</code><span class="sig-paren">(</span><em>row</em>, <em>b0_mat</em>, <em>sm_factor</em>, <em>sm_order</em>, <em>ifg_data</em>, <em>mst</em>, <em>ncols</em>, <em>nvelpar</em>, <em>p_thresh</em>, <em>vcmt</em>, <em>ts_method</em>, <em>interp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#time_series_by_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.time_series_by_rows" title="Permalink to this definition">¶</a></dt>
-<dd><p>time series computation for each row of interferrograms</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.timeseries.time_series_setup">
-<code class="descclassname">pyrate.timeseries.</code><code class="descname">time_series_setup</code><span class="sig-paren">(</span><em>ifgs</em>, <em>mst</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/timeseries.html#time_series_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.timeseries.time_series_setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function setting up time series computation parameters</p>
 </dd></dl>
 
 </div>
@@ -149,7 +110,7 @@ size(nrows, ncols, nepochs-1), where:</p>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">Python Modules</a><ul>
       <li>Previous: <a href="shared.html" title="previous chapter">Shared Module</a></li>
-      <li>Next: <a href="vcm.html" title="next chapter">VCM and Maxvar Module</a></li>
+      <li>Next: <a href="covariance.html" title="next chapter">Covariance Module</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -179,7 +140,7 @@ size(nrows, ncols, nepochs-1), where:</p>
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

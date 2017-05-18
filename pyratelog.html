@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -46,38 +46,20 @@
   <div class="section" id="module-pyrate.pyratelog">
 <span id="logging-module"></span><h1>Logging Module<a class="headerlink" href="#module-pyrate.pyratelog" title="Permalink to this headline">¶</a></h1>
 <p>This Python module contains functions to control PyRate log outputs</p>
-<dl class="class">
-<dt id="pyrate.pyratelog.ElapsedFormatter">
-<em class="property">class </em><code class="descclassname">pyrate.pyratelog.</code><code class="descname">ElapsedFormatter</code><a class="reference internal" href="_modules/pyrate/pyratelog.html#ElapsedFormatter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.pyratelog.ElapsedFormatter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience class for used in showing timestamps</p>
-<dl class="method">
-<dt id="pyrate.pyratelog.ElapsedFormatter.format">
-<code class="descname">format</code><span class="sig-paren">(</span><em>record</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/pyratelog.html#ElapsedFormatter.format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.pyratelog.ElapsedFormatter.format" title="Permalink to this definition">¶</a></dt>
-<dd><p>time formatter</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="pyrate.pyratelog.MPIStreamHandler">
-<em class="property">class </em><code class="descclassname">pyrate.pyratelog.</code><code class="descname">MPIStreamHandler</code><span class="sig-paren">(</span><em>stream=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/pyratelog.html#MPIStreamHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.pyratelog.MPIStreamHandler" title="Permalink to this definition">¶</a></dt>
-<dd><p>Only logs messages from Node 0</p>
-</dd></dl>
-
 <dl class="function">
 <dt id="pyrate.pyratelog.configure">
 <code class="descclassname">pyrate.pyratelog.</code><code class="descname">configure</code><span class="sig-paren">(</span><em>verbosity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/pyratelog.html#configure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.pyratelog.configure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to configure logging properties
-:param verbosity: str</p>
-<blockquote>
-<div>one of [&#8216;DEBUG&#8217;, &#8216;INFO&#8217;, &#8216;WARNING&#8217;, &#8216;ERROR&#8217;]</div></blockquote>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.pyratelog.warn_with_traceback">
-<code class="descclassname">pyrate.pyratelog.</code><code class="descname">warn_with_traceback</code><span class="sig-paren">(</span><em>message</em>, <em>category</em>, <em>filename</em>, <em>lineno</em>, <em>line=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/pyratelog.html#warn_with_traceback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.pyratelog.warn_with_traceback" title="Permalink to this definition">¶</a></dt>
-<dd><p>copied from:
-<a class="reference external" href="http://stackoverflow.com/questions/22373927/get-traceback-of-warnings">http://stackoverflow.com/questions/22373927/get-traceback-of-warnings</a></p>
+<dd><p>Function to configure logging properties</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>verbosity</strong> (<em>str</em>) – [‘DEBUG’, ‘INFO’, ‘WARNING’, or ‘ERROR’]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -123,7 +105,7 @@
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

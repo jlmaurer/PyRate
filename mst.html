@@ -1,12 +1,12 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>MST Module &#8212; PyRate  documentation</title>
+    <title>Minimum Spanning Tree Module &#8212; PyRate  documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Orbital Error Correction Module" href="orbital.html" />
-    <link rel="prev" title="Matlab MST Module" href="matlab_mst.html" />
+    <link rel="prev" title="Matlab Minimum Spanning Tree Module" href="matlab_mst.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -44,104 +44,23 @@
           <div class="body" role="main">
             
   <div class="section" id="module-pyrate.mst">
-<span id="mst-module"></span><h1>MST Module<a class="headerlink" href="#module-pyrate.mst" title="Permalink to this headline">¶</a></h1>
+<span id="minimum-spanning-tree-module"></span><h1>Minimum Spanning Tree Module<a class="headerlink" href="#module-pyrate.mst" title="Permalink to this headline">¶</a></h1>
 <p>This Python module implements the minimum spanning tree
 functionality for selecting interferometric observations.</p>
 <dl class="function">
-<dt id="pyrate.mst.minimum_spanning_edges">
-<code class="descclassname">pyrate.mst.</code><code class="descname">minimum_spanning_edges</code><span class="sig-paren">(</span><em>G</em>, <em>weight='weight'</em>, <em>data=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/mst.html#minimum_spanning_edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.mst.minimum_spanning_edges" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate edges in a minimum spanning forest of an undirected
-weighted graph.</p>
-<p>A minimum spanning tree is a subgraph of the graph (a tree)
-with the minimum sum of edge weights.  A spanning forest is a
-union of the spanning trees for each connected component of the graph.</p>
-<p>G : NetworkX Graph</p>
-<dl class="docutils">
-<dt>weight <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
-<dd>Edge data key to use for weight (default &#8216;weight&#8217;).</dd>
-<dt>data <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional</span></dt>
-<dd>If True yield the edge data along with the edge.</dd>
-</dl>
-<dl class="docutils">
-<dt>edges <span class="classifier-delimiter">:</span> <span class="classifier">iterator</span></dt>
-<dd>A generator that produces edges in the minimum spanning tree.
-The edges are three-tuples (u,v,w) where w is the weight.</dd>
-</dl>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">cycle_graph</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">weight</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># assign weight 2 to edge 0-3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">mst</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">minimum_spanning_edges</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># a generator of MST edges</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">edgelist</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">mst</span><span class="p">)</span> <span class="c1"># make a list of the edges</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">edgelist</span><span class="p">))</span>
-<span class="go">[(0, 1), (1, 2), (2, 3)]</span>
-</pre></div>
-</div>
-<p>Uses Kruskal&#8217;s algorithm.</p>
-<p>If the graph edges do not have a weight attribute a default weight of 1
-will be used.</p>
-<p>Modified code from David Eppstein, April 2006
-<a class="reference external" href="http://www.ics.uci.edu/~eppstein/PADS/">http://www.ics.uci.edu/~eppstein/PADS/</a></p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.mst.minimum_spanning_edges_from_mst">
-<code class="descclassname">pyrate.mst.</code><code class="descname">minimum_spanning_edges_from_mst</code><span class="sig-paren">(</span><em>edges</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/mst.html#minimum_spanning_edges_from_mst"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.mst.minimum_spanning_edges_from_mst" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>edges: list</dt>
-<dd>List of tuples (master, slave, nan_frac) corresponding to ifgs</dd>
-</dl>
-<dl class="docutils">
-<dt>edges: list</dt>
-<dd>list of mst edges</dd>
-</dl>
-<p>g_nx: nx.Graph() instance</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.mst.minimum_spanning_tree">
-<code class="descclassname">pyrate.mst.</code><code class="descname">minimum_spanning_tree</code><span class="sig-paren">(</span><em>G</em>, <em>weight='weight'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/mst.html#minimum_spanning_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.mst.minimum_spanning_tree" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a minimum spanning tree or forest of an undirected
-weighted graph.</p>
-<p>A minimum spanning tree is a subgraph of the graph (a tree) with
-the minimum sum of edge weights.</p>
-<p>If the graph is not connected a spanning forest is constructed.  A
-spanning forest is a union of the spanning trees for each
-connected component of the graph.</p>
-<p>G : NetworkX Graph</p>
-<dl class="docutils">
-<dt>weight <span class="classifier-delimiter">:</span> <span class="classifier">string</span></dt>
-<dd>Edge data key to use for weight (default &#8216;weight&#8217;).</dd>
-</dl>
-<dl class="docutils">
-<dt>G <span class="classifier-delimiter">:</span> <span class="classifier">NetworkX Graph</span></dt>
-<dd>A minimum spanning tree or forest.</dd>
-</dl>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">cycle_graph</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="n">weight</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># assign weight 2 to edge 0-3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">T</span><span class="o">=</span><span class="n">nx</span><span class="o">.</span><span class="n">minimum_spanning_tree</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">T</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="kc">True</span><span class="p">)))</span>
-<span class="go">[(0, 1, {}), (1, 2, {}), (2, 3, {})]</span>
-</pre></div>
-</div>
-<p>Uses Kruskal&#8217;s algorithm.</p>
-<p>If the graph edges do not have a weight attribute a default weight of 1
-will be used.</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="pyrate.mst.mst_boolean_array">
 <code class="descclassname">pyrate.mst.</code><code class="descname">mst_boolean_array</code><span class="sig-paren">(</span><em>ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/mst.html#mst_boolean_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.mst.mst_boolean_array" title="Permalink to this definition">¶</a></dt>
-<dd><p>Filter: returns array of independent ifgs from the pixel by pixel MST,
-like that used by the MATLAB version Pirate.</p>
-<p>The MSTs are stripped of connecting edge info, leaving just the ifgs.</p>
+<dd><p>Returns a 3D array of booleans constituting valid interferogram connections
+in the Minimum Spanning Tree matrix.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ifgs</strong> &#8211; sequence of Ifg objs</li>
-<li><strong>epochs</strong> &#8211; an EpochList object derived from the ifgs</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ifgs</strong> (<em>list</em>) – Sequence of interferogram objects</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">result: Array of booleans representing valid ifg connections</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
 </tr>
 </tbody>
 </table>
@@ -150,43 +69,30 @@ like that used by the MATLAB version Pirate.</p>
 <dl class="function">
 <dt id="pyrate.mst.mst_from_ifgs">
 <code class="descclassname">pyrate.mst.</code><code class="descname">mst_from_ifgs</code><span class="sig-paren">(</span><em>ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/mst.html#mst_from_ifgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.mst.mst_from_ifgs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns default MST dict for the given Ifgs. The MST is calculated using a
-weighting based on the number of incoherent cells in the phase band.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.mst.mst_matrix_as_array">
-<code class="descclassname">pyrate.mst.</code><code class="descname">mst_matrix_as_array</code><span class="sig-paren">(</span><em>ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/mst.html#mst_matrix_as_array"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.mst.mst_matrix_as_array" title="Permalink to this definition">¶</a></dt>
-<dd><p>Filter: returns array of pixel by pixel MSTs.</p>
-<p>Each pixel contains an MST (with connecting edges etc).</p>
+<dd><p>Returns a Minimum Spanning Tree (MST) network from the given interferograms
+using Kruskal’s algorithm. The MST is calculated using a weighting based
+on the number of NaN cells in the phase band.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ifgs</strong> &#8211; sequence of Ifg objs</li>
-<li><strong>epochs</strong> &#8211; an EpochList object derived from the ifgs</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ifgs</strong> (<em>list</em>) – List of interferogram objects (Ifg class)</td>
 </tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.mst.mst_matrix_ifgs_only">
-<code class="descclassname">pyrate.mst.</code><code class="descname">mst_matrix_ifgs_only</code><span class="sig-paren">(</span><em>ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/mst.html#mst_matrix_ifgs_only"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.mst.mst_matrix_ifgs_only" title="Permalink to this definition">¶</a></dt>
-<dd><p>Filter: returns array of independent ifgs from the pixel by pixel MST.</p>
-<p>The MSTs are stripped of connecting edge info, leaving just the ifgs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ifgs</strong> &#8211; sequence of Ifg objs</li>
-<li><strong>epochs</strong> &#8211; an EpochList object derived from the ifgs</li>
-</ul>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">edges: The number of network connections</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">is_tree: A boolean that is True if network is a tree</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">ntrees: The number of disconnected trees</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">mst_ifgs: Minimum Spanning Tree network of interferograms</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
 </tr>
 </tbody>
 </table>
@@ -195,28 +101,79 @@ weighting based on the number of incoherent cells in the phase band.</p>
 <dl class="function">
 <dt id="pyrate.mst.mst_matrix_networkx">
 <code class="descclassname">pyrate.mst.</code><code class="descname">mst_matrix_networkx</code><span class="sig-paren">(</span><em>ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/mst.html#mst_matrix_networkx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.mst.mst_matrix_networkx" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates/emits MST trees on a pixel-by-pixel basis for the given ifgs.
-:param ifgs: sequence of Ifg objs</p>
+<dd><p>Generates MST network for a single pixel for the given ifgs using
+NetworkX-package algorithms.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ifgs</strong> (<em>list</em>) – Sequence of interferogram objects</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">y: pixel y coordinate</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">x: pixel x coordinate</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">mst: list of tuples for edges in the minimum spanning tree</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyrate.mst.mst_multiprocessing">
 <code class="descclassname">pyrate.mst.</code><code class="descname">mst_multiprocessing</code><span class="sig-paren">(</span><em>tile</em>, <em>ifgs_or_paths</em>, <em>preread_ifgs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/mst.html#mst_multiprocessing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.mst.mst_multiprocessing" title="Permalink to this definition">¶</a></dt>
-<dd><p>The memory requirement during mpi mst computation is determined by the
-number of ifgs times size of IfgPart. Note that we need all ifg header
-information (like masters/slave dates) for mst computation.
-To manage memory we need smaller tiles (IfgPart) as number of ifgs go up.
-:param tile: Tile class instance
-:param ifgs_or_paths: all ifg paths of the problem. List of strings.</p>
+<dd><p>Wrapper function for calculating MST matrix for a tile</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tile</strong> (<em>ndarray</em>) – Tile class instance</li>
+<li><strong>ifgs_or_paths</strong> (<em>list</em>) – All interferograms paths of the problem.
+List of strings</li>
+<li><strong>preread_ifgs</strong> (<em>dict</em>) – Dictionary of interferogram metadata</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">mst_tile: MST matrix tile. An array of booleans representing
+valid ifg connections</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyrate.mst.mst_parallel">
 <code class="descclassname">pyrate.mst.</code><code class="descname">mst_parallel</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/mst.html#mst_parallel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.mst.mst_parallel" title="Permalink to this definition">¶</a></dt>
-<dd><p>wrapper function for calculating ifgs in non mpi runs
-:param ifgs:
-:param params:
-:return:</p>
+<dd><p>Wrapper function for calculating MST matrix in non-MPI runs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifgs</strong> (<em>list</em>) – List of interferogram objects (Ifg class)</li>
+<li><strong>params</strong> (<em>dict</em>) – Dictionary of parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">result: 3-dimensional Minimum Spanning Tree matrix</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -231,7 +188,7 @@ To manage memory we need smaller tiles (IfgPart) as number of ifgs go up.
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">Python Modules</a><ul>
-      <li>Previous: <a href="matlab_mst.html" title="previous chapter">Matlab MST Module</a></li>
+      <li>Previous: <a href="matlab_mst.html" title="previous chapter">Matlab Minimum Spanning Tree Module</a></li>
       <li>Next: <a href="orbital.html" title="next chapter">Orbital Error Correction Module</a></li>
   </ul></li>
   </ul></li>
@@ -262,7 +219,7 @@ To manage memory we need smaller tiles (IfgPart) as number of ifgs go up.
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

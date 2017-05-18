@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -52,7 +52,7 @@
 <dd><p>Adapted from <a class="reference external" href="http://karthur.org/2015/clipping-rasters-in-python.html">http://karthur.org/2015/clipping-rasters-in-python.html</a></p>
 <p>Clips a raster (given as either a gdal.Dataset or as a numpy.array
 instance) to a polygon layer provided by a Shapefile (or other vector
-layer). If a numpy.array is given, a &#8220;GeoTransform&#8221; must be provided
+layer). If a numpy.array is given, a “GeoTransform” must be provided
 (via dataset.GetGeoTransform() in GDAL). Returns an array. Clip features
 must be a dissolved, single-part geometry (not multi-part). Modified from:</p>
 <p><a class="reference external" href="http://pcjericks.github.io/py-gdalogr-cookbook/raster_layers.html">http://pcjericks.github.io/py-gdalogr-cookbook/raster_layers.html</a>
@@ -64,108 +64,162 @@ features_path   The path to the clipping features
 geo_trans              An optional GDAL GeoTransform to use instead
 nodata          The NoData value; defaults to -9999.</dd>
 </dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.gdal_python.crop_rasample_setup">
-<code class="descclassname">pyrate.gdal_python.</code><code class="descname">crop_rasample_setup</code><span class="sig-paren">(</span><em>extents</em>, <em>input_tif</em>, <em>new_res</em>, <em>output_file</em>, <em>dst_driver_type='GTiff'</em>, <em>out_bands=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gdal_python.html#crop_rasample_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gdal_python.crop_rasample_setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function for crop/resample setup</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_file</strong> (<em>str</em>) – input image file path</li>
+<li><strong>extents</strong> (<em>list</em>) – extents for the cropped area</li>
+<li><strong>geo_trans</strong> (<em>list</em>) – An optional GDAL GeoTransform to use instead</li>
+<li><strong>nodata</strong> (<em>int</em>) – The NoData value; defaults to -9999</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">clip: cropped part of the image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">gt2: geotransform parameters for the cropped image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyrate.gdal_python.crop_resample_average">
-<code class="descclassname">pyrate.gdal_python.</code><code class="descname">crop_resample_average</code><span class="sig-paren">(</span><em>input_tif</em>, <em>extents</em>, <em>new_res</em>, <em>output_file</em>, <em>thresh</em>, <em>out_driver_type='GTiff'</em>, <em>match_pirate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gdal_python.html#crop_resample_average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gdal_python.crop_resample_average" title="Permalink to this definition">¶</a></dt>
-<dd><p>Crop, resample, and average a geotif
-Parameters
-&#8212;&#8212;&#8212;-
-input_tif: str</p>
-<blockquote>
-<div>path to input geotif to resample/crop</div></blockquote>
-<dl class="docutils">
-<dt>extents: tuple</dt>
-<dd>georeferenced extents for new file: (xfirst, yfirst, xlast, ylast)</dd>
-<dt>output_file: str</dt>
-<dd>output resampled/cropped file name</dd>
-<dt>new_res: list</dt>
-<dd>[xres, yres] Sets resolution output Ifg metadata.</dd>
-<dt>thresh: float</dt>
-<dd>nan fraction threshold</dd>
-<dt>out_driver_type: str, optional</dt>
-<dd>the output driver type. <cite>MEM</cite> or <cite>GTiff</cite>.</dd>
-<dt>match_pirate: bool, optional</dt>
-<dd>whether to match matlab pirate style resampled/croppped output</dd>
-</dl>
+<code class="descclassname">pyrate.gdal_python.</code><code class="descname">crop_resample_average</code><span class="sig-paren">(</span><em>input_tif</em>, <em>extents</em>, <em>new_res</em>, <em>output_file</em>, <em>thresh</em>, <em>out_driver_type=’GTiff’</em>, <em>match_pirate=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gdal_python.html#crop_resample_average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gdal_python.crop_resample_average" title="Permalink to this definition">¶</a></dt>
+<dd><p>Crop, resample, and average a geotiff image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_tif</strong> (<em>str</em>) – Path to input geotiff to resample/crop</li>
+<li><strong>extents</strong> (<em>tuple</em>) – Cropping extents (xfirst, yfirst, xlast, ylast)</li>
+<li><strong>output_file</strong> (<em>str</em>) – Path to output resampled/cropped geotiff</li>
+<li><strong>new_res</strong> (<em>list</em>) – [xres, yres] resolution of output image</li>
+<li><strong>thresh</strong> (<em>float</em>) – NaN fraction threshold</li>
+<li><strong>out_driver_type</strong> (<em>str</em>) – The output driver; <cite>MEM</cite> or <cite>GTiff</cite> (optional)</li>
+<li><strong>match_pirate</strong> (<em>bool</em>) – Match Matlab Pirate output (optional)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">resampled_average: output cropped and resampled image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">out_ds: destination gdal dataset object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">gdal.Dataset</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyrate.gdal_python.gdal_average">
 <code class="descclassname">pyrate.gdal_python.</code><code class="descname">gdal_average</code><span class="sig-paren">(</span><em>dst_ds</em>, <em>input_tif</em>, <em>thresh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gdal_python.html#gdal_average"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gdal_python.gdal_average" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>dst_ds: gdal.Dataset</dt>
-<dd>destination gdal dataset object</dd>
-<dt>input_tif: str</dt>
-<dd>input geotif</dd>
-<dt>thresh: float</dt>
-<dd>nan fraction threshold</dd>
-</dl>
-<dl class="docutils">
-<dt>resampled_average: ndarray</dt>
-<dd>ndarray of of ifg phase data</dd>
-<dt>src_ds_mem: gdal.Dataset</dt>
-<dd>modified in memory src_ds with nan_fraction in Band2. The nan_fraction
+<dd><p>Perform subsampling of an image by averaging values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dst_ds</strong> (<em>gdal.Dataset</em>) – Destination gdal dataset object</li>
+<li><strong>input_tif</strong> (<em>str</em>) – Input geotif</li>
+<li><strong>thresh</strong> (<em>float</em>) – NaN fraction threshold</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return resampled_average:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">resampled image data</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Return src_ds_mem:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first">Modified in memory src_ds with nan_fraction in Band2. The nan_fraction
 is computed efficiently here in gdal in the same step as the that of
 the resampled average (band 1). This results is huge memory and
-computational efficiency.</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.gdal_python.gdalwarp_width_and_height">
-<code class="descclassname">pyrate.gdal_python.</code><code class="descname">gdalwarp_width_and_height</code><span class="sig-paren">(</span><em>max_x</em>, <em>max_y</em>, <em>min_x</em>, <em>min_y</em>, <em>geo_trans</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gdal_python.html#gdalwarp_width_and_height"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gdal_python.gdalwarp_width_and_height" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify pixel height and width based on world_to_pixel</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.gdal_python.get_matlab_resampled_data_size">
-<code class="descclassname">pyrate.gdal_python.</code><code class="descname">get_matlab_resampled_data_size</code><span class="sig-paren">(</span><em>xscale</em>, <em>yscale</em>, <em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gdal_python.html#get_matlab_resampled_data_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gdal_python.get_matlab_resampled_data_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>convenience function mimicking the matlab output size</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.gdal_python.matlab_alignment">
-<code class="descclassname">pyrate.gdal_python.</code><code class="descname">matlab_alignment</code><span class="sig-paren">(</span><em>input_tif</em>, <em>new_res</em>, <em>resampled_average</em>, <em>src_ds_mem</em>, <em>src_gt</em>, <em>tmp_ds</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gdal_python.html#matlab_alignment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gdal_python.matlab_alignment" title="Permalink to this definition">¶</a></dt>
-<dd><p>Correction step to match python multilook/crop ouput to match that of
-matlab pirate code.</p>
-<dl class="docutils">
-<dt>input_tif: str</dt>
-<dd>path to input geotif to resample/crop</dd>
-<dt>new_res: list</dt>
-<dd>[xres, yres] Sets resolution output Ifg metadata.</dd>
-<dt>resampled_average: ndarray</dt>
-<dd>ndarray from previous step with average resampling
-applied to phase data</dd>
-<dt>src_ds_mem: gdal.Dataset</dt>
-<dd>gdal memory dataset object</dd>
-<dt>src_gt: tuple</dt>
-<dd>geotransform tuple</dd>
-<dt>tmp_ds: gdal.Dataset</dt>
-<dd>gdal memory dataset object</dd>
-</dl>
-<p>Modifies the resampled_average array in place.</p>
+computational efficiency</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">gdal.Dataset</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyrate.gdal_python.resample_nearest_neighbour">
 <code class="descclassname">pyrate.gdal_python.</code><code class="descname">resample_nearest_neighbour</code><span class="sig-paren">(</span><em>input_tif</em>, <em>extents</em>, <em>new_res</em>, <em>output_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gdal_python.html#resample_nearest_neighbour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gdal_python.resample_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
-<dd><p>nearest neighbor resampling via GDAL</p>
+<dd><p>Nearest neighbor resampling and cropping of an image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>input_tif</strong> (<em>str</em>) – input geotiff file path</li>
+<li><strong>extents</strong> (<em>list</em>) – new extents for cropping</li>
+<li><strong>new_res</strong> (<em>float</em>) – new resolution for resampling</li>
+<li><strong>output_file</strong> (<em>str</em>) – output geotiff file path</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dst: resampled image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyrate.gdal_python.world_to_pixel">
 <code class="descclassname">pyrate.gdal_python.</code><code class="descname">world_to_pixel</code><span class="sig-paren">(</span><em>geo_transform</em>, <em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gdal_python.html#world_to_pixel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gdal_python.world_to_pixel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uses a gdal geomatrix (gdal.GetGeoTransform()) to calculate
-the pixel location of a geospatial coordinate; from:
-<a class="reference external" href="http://pcjericks.github.io/py-gdalogr-cookbook/raster_layers.html#clip-a-geotiff-with-shapefile">http://pcjericks.github.io/py-gdalogr-cookbook/raster_layers.html#clip-a-geotiff-with-shapefile</a></p>
+the pixel location of a geospatial coordinate;
+see: <a class="reference external" href="http://pcjericks.github.io/py-gdalogr-cookbook/raster_layers.html">http://pcjericks.github.io/py-gdalogr-cookbook/raster_layers.html</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>geo_transform</strong> (<em>list</em>) – Affine transformation coefficients</li>
+<li><strong>x</strong> (<em>float</em>) – longitude coordinate</li>
+<li><strong>y</strong> (<em>float</em>) – latitude coordinate</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">col: pixel column number</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">line: pixel line number</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -211,7 +265,7 @@ the pixel location of a geospatial coordinate; from:
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Contributing" href="contributing.html" />
-    <link rel="prev" title="Running PyRate on a HPC system" href="pbs.html" />
+    <link rel="prev" title="High Performance Computing" href="hpc.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -70,9 +70,9 @@
 <li>postprocess</li>
 </ol>
 <p>Below we discuss these options.</p>
-<div class="section" id="preparing-interferrograms-prepifg">
-<span id="preparing-interferrograms-prepifg"></span><h3>Preparing interferrograms: prepifg<a class="headerlink" href="#preparing-interferrograms-prepifg" title="Permalink to this headline">¶</a></h3>
-<p>The first step of PyRate is to convert the unwrapped interforrograms into
+<div class="section" id="preparing-interferograms-prepifg">
+<span id="preparing-interferograms-prepifg"></span><h3>Preparing interferograms: prepifg<a class="headerlink" href="#preparing-interferograms-prepifg" title="Permalink to this headline">¶</a></h3>
+<p>The first step of PyRate is to convert the unwrapped interferograms into
 geotiffs, followed by multilooking and cropping. Both of these operations are
 performed by <code class="docutils literal"><span class="pre">pyrate</span> <span class="pre">prepifg</span></code> command:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&gt;&gt;</span> <span class="n">pyrate</span> <span class="n">prepifg</span> <span class="o">--</span><span class="n">help</span>
@@ -92,7 +92,7 @@ performed by <code class="docutils literal"><span class="pre">pyrate</span> <spa
 <p>The <code class="docutils literal"><span class="pre">prepifg</span></code> command will determine the input format from the value specified
 at the <em>processor:</em> keyword in the config file (0: ROI_PAC; 1: GAMMA)</p>
 <p>A GAMMA translation requires a geographic DEM header file (*.dem.par) and SLC parameter files (*.slc.par) for both master and slave images to extract metadata required for the formatting. Therefore three header files are needed to format each geocoded unwrapped GAMMA interferogram &lt;GAMMA_FILE&gt;. The path and name of the DEM header file are specified in the config file under the <em>demHeaderFile:</em> keyword. The SLC parameter files should be in the same location as the interferogram file and are found automatically by date string pattern matching.</p>
-<p>A ROI_PAC translation requires a header/resource file (<em>.rsc</em> extension) for the geocoded unwrapped ROI_PAC interferogram (in the same directory) and either the geographic projection (e.g. &#8216;WGS84&#8217;) specified as an option or a header/resource file for the geographic DEM containing the geographic projection in the parameter DATUM:</p>
+<p>A ROI_PAC translation requires a header/resource file (<em>.rsc</em> extension) for the geocoded unwrapped ROI_PAC interferogram (in the same directory) and either the geographic projection (e.g. 'WGS84') specified as an option or a header/resource file for the geographic DEM containing the geographic projection in the parameter DATUM:</p>
 </div>
 <div class="section" id="image-transformations-multilooking-and-cropping">
 <span id="image-transformations-multilooking-and-cropping"></span><h4>Image transformations: multilooking and cropping<a class="headerlink" href="#image-transformations-multilooking-and-cropping" title="Permalink to this headline">¶</a></h4>
@@ -119,11 +119,11 @@ Both config files can be used with <code class="docutils literal"><span class="p
 </pre></div>
 </div>
 <p>This command will does the time series and linear rate analysis, but has the
-options to break the interferrograms into tiles of <code class="docutils literal"><span class="pre">r</span></code> rows and <code class="docutils literal"><span class="pre">c</span></code> columns.
-So this above command will break the interferrograms into 12 tiles and will
+options to break the interferograms into tiles of <code class="docutils literal"><span class="pre">r</span></code> rows and <code class="docutils literal"><span class="pre">c</span></code> columns.
+So this above command will break the interferograms into 12 tiles and will
 produce 12 linear rate and time series predictions corresponding to each tile.</p>
 <p>The optional rows and columns help us create smaller <code class="docutils literal"><span class="pre">tiles</span></code> of the
-interferrograms that can be accommodated in the memory. The number of tiles
+interferograms that can be accommodated in the memory. The number of tiles
 chosen should be as small as possible that fits in the system memory.</p>
 </div>
 <div class="section" id="putting-it-back-together-postprocess">
@@ -169,7 +169,7 @@ advantage of multiple cores on a single PC.</p>
   <ul>
 <li><a class="reference internal" href="#">Usage</a><ul>
 <li><a class="reference internal" href="#pyrate-workflow">PyRate workflow</a><ul>
-<li><a class="reference internal" href="#preparing-interferrograms-prepifg">Preparing interferrograms: prepifg</a><ul>
+<li><a class="reference internal" href="#preparing-interferograms-prepifg">Preparing interferograms: prepifg</a><ul>
 <li><a class="reference internal" href="#data-formatting-convert-to-geotiff">Data formatting: convert to geotiff</a></li>
 <li><a class="reference internal" href="#image-transformations-multilooking-and-cropping">Image transformations: multilooking and cropping</a></li>
 </ul>
@@ -187,7 +187,7 @@ advantage of multiple cores on a single PC.</p>
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="pbs.html" title="previous chapter">Running PyRate on a HPC system</a></li>
+      <li>Previous: <a href="hpc.html" title="previous chapter">High Performance Computing</a></li>
       <li>Next: <a href="contributing.html" title="next chapter">Contributing</a></li>
   </ul></li>
 </ul>
@@ -217,7 +217,7 @@ advantage of multiple cores on a single PC.</p>
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

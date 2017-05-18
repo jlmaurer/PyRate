@@ -1,0 +1,4 @@
+High Performance Computing
+==========================
+
+.. include:: ../hpc/README.rst

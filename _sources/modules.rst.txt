@@ -21,4 +21,4 @@ Python Modules
    roipac
    shared
    timeseries
-   vcm
+   covariance

@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Matlab MST Module" href="matlab_mst.html" />
+    <link rel="next" title="Matlab Minimum Spanning Tree Module" href="matlab_mst.html" />
     <link rel="prev" title="Interferrogram Constants Module" href="ifgconstants.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -47,8 +47,8 @@
 <span id="linrate-module"></span><h1>Linrate Module<a class="headerlink" href="#module-pyrate.linrate" title="Permalink to this headline">¶</a></h1>
 <p>This Python module implements pixel-by-pixel linear rate
 (velocity) estimation using an iterative weighted least-squares
-method. The algorithm is based on the Pirate package &#8216;stack.m&#8217;
-and Matlab &#8216;lscov.m&#8217; functions.</p>
+method. The algorithm is based on the Matlab Pirate package ‘stack.m’
+and Matlab ‘lscov.m’ functions.</p>
 <dl class="function">
 <dt id="pyrate.linrate.linear_rate">
 <code class="descclassname">pyrate.linrate.</code><code class="descname">linear_rate</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em>, <em>vcmt</em>, <em>mst=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/linrate.html#linear_rate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.linrate.linear_rate" title="Permalink to this definition">¶</a></dt>
@@ -59,55 +59,35 @@ weighted least-squares method.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>ifgs</strong> &#8211; Sequence of ifg objs from which to extract observations</li>
-<li><strong>params</strong> &#8211; configuration parameters</li>
-<li><strong>vcmt</strong> &#8211; Derived positive definite temporal variance covariance matrix</li>
-<li><strong>mst</strong> &#8211; Pixel-wise matrix describing the minimum spanning tree network</li>
-<li><strong>parallel</strong> &#8211; use multiprocessing or not.</li>
-<li><strong>processes</strong> &#8211; number of parallel processes to use</li>
+<li><strong>ifgs</strong> (<em>Ifg.object</em>) – Sequence of interferogram objects from which to extract observations</li>
+<li><strong>params</strong> (<em>dict</em>) – Configuration parameters</li>
+<li><strong>vcmt</strong> (<em>ndarray</em>) – Derived positive definite temporal variance covariance matrix</li>
+<li><strong>mst</strong> (<em>ndarray</em>) – Pixel-wise matrix describing the minimum spanning tree network</li>
+<li><strong>parallel</strong> (<em>int</em>) – Use multiprocessing or not</li>
+<li><strong>processes</strong> (<em>int</em>) – Number of parallel processes to use</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><p>python/matlab variable names
-rate/ifg_stack: stacked interferogram (i.e., rate map)
-error/std_stack: standard deviation of the stacked interferogram</p>
-<blockquote>
-<div><p>(i.e., error map)</p>
-</div></blockquote>
-<p>samples/coh_sta: statistics of coherent pixels used for stacking
-demerror:  dem errors in metres, not implemented in python</p>
-</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">rate: Linear rate (velocity) map</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">error: Standard deviation of the rate map</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">samples: Statistics of observations used in calculation</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
 </td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.linrate.linear_rate_by_pixel">
-<code class="descclassname">pyrate.linrate.</code><code class="descname">linear_rate_by_pixel</code><span class="sig-paren">(</span><em>row</em>, <em>col</em>, <em>mst</em>, <em>nsig</em>, <em>obs</em>, <em>pthresh</em>, <em>span</em>, <em>vcmt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/linrate.html#linear_rate_by_pixel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.linrate.linear_rate_by_pixel" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute linear rate for one pixel</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.linrate.linear_rate_by_rows">
-<code class="descclassname">pyrate.linrate.</code><code class="descname">linear_rate_by_rows</code><span class="sig-paren">(</span><em>row</em>, <em>cols</em>, <em>mst</em>, <em>NSIG</em>, <em>obs</em>, <em>PTHRESH</em>, <em>span</em>, <em>vcmt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/linrate.html#linear_rate_by_rows"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.linrate.linear_rate_by_rows" title="Permalink to this definition">¶</a></dt>
-<dd><p>helper function for parallel &#8216;row&#8217; runs
-:param row:
-:param cols:
-:param mst:
-:param NSIG:
-:param obs:
-:param PTHRESH:
-:param span: span calculated in linarate function
-:param vcmt: temporal vcm matrix
-:return:</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.linrate.linrate_setup">
-<code class="descclassname">pyrate.linrate.</code><code class="descname">linrate_setup</code><span class="sig-paren">(</span><em>ifgs</em>, <em>mst</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/linrate.html#linrate_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.linrate.linrate_setup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convenience function for linrate setup</p>
 </dd></dl>
 
 </div>
@@ -123,7 +103,7 @@ demerror:  dem errors in metres, not implemented in python</p>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">Python Modules</a><ul>
       <li>Previous: <a href="ifgconstants.html" title="previous chapter">Interferrogram Constants Module</a></li>
-      <li>Next: <a href="matlab_mst.html" title="next chapter">Matlab MST Module</a></li>
+      <li>Next: <a href="matlab_mst.html" title="next chapter">Matlab Minimum Spanning Tree Module</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -153,7 +133,7 @@ demerror:  dem errors in metres, not implemented in python</p>
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -33,7 +33,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -69,8 +69,6 @@
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">floor</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">basename</span><span class="p">,</span> <span class="n">dirname</span><span class="p">,</span> <span class="n">join</span>
-<span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">import</span> <span class="nn">stat</span>
 <span class="kn">import</span> <span class="nn">struct</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">date</span>
 <span class="kn">from</span> <span class="nn">itertools</span> <span class="k">import</span> <span class="n">product</span>
@@ -80,7 +78,7 @@
 <span class="kn">import</span> <span class="nn">pkg_resources</span>
 
 <span class="kn">from</span> <span class="nn">pyrate</span> <span class="k">import</span> <span class="n">ifgconstants</span> <span class="k">as</span> <span class="n">ifc</span><span class="p">,</span> <span class="n">mpiops</span>
-<span class="kn">from</span> <span class="nn">pyrate</span> <span class="k">import</span> <span class="n">roipac</span><span class="p">,</span> <span class="n">gamma</span><span class="p">,</span> <span class="n">config</span> <span class="k">as</span> <span class="n">cf</span>
+<span class="kn">from</span> <span class="nn">pyrate</span> <span class="k">import</span> <span class="n">config</span> <span class="k">as</span> <span class="n">cf</span>
 
 <span class="n">VERBOSE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">log</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -108,7 +106,13 @@
 
 
 <div class="viewcode-block" id="mkdir_p"><a class="viewcode-back" href="../../shared.html#pyrate.shared.mkdir_p">[docs]</a><span class="k">def</span> <span class="nf">mkdir_p</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; copied from stackoverflow&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make new directory and create parent directories as necessary.</span>
+<span class="sd">    Copied from stackoverflow:</span>
+<span class="sd">    http://stackoverflow.com/questions/600268/mkdir-p-functionality-in-python</span>
+
+<span class="sd">    :param str path: Path name for new directory</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># Python &gt;2.5</span>
@@ -171,7 +175,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">add_geographic_data</span><span class="p">()</span></div>
 
-    <span class="k">def</span> <span class="nf">add_geographic_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="RasterBase.add_geographic_data"><a class="viewcode-back" href="../../shared.html#pyrate.shared.RasterBase.add_geographic_data">[docs]</a>    <span class="k">def</span> <span class="nf">add_geographic_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine and add geographic data to object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># add some geographic data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_centre</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncols</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y_centre</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nrows</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
@@ -179,38 +186,62 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">long_centre</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_first</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_step</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_centre</span><span class="p">)</span>
         <span class="c1"># use cell size from centre of scene</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_size</span> <span class="o">=</span> <span class="n">cell_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lat_centre</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">long_centre</span><span class="p">,</span>
-                                             <span class="bp">self</span><span class="o">.</span><span class="n">x_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span>
+                                             <span class="bp">self</span><span class="o">.</span><span class="n">x_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_step</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">ncols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of raster columns</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">RasterXSize</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nrows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Number of raster rows</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">RasterYSize</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">x_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raster pixel size in X (easting) dimension</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()[</span><span class="n">GDAL_X_CELLSIZE</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">y_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raster pixel size in Y (northing) dimension</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()[</span><span class="n">GDAL_Y_CELLSIZE</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">x_first</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raster western bounding coordinate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()[</span><span class="n">GDAL_X_FIRST</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">x_last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raster eastern bounding coordinate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_first</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_step</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span><span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">y_first</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raster northern bounding coordinate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()[</span><span class="n">GDAL_Y_FIRST</span><span class="p">])</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">y_last</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Raster southern bounding coordinate</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_first</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_step</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nrows</span><span class="p">)</span>
 
     <span class="nd">@property</span>
@@ -222,6 +253,9 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">num_cells</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Total number of pixels in raster dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_open</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">RasterXSize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">RasterYSize</span>
         <span class="k">else</span><span class="p">:</span>
@@ -238,21 +272,24 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Explicitly closes file opened by gdal.Open()</span>
 <span class="sd">        This is required in windows, otherwise opened files can not be removed,</span>
-<span class="sd">        because windows locks opened files.</span>
+<span class="sd">        because windows locks open files.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_open</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="kc">None</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">is_read_only</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines file permissions</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readonly</span>
 
     <span class="k">def</span> <span class="nf">_get_band</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">band</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Wrapper (with error checking) for GDAL&#39;s Band.GetRasterBand() method.</span>
-<span class="sd">        :param band: number of band, starting at 1</span>
-<span class="sd">        &quot;&quot;&quot;</span>
 
+<span class="sd">        :param int band: number of band, starting at 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">band</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -262,19 +299,16 @@
 
 <div class="viewcode-block" id="Ifg"><a class="viewcode-back" href="../../shared.html#pyrate.shared.Ifg">[docs]</a><span class="k">class</span> <span class="nc">Ifg</span><span class="p">(</span><span class="n">RasterBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Interferrogram class, represents the difference between two acquisitions.</span>
-<span class="sd">    Ifg objects double as a container for related data.</span>
+<span class="sd">    Interferogram (Ifg) class objects; double as a container for</span>
+<span class="sd">    interferometric phase raster band data and related data.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># pylint: disable=too-many-instance-attributes</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Interferogram constructor, for 2 band ROIPAC Ifg raster datasets.</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        path: str</span>
-<span class="sd">            path to ifg</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        Interferogram constructor, for 2-band Ifg raster datasets.</span>
 
+<span class="sd">        :param str path: Path to interferogram file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">RasterBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_phase_band</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_phase_data</span> <span class="o">=</span> <span class="kc">None</span>
@@ -289,22 +323,27 @@
 
 <div class="viewcode-block" id="Ifg.open"><a class="viewcode-back" href="../../shared.html#pyrate.shared.Ifg.open">[docs]</a>    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Open raster file.</span>
+
 <span class="sd">        :param bool readonly: True/False, or None to open as underlying file setting</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">RasterBase</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">readonly</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Ifg.initialize"><a class="viewcode-back" href="../../shared.html#pyrate.shared.Ifg.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;basic ifg properties read on opening Ifg&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read basic interferogram properties upon opening interferogram.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_dates</span><span class="p">()</span>
         <span class="n">md</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetMetadata</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">md</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_WAVELENGTH_METRES</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">meta_data</span> <span class="o">=</span> <span class="n">md</span>
-        <span class="c1"># creating code needs to set this flag after 0 -&gt; NaN replacement</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nan_converted</span> <span class="o">=</span> <span class="kc">False</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nan_converted</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># This flag set True after NaN conversion</span></div>
 
     <span class="k">def</span> <span class="nf">_init_dates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;grab master and slade date from metadata&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine master and slave dates, and interferogram timespan</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">def</span> <span class="nf">_to_date</span><span class="p">(</span><span class="n">datestr</span><span class="p">):</span>
             <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">datestr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)]</span>
             <span class="k">return</span> <span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
@@ -321,8 +360,7 @@
 
 <div class="viewcode-block" id="Ifg.convert_to_nans"><a class="viewcode-back" href="../../shared.html#pyrate.shared.Ifg.convert_to_nans">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_nans</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Converts given values in phase data to NaNs</span>
-<span class="sd">        :param val: value to convert, default is 0</span>
+<span class="sd">        Convert phase data of given value to NaN</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nodata_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> \
                 <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
@@ -351,7 +389,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns a GDAL Band object for the phase band.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_band</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_phase_band</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_band</span><span class="p">(</span><span class="n">PHASE_BAND</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_band</span>
@@ -359,28 +396,29 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nodata_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a GDAL Band object for the phase band.</span>
+<span class="sd">        Determine the no-data value in phase band.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodata_value</span>
 
     <span class="nd">@nodata_value</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">nodata_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the no-data value for phase band.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_nodata_value</span> <span class="o">=</span> <span class="n">val</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">phase_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns entire phase band as an array.</span>
+<span class="sd">        Returns phase band as an array.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_phase_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_phase_data</span>
 
 <div class="viewcode-block" id="Ifg.convert_to_mm"><a class="viewcode-back" href="../../shared.html#pyrate.shared.Ifg.convert_to_mm">[docs]</a>    <span class="k">def</span> <span class="nf">convert_to_mm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        :param ifg: ifg file</span>
-<span class="sd">        :return: convert wavelength from radians to mm</span>
+<span class="sd">        Convert phase data units from radians to millimetres.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mm_converted</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetMetadataItem</span><span class="p">(</span><span class="n">ifc</span><span class="o">.</span><span class="n">DATA_UNITS</span><span class="p">)</span> <span class="o">==</span> <span class="n">MILLIMETRES</span><span class="p">:</span>
@@ -406,6 +444,9 @@
 
     <span class="nd">@phase_data</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">phase_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set phase data value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_phase_data</span> <span class="o">=</span> <span class="n">data</span>
 
     <span class="nd">@property</span>
@@ -413,7 +454,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generator returning each row of the phase data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nrows</span><span class="p">):</span>
             <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(</span><span class="n">yoff</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
                                             <span class="n">win_xsize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ncols</span><span class="p">,</span> <span class="n">win_ysize</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
@@ -422,14 +462,14 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nan_count</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns number of NaN cells in the phase data.</span>
+<span class="sd">        Returns total number of NaN cells in the phase data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">nsum</span><span class="p">(</span><span class="n">isnan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_data</span><span class="p">))</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nan_fraction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns 0-1 (float) proportion of NaN cells for the phase band.</span>
+<span class="sd">        Returns decimal fraction of NaN cells in the phase band.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nodata_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;nodata_value needs to be set for nan fraction calc.&#39;</span> \
@@ -445,10 +485,8 @@
 
 <div class="viewcode-block" id="Ifg.write_modified_phase"><a class="viewcode-back" href="../../shared.html#pyrate.shared.Ifg.write_modified_phase">[docs]</a>    <span class="k">def</span> <span class="nf">write_modified_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Writes phase data to disk.</span>
-<span class="sd">        For this to work, a copy of the original file</span>
+<span class="sd">        Write updated phase data to file on disk.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_read_only</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Cannot write to read only Ifg&quot;</span><span class="p">)</span>
 
@@ -467,32 +505,33 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">phase_band</span><span class="o">.</span><span class="n">WriteArray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_data</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">SetMetadataItem</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">FlushCache</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">FlushCache</span><span class="p">()</span></div></div>
 
-<div class="viewcode-block" id="Ifg.save_numpy_phase"><a class="viewcode-back" href="../../shared.html#pyrate.shared.Ifg.save_numpy_phase">[docs]</a>    <span class="k">def</span> <span class="nf">save_numpy_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numpy_file</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        numpy_file: str</span>
-<span class="sd">            file path where phase data is saved</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">numpy_file</span><span class="p">,</span> <span class="n">arr</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_data</span><span class="p">)</span></div></div>
+<span class="c1"># Is this functionality used?</span>
+<span class="c1">#    def save_numpy_phase(self, numpy_file):</span>
+<span class="c1">#        &quot;&quot;&quot;</span>
+<span class="c1">#        Dump phase data to numpy array file</span>
+<span class="c1">#        &quot;&quot;&quot;</span>
+<span class="c1">#        np.save(file=numpy_file, arr=self.phase_data)</span>
 
 
 <div class="viewcode-block" id="IfgPart"><a class="viewcode-back" href="../../shared.html#pyrate.shared.IfgPart">[docs]</a><span class="k">class</span> <span class="nc">IfgPart</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    slice of Ifg data object</span>
+<span class="sd">    Create a tile (subset) of an Ifg data object</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># pylint: disable=missing-docstring</span>
     <span class="c1"># pylint: disable=too-many-instance-attributes</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ifg_or_path</span><span class="p">,</span> <span class="n">tile</span><span class="p">,</span> <span class="n">ifg_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Interferogram tile constructor.</span>
 
+<span class="sd">        :param str path: Path to interferogram file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">r_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile</span><span class="o">.</span><span class="n">top_left_y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">r_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile</span><span class="o">.</span><span class="n">bottom_right_y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile</span><span class="o">.</span><span class="n">top_left_x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">c_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tile</span><span class="o">.</span><span class="n">bottom_right_x</span>
-        <span class="c1"># TODO: fix this if cond</span>
         <span class="k">if</span> <span class="n">ifg_dict</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># should be used with MPI</span>
             <span class="n">ifg</span> <span class="o">=</span> <span class="n">ifg_dict</span><span class="p">[</span><span class="n">ifg_or_path</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nan_fraction</span> <span class="o">=</span> <span class="n">ifg</span><span class="o">.</span><span class="n">nan_fraction</span>
@@ -501,7 +540,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">time_span</span> <span class="o">=</span> <span class="n">ifg</span><span class="o">.</span><span class="n">time_span</span>
             <span class="n">phase_file</span> <span class="o">=</span> <span class="s1">&#39;phase_data_</span><span class="si">{}</span><span class="s1">_</span><span class="si">{}</span><span class="s1">.npy&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">basename</span><span class="p">(</span><span class="n">ifg_or_path</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tile</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">phase_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">ifg_or_path</span><span class="p">),</span> <span class="n">phase_file</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phase_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">join</span><span class="p">(</span><span class="n">dirname</span><span class="p">(</span><span class="n">ifg_or_path</span><span class="p">),</span> <span class="n">cf</span><span class="o">.</span><span class="n">TMPDIR</span><span class="p">,</span>
+                                           <span class="n">phase_file</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># check if Ifg was sent.</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ifg_or_path</span><span class="p">,</span> <span class="n">Ifg</span><span class="p">):</span>
@@ -517,7 +557,10 @@
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ifg</span><span class="p">,</span> <span class="n">Ifg</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">read_required</span><span class="p">(</span><span class="n">ifg</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">read_required</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ifg</span><span class="p">):</span>
+<div class="viewcode-block" id="IfgPart.read_required"><a class="viewcode-back" href="../../shared.html#pyrate.shared.IfgPart.read_required">[docs]</a>    <span class="k">def</span> <span class="nf">read_required</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ifg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read interferogram file if not already open.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">ifg</span><span class="o">.</span><span class="n">is_open</span><span class="p">:</span>
             <span class="n">ifg</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">ifg</span><span class="o">.</span><span class="n">nodata_value</span> <span class="o">=</span> <span class="mi">0</span>
@@ -528,25 +571,33 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">slave</span> <span class="o">=</span> <span class="n">ifg</span><span class="o">.</span><span class="n">slave</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time_span</span> <span class="o">=</span> <span class="n">ifg</span><span class="o">.</span><span class="n">time_span</span>
         <span class="n">ifg</span><span class="o">.</span><span class="n">phase_data</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">ifg</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c1"># close base ifg</span>
+        <span class="n">ifg</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c1"># close base ifg</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">nrows</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine number of rows in tile.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_end</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">r_start</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">ncols</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determine number of columns in tile.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">c_end</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">c_start</span></div>
 
 
 <div class="viewcode-block" id="Incidence"><a class="viewcode-back" href="../../shared.html#pyrate.shared.Incidence">[docs]</a><span class="k">class</span> <span class="nc">Incidence</span><span class="p">(</span><span class="n">RasterBase</span><span class="p">):</span>   <span class="c1"># pragma: no cover</span>
-    <span class="sd">&quot;&quot;&quot; Incidence class&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Class for storing viewing geometry data.</span>
+<span class="sd">    e.g. incidence and azimuth raster values</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Incidence obj constructor.</span>
+<span class="sd">        Incidence object constructor.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="n">RasterBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_incidence_band</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth_band</span> <span class="o">=</span> <span class="kc">None</span>
@@ -555,9 +606,9 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">incidence_band</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the GDALBand for the incidence angle layer.</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_incidence_band</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_incidence_band</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_band</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -566,9 +617,8 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">incidence_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the entire incidence band as an array.</span>
+<span class="sd">        Returns the incidence band as an array.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_incidence_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_incidence_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">incidence_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_incidence_data</span>
@@ -578,7 +628,6 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the GDALBand for the azimuth layer.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth_band</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth_band</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_band</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth_band</span>
@@ -586,9 +635,8 @@
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">azimuth_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the entire incidence band as an array.</span>
+<span class="sd">        Returns the azimuth band as an array.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">azimuth_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_azimuth_data</span></div>
@@ -596,18 +644,21 @@
 
 <div class="viewcode-block" id="DEM"><a class="viewcode-back" href="../../shared.html#pyrate.shared.DEM">[docs]</a><span class="k">class</span> <span class="nc">DEM</span><span class="p">(</span><span class="n">RasterBase</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Generic raster class for ROIPAC single band DEM files.</span>
+<span class="sd">    Generic raster class for single band DEM files.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;DEM constructor.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        DEM constructor.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">RasterBase</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_band</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">height_band</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Returns the GDALBand for the elevation layer.&quot;&quot;&quot;</span>
-
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns the GDALBand for the elevation layer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_band</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_band</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_band</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_band</span></div>
@@ -631,9 +682,12 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dates</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spans</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Construct epochlist object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dates</span> <span class="o">=</span> <span class="n">dates</span> <span class="c1"># list of unique dates from all the ifgs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">repeat</span> <span class="o">=</span> <span class="n">repeat</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">spans</span> <span class="o">=</span> <span class="n">spans</span> <span class="c1"># time span from earliest ifg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spans</span> <span class="o">=</span> <span class="n">spans</span>  <span class="c1"># time span from earliest ifg</span>
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s2">&quot;EpochList: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dates</span><span class="p">)</span>
@@ -644,17 +698,26 @@
 
 <div class="viewcode-block" id="convert_radians_to_mm"><a class="viewcode-back" href="../../shared.html#pyrate.shared.convert_radians_to_mm">[docs]</a><span class="k">def</span> <span class="nf">convert_radians_to_mm</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Translates phase from radians to millimetres</span>
-<span class="sd">    data: interferogram phase data</span>
-<span class="sd">    wavelength: radar wavelength; normally included with SAR instrument metadata</span>
+<span class="sd">    Function to translates phase in units of radians to units in millimetres.</span>
+
+<span class="sd">    :param ndarray data: Interferogram phase data array</span>
+<span class="sd">    :param float wavelength: Radar wavelength in metres</span>
+
+<span class="sd">    :return: data: converted phase data</span>
+<span class="sd">    :rtype: ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">data</span> <span class="o">*</span> <span class="n">ifc</span><span class="o">.</span><span class="n">MM_PER_METRE</span> <span class="o">*</span> <span class="p">(</span><span class="n">wavelength</span> <span class="o">/</span> <span class="p">(</span><span class="mi">4</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="nanmedian"><a class="viewcode-back" href="../../shared.html#pyrate.shared.nanmedian">[docs]</a><span class="k">def</span> <span class="nf">nanmedian</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :param x:</span>
-<span class="sd">    :return:</span>
+<span class="sd">    Determine the median of values excluding nan values.</span>
+<span class="sd">    Use different numpy algorithm dependent on numpy version.</span>
+
+<span class="sd">    :param ndarray x: array of numeric data.</span>
+
+<span class="sd">    :return: y: median value</span>
+<span class="sd">    :rtype: float</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># pylint: disable=no-member</span>
     <span class="n">version</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>
@@ -668,8 +731,15 @@
 <div class="viewcode-block" id="write_geotiff"><a class="viewcode-back" href="../../shared.html#pyrate.shared.write_geotiff">[docs]</a><span class="k">def</span> <span class="nf">write_geotiff</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">nodata</span><span class="p">):</span>
     <span class="c1"># pylint: disable=too-many-statements</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Writes input image data (interferograms, DEM, incidence maps etc)</span>
-<span class="sd">    to GeoTIFF format with PyRate metadata</span>
+<span class="sd">    Creates a copy of input image data (interferograms, DEM, incidence maps</span>
+<span class="sd">    etc) in GeoTIFF format with PyRate metadata.</span>
+
+<span class="sd">    :param dict header: Interferogram metadata dictionary</span>
+<span class="sd">    :param str data_path: Input file</span>
+<span class="sd">    :param str dest: Output destination file</span>
+<span class="sd">    :param float nodata: No-data value</span>
+
+<span class="sd">    :return: None, file saved to disk</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># pylint: disable=too-many-branches</span>
     <span class="c1"># pylint: disable=too-many-locals</span>
@@ -678,14 +748,14 @@
     <span class="n">ifg_proc</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_INSAR_PROCESSOR</span><span class="p">]</span>
     <span class="n">ncols</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_NCOLS</span><span class="p">]</span>
     <span class="n">nrows</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_NROWS</span><span class="p">]</span>
+    <span class="n">bytes_per_col</span><span class="p">,</span> <span class="n">fmtstr</span> <span class="o">=</span> <span class="n">_data_format</span><span class="p">(</span><span class="n">ifg_proc</span><span class="p">,</span> <span class="n">is_ifg</span><span class="p">,</span> <span class="n">ncols</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">is_ifg</span> <span class="ow">and</span> <span class="n">ifg_proc</span> <span class="o">==</span> <span class="n">ROIPAC</span><span class="p">:</span>
+        <span class="c1"># roipac ifg has 2 bands</span>
+        <span class="n">_check_raw_data</span><span class="p">(</span><span class="n">bytes_per_col</span><span class="o">*</span><span class="mi">2</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">nrows</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_check_raw_data</span><span class="p">(</span><span class="n">bytes_per_col</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">nrows</span><span class="p">)</span>
 
-    <span class="c1"># need to have gamma/roipac functionality here?</span>
-    <span class="k">if</span> <span class="n">ifg_proc</span> <span class="o">==</span> <span class="n">ROIPAC</span><span class="p">:</span>
-        <span class="n">roipac</span><span class="o">.</span><span class="n">check_raw_data</span><span class="p">(</span><span class="n">is_ifg</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">nrows</span><span class="p">)</span>
-        <span class="n">roipac</span><span class="o">.</span><span class="n">check_step_mismatch</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>  <span class="c1"># GAMMA</span>
-        <span class="n">gamma</span><span class="o">.</span><span class="n">check_raw_data</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">nrows</span><span class="p">)</span>
-        <span class="n">gamma</span><span class="o">.</span><span class="n">check_step_mismatch</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+    <span class="n">_check_pixel_res_mismatch</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
 
     <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;GTiff&quot;</span><span class="p">)</span>
     <span class="n">dtype</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Float32</span> <span class="k">if</span> <span class="p">(</span><span class="n">is_ifg</span> <span class="ow">or</span> <span class="n">is_incidence</span><span class="p">)</span> <span class="k">else</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Int16</span>
@@ -723,20 +793,6 @@
     <span class="n">band</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">band</span><span class="o">.</span><span class="n">SetNoDataValue</span><span class="p">(</span><span class="n">nodata</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">ifg_proc</span> <span class="o">==</span> <span class="n">GAMMA</span><span class="p">:</span>
-        <span class="n">fmtstr</span> <span class="o">=</span> <span class="s1">&#39;!&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span> <span class="o">*</span> <span class="n">ncols</span><span class="p">)</span>  <span class="c1"># data format is big endian float32s</span>
-        <span class="n">bytes_per_col</span> <span class="o">=</span> <span class="mi">4</span>
-    <span class="k">elif</span> <span class="n">ifg_proc</span> <span class="o">==</span> <span class="n">ROIPAC</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">is_ifg</span><span class="p">:</span>
-            <span class="n">fmtstr</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span> <span class="o">*</span> <span class="n">ncols</span><span class="p">)</span>  <span class="c1"># roipac ifgs are little endian float32s</span>
-            <span class="n">bytes_per_col</span> <span class="o">=</span> <span class="mi">4</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">fmtstr</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;h&#39;</span> <span class="o">*</span> <span class="n">ncols</span><span class="p">)</span>  <span class="c1"># roipac DEM is little endian signed int16</span>
-            <span class="n">bytes_per_col</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Unrecognised InSAR Processor: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">ifg_proc</span>
-        <span class="k">raise</span> <span class="n">GeotiffException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
     <span class="n">row_bytes</span> <span class="o">=</span> <span class="n">ncols</span> <span class="o">*</span> <span class="n">bytes_per_col</span>
 
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -756,14 +812,65 @@
     <span class="k">del</span> <span class="n">ds</span></div>
 
 
+<span class="k">def</span> <span class="nf">_data_format</span><span class="p">(</span><span class="n">ifg_proc</span><span class="p">,</span> <span class="n">is_ifg</span><span class="p">,</span> <span class="n">ncols</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convenience function to determine the bytesize and format of input files</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">ifg_proc</span> <span class="o">==</span> <span class="n">GAMMA</span><span class="p">:</span>
+        <span class="n">fmtstr</span> <span class="o">=</span> <span class="s1">&#39;!&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span> <span class="o">*</span> <span class="n">ncols</span><span class="p">)</span>  <span class="c1"># data format is big endian float32s</span>
+        <span class="n">bytes_per_col</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="k">elif</span> <span class="n">ifg_proc</span> <span class="o">==</span> <span class="n">ROIPAC</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">is_ifg</span><span class="p">:</span>
+            <span class="n">fmtstr</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;f&#39;</span> <span class="o">*</span> <span class="n">ncols</span><span class="p">)</span>  <span class="c1"># roipac ifgs are little endian float32s</span>
+            <span class="n">bytes_per_col</span> <span class="o">=</span> <span class="mi">4</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fmtstr</span> <span class="o">=</span> <span class="s1">&#39;&lt;&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;h&#39;</span> <span class="o">*</span> <span class="n">ncols</span><span class="p">)</span>  <span class="c1"># roipac DEM is little endian signed int16</span>
+            <span class="n">bytes_per_col</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Unrecognised InSAR Processor: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">ifg_proc</span>
+        <span class="k">raise</span> <span class="n">GeotiffException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">bytes_per_col</span><span class="p">,</span> <span class="n">fmtstr</span>
+
+
+<span class="k">def</span> <span class="nf">_check_raw_data</span><span class="p">(</span><span class="n">bytes_per_col</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">nrows</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convenience function to check the file size is as expected</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">ncols</span> <span class="o">*</span> <span class="n">nrows</span> <span class="o">*</span> <span class="n">bytes_per_col</span>
+    <span class="n">act_size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span><span class="o">.</span><span class="n">st_size</span>
+    <span class="k">if</span> <span class="n">act_size</span> <span class="o">!=</span> <span class="n">size</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> should have size </span><span class="si">%s</span><span class="s1">, not </span><span class="si">%s</span><span class="s1">. Is the correct file being used?&#39;</span>
+        <span class="k">raise</span> <span class="n">GeotiffException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">act_size</span><span class="p">))</span>
+
+
+<span class="k">def</span> <span class="nf">_check_pixel_res_mismatch</span><span class="p">(</span><span class="n">header</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convenience function to check equality of pixel resolution in X and Y dimensions</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># pylint: disable=invalid-name</span>
+    <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">header</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_X_STEP</span><span class="p">],</span>
+                               <span class="n">header</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_Y_STEP</span><span class="p">]]]</span>
+
+    <span class="k">if</span> <span class="n">xs</span> <span class="o">!=</span> <span class="n">ys</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;X and Y cell sizes do not match: </span><span class="si">%s</span><span class="s1"> &amp; </span><span class="si">%s</span><span class="s1">&#39;</span>
+        <span class="k">raise</span> <span class="n">GeotiffException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">))</span>
+
+
 <div class="viewcode-block" id="write_unw_from_data_or_geotiff"><a class="viewcode-back" href="../../shared.html#pyrate.shared.write_unw_from_data_or_geotiff">[docs]</a><span class="k">def</span> <span class="nf">write_unw_from_data_or_geotiff</span><span class="p">(</span><span class="n">geotif_or_data</span><span class="p">,</span> <span class="n">dest_unw</span><span class="p">,</span> <span class="n">ifg_proc</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :param geotif_or_data: data or geotif to covert into unw</span>
-<span class="sd">    :param dest_unw: destination unw file</span>
-<span class="sd">    :param ifg_proc: processor type, GAMMA=1, ROIPAC=0</span>
+<span class="sd">    Function to write numpy array data or a geotiff to a GAMMA-format</span>
+<span class="sd">    big-endian float32 .unw file</span>
+
+<span class="sd">    :param str geotif_or_data: path name of geotiff file to convert</span>
+<span class="sd">        OR</span>
+<span class="sd">    :param ndarray geotif_or_data: numpy array of data to convert</span>
+<span class="sd">    :param str dest_unw: destination unw file</span>
+<span class="sd">    :param int ifg_proc: processor type, GAMMA=1, ROIPAC=0</span>
+
+<span class="sd">    :return: None, file saved to disk</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">ifg_proc</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;only support gamma processor for now&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;only supports GAMMA format for now&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">geotif_or_data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">assert</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">geotif_or_data</span><span class="p">),</span> <span class="s1">&#39;make sure geotif exists&#39;</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">geotif_or_data</span><span class="p">)</span>
@@ -785,9 +892,15 @@
     <span class="c1"># pylint: disable=too-many-arguments</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Writes PyRate output data to a GeoTIFF file.</span>
-<span class="sd">    md is a dictionary containing PyRate metadata</span>
-<span class="sd">    gt is the GDAL geotransform for the data</span>
-<span class="sd">    wkt is the GDAL projection information for the data</span>
+
+<span class="sd">    :param dict md: Dictionary containing PyRate metadata</span>
+<span class="sd">    :param list gt: GDAL geotransform for the data</span>
+<span class="sd">    :param list wkt: GDAL projection information for the data</span>
+<span class="sd">    :param ndarray data: Output data array to save</span>
+<span class="sd">    :param str dest: Destination file name</span>
+<span class="sd">    :param float nodata: No data value of data</span>
+
+<span class="sd">    :return None, file saved to disk</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;GTiff&quot;</span><span class="p">)</span>
@@ -815,30 +928,21 @@
 <span class="sd">    Geotiff exception class</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
-
 <div class="viewcode-block" id="create_tiles"><a class="viewcode-back" href="../../shared.html#pyrate.shared.create_tiles">[docs]</a><span class="k">def</span> <span class="nf">create_tiles</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    shape must be a 2-tuple, i.e., 2d_array.shape.</span>
-<span class="sd">    The returned list contains nrowsXncols Tiles with each tile preserving the</span>
-<span class="sd">    &quot;physical&quot; layout of original arr.</span>
+<span class="sd">    Return a list of tiles containing nrows x ncols with each tile preserving</span>
+<span class="sd">    the physical layout of original array. The number of rows can be changed</span>
+<span class="sd">    (increased) such that the resulting tiles with float32&#39;s do not exceed</span>
+<span class="sd">    500MB in memory. When the array shape (rows, columns) are not divisible</span>
+<span class="sd">    by (nrows, ncols) then some of the array dimensions can change according</span>
+<span class="sd">    to numpy.array_split.</span>
 
-<span class="sd">    The number of rows can be changed (increased) such that  the resulting tiles</span>
-<span class="sd">    with float32&#39;s do not exceed 500MB in memory.</span>
+<span class="sd">    :param tuple shape: Shape tuple (2-element) of interferogram.</span>
+<span class="sd">    :param int nrows: Number of rows of tiles</span>
+<span class="sd">    :param int ncols: Number of columns of tiles</span>
 
-<span class="sd">    When the array shape (rows, cols) are not divisible by (nrows, ncols) then</span>
-<span class="sd">    some of the array dimensions can change according to numpy.array_split.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    shape: tuple</span>
-<span class="sd">        shape tuple of ifg</span>
-<span class="sd">    nrows: int</span>
-<span class="sd">        number of rows of tiles</span>
-<span class="sd">    ncols: int</span>
-<span class="sd">        number of columns of tiles</span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    list of Tile class instances</span>
+<span class="sd">    :return: List of Tile class instances.</span>
+<span class="sd">    :rtype: list</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
@@ -854,9 +958,28 @@
             <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">product</span><span class="p">(</span><span class="n">row_arr</span><span class="p">,</span> <span class="n">col_arr</span><span class="p">))]</span></div>
 
 
-<div class="viewcode-block" id="Tile"><a class="viewcode-back" href="../../shared.html#pyrate.shared.Tile">[docs]</a><span class="k">class</span> <span class="nc">Tile</span><span class="p">:</span>
+<div class="viewcode-block" id="get_tiles"><a class="viewcode-back" href="../../shared.html#pyrate.shared.get_tiles">[docs]</a><span class="k">def</span> <span class="nf">get_tiles</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Tile class containing part of the ifgs</span>
+<span class="sd">    Break up the interferograms into smaller tiles based on user supplied</span>
+<span class="sd">    rows and columns.</span>
+
+<span class="sd">    :param list ifg_path: List of destination geotiff file names</span>
+<span class="sd">    :param int rows: Number of rows to break each interferogram into</span>
+<span class="sd">    :param int cols: Number of columns to break each interferogram into</span>
+
+<span class="sd">    :return: tiles: List of shared.Tile instances</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ifg</span> <span class="o">=</span> <span class="n">Ifg</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">)</span>
+    <span class="n">ifg</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">tiles</span> <span class="o">=</span> <span class="n">create_tiles</span><span class="p">(</span><span class="n">ifg</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="n">cols</span><span class="p">)</span>
+    <span class="n">ifg</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">tiles</span></div>
+
+
+<div class="viewcode-block" id="Tile"><a class="viewcode-back" href="../../shared.html#pyrate.shared.Tile">[docs]</a><span class="k">class</span> <span class="nc">Tile</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tile class for containing a sub-part of an interferogram</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">top_left</span><span class="p">,</span> <span class="n">bottom_right</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -880,72 +1003,14 @@
         <span class="k">return</span> <span class="s2">&quot;Convenience Tile class containing tile co-ordinates&quot;</span></div>
 
 
-<div class="viewcode-block" id="copytree"><a class="viewcode-back" href="../../shared.html#pyrate.shared.copytree">[docs]</a><span class="k">def</span> <span class="nf">copytree</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">,</span> <span class="n">symlinks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ignore</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="c1"># pylint: disable=line-too-long</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    copy contents of src dir into dst dir</span>
-<span class="sd">    stolen from: http://stackoverflow.com/questions/1868714/how-do-i-copy-an-entire-directory-of-files-into-an-existing-directory-using-pyth?lq=1</span>
-<span class="sd">    :param src: source dir to copy from</span>
-<span class="sd">    :param dst: dst dir to copy to, created if does not exist</span>
-<span class="sd">    :param symlinks: bool, whether to copy symlink or not</span>
-<span class="sd">    :param ignore:</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># pylint: disable=invalid-name</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dst</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
-    <span class="n">shutil</span><span class="o">.</span><span class="n">copystat</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">)</span>
-    <span class="n">lst</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">src</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">ignore</span><span class="p">:</span>
-        <span class="n">excl</span> <span class="o">=</span> <span class="n">ignore</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">lst</span><span class="p">)</span>
-        <span class="n">lst</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">lst</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">excl</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">:</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">symlinks</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
-            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">lexists</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">readlink</span><span class="p">(</span><span class="n">s</span><span class="p">),</span> <span class="n">d</span><span class="p">)</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">st</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">lstat</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-                <span class="n">mode</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">S_IMODE</span><span class="p">(</span><span class="n">st</span><span class="o">.</span><span class="n">st_mode</span><span class="p">)</span>
-                <span class="n">os</span><span class="o">.</span><span class="n">lchmod</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">mode</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-                <span class="k">pass</span>  <span class="c1"># lchmod not available</span>
-        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
-            <span class="n">copytree</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">symlinks</span><span class="p">,</span> <span class="n">ignore</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="pre_prepare_ifgs"><a class="viewcode-back" href="../../shared.html#pyrate.shared.pre_prepare_ifgs">[docs]</a><span class="k">def</span> <span class="nf">pre_prepare_ifgs</span><span class="p">(</span><span class="n">ifg_paths</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    ifg_paths: list</span>
-<span class="sd">        list of ifg paths</span>
-<span class="sd">    params: dict</span>
-<span class="sd">        parameters dict</span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    ifgs: list</span>
-<span class="sd">        list of Ifg instances</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">ifgs</span> <span class="o">=</span> <span class="p">[</span><span class="n">Ifg</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">ifg_paths</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ifgs</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">i</span><span class="o">.</span><span class="n">is_open</span><span class="p">:</span>
-            <span class="n">i</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="n">nan_and_mm_convert</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-    <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Opened ifg for reading&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ifgs</span></div>
-
-
 <div class="viewcode-block" id="nan_and_mm_convert"><a class="viewcode-back" href="../../shared.html#pyrate.shared.nan_and_mm_convert">[docs]</a><span class="k">def</span> <span class="nf">nan_and_mm_convert</span><span class="p">(</span><span class="n">ifg</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    ifg: Ifg class instance</span>
-<span class="sd">    params: dict</span>
-<span class="sd">        parameters dict</span>
+<span class="sd">    Perform millimetre and nan conversion on interferogram data</span>
+
+<span class="sd">    :param Ifg instance ifg: Interferogram class instance</span>
+<span class="sd">    :param dict params: Dictionary of parameters</span>
+
+<span class="sd">    :return: None, data modified internally</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">nan_conversion</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">NAN_CONVERSION</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">nan_conversion</span><span class="p">:</span>  <span class="c1"># nan conversion happens here in networkx mst</span>
@@ -959,19 +1024,23 @@
 <div class="viewcode-block" id="cell_size"><a class="viewcode-back" href="../../shared.html#pyrate.shared.cell_size">[docs]</a><span class="k">def</span> <span class="nf">cell_size</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">x_step</span><span class="p">,</span> <span class="n">y_step</span><span class="p">):</span>
     <span class="c1"># pylint: disable=invalid-name</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Collection of geodesy/pyproj algorithms for PyRate.</span>
-<span class="sd">    This function depends on PyProj/PROJ4 to replace llh2local.m in MATLAB Pirate.</span>
-<span class="sd">    Converts X|Y_STEP in degrees to X &amp; Y cell length/width in metres.</span>
-<span class="sd">    lat: latitude in degrees</span>
-<span class="sd">    lon: longitude in degrees</span>
-<span class="sd">    x_step: horizontal step size in degrees</span>
-<span class="sd">    y_step: vertical step size in degrees</span>
+<span class="sd">    Converts X|Y_STEP in degrees to X &amp; Y cell size in metres.</span>
+<span class="sd">    This function depends on PyProj/PROJ4 to implement the function</span>
+
+<span class="sd">    :param float lat: Latitude in degrees</span>
+<span class="sd">    :param float lon: Longitude in degrees</span>
+<span class="sd">    :param float x_step: Horizontal step size in degrees</span>
+<span class="sd">    :param float y_step: Vertical step size in degrees</span>
+
+<span class="sd">    :return: tuple of X and Y cell size floats</span>
+<span class="sd">    :rtype: tuple</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Equivalent of llh2local.m used in Matlab Pirate.</span>
     <span class="k">if</span> <span class="n">lat</span> <span class="o">&gt;</span> <span class="mf">84.0</span> <span class="ow">or</span> <span class="n">lat</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">80</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;No UTM zone for polar region: &gt; 84 degrees N or &lt; 80 degrees S&quot;</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
-    <span class="n">zone</span> <span class="o">=</span> <span class="n">utm_zone</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span>
+    <span class="n">zone</span> <span class="o">=</span> <span class="n">_utm_zone</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span>
     <span class="n">p0</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">proj</span><span class="o">=</span><span class="s1">&#39;latlong&#39;</span><span class="p">,</span> <span class="n">ellps</span><span class="o">=</span><span class="s1">&#39;WGS84&#39;</span><span class="p">)</span>
     <span class="n">p1</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">proj</span><span class="o">=</span><span class="s1">&#39;utm&#39;</span><span class="p">,</span> <span class="n">zone</span><span class="o">=</span><span class="n">zone</span><span class="p">,</span> <span class="n">ellps</span><span class="o">=</span><span class="s1">&#39;WGS84&#39;</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">p0</span><span class="o">.</span><span class="n">is_latlong</span><span class="p">()</span>
@@ -982,18 +1051,18 @@
     <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">x0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">-</span> <span class="n">y0</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="utm_zone"><a class="viewcode-back" href="../../shared.html#pyrate.shared.utm_zone">[docs]</a><span class="k">def</span> <span class="nf">utm_zone</span><span class="p">(</span><span class="n">longitude</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_utm_zone</span><span class="p">(</span><span class="n">longitude</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns basic UTM zone for given longitude in degrees. Currently does NOT</span>
-<span class="sd">    handle the sub-zoning around Scandanavian countries.</span>
+<span class="sd">    Returns basic UTM zone for given longitude in degrees.</span>
+<span class="sd">    Currently does NOT handle the sub-zoning around Scandanavian countries.</span>
 <span class="sd">    See http://www.dmap.co.uk/utmworld.htm</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">longitude</span> <span class="o">==</span> <span class="mi">180</span><span class="p">:</span>
         <span class="k">return</span> <span class="mf">60.0</span>
-    <span class="k">return</span> <span class="n">floor</span><span class="p">((</span><span class="n">longitude</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">/</span> <span class="mf">6.0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span></div>
+    <span class="k">return</span> <span class="n">floor</span><span class="p">((</span><span class="n">longitude</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">/</span> <span class="mf">6.0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
 
 
-<div class="viewcode-block" id="PrereadIfg"><a class="viewcode-back" href="../../shared.html#pyrate.shared.PrereadIfg">[docs]</a><span class="k">class</span> <span class="nc">PrereadIfg</span><span class="p">:</span>
+<div class="viewcode-block" id="PrereadIfg"><a class="viewcode-back" href="../../shared.html#pyrate.shared.PrereadIfg">[docs]</a><span class="k">class</span> <span class="nc">PrereadIfg</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convenience class for handling pre-calculated ifg params</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1012,41 +1081,37 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">metadata</span></div>
 
 
-<div class="viewcode-block" id="prepare_ifg"><a class="viewcode-back" href="../../shared.html#pyrate.shared.prepare_ifg">[docs]</a><span class="k">def</span> <span class="nf">prepare_ifg</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_prep_ifg</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    ifg_path: str</span>
-<span class="sd">        ifg path</span>
-<span class="sd">    tiles: list</span>
-<span class="sd">        list of Tile instances</span>
-<span class="sd">    params: dict</span>
-<span class="sd">        config dict</span>
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    ifg: ifg class instance</span>
+<span class="sd">    Wrapper for reading an interferogram file and creating an Ifg object</span>
+
+<span class="sd">    :param str ifg_path: Interferogram file path</span>
+<span class="sd">    :param dict params: Dictionary of configuration parameters</span>
+
+<span class="sd">    :return: ifg: Interferogram class instance</span>
+<span class="sd">    :rtype: xxxx (eg float)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Only used in pyrate.scripts.run_pyrate?</span>
     <span class="n">ifg</span> <span class="o">=</span> <span class="n">Ifg</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">)</span>
     <span class="n">ifg</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
     <span class="n">nan_and_mm_convert</span><span class="p">(</span><span class="n">ifg</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ifg</span></div>
+    <span class="k">return</span> <span class="n">ifg</span>
 
 
 <div class="viewcode-block" id="save_numpy_phase"><a class="viewcode-back" href="../../shared.html#pyrate.shared.save_numpy_phase">[docs]</a><span class="k">def</span> <span class="nf">save_numpy_phase</span><span class="p">(</span><span class="n">ifg_paths</span><span class="p">,</span> <span class="n">tiles</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Save ifg phase data as numpy array.</span>
+<span class="sd">    Save interferogram phase data as numpy array file on disk.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    ifg_paths: list</span>
-<span class="sd">        list of strings corresponding to ifg paths</span>
-<span class="sd">    params: dict</span>
-<span class="sd">        config dict</span>
-<span class="sd">    tiles: list</span>
-<span class="sd">        list of Shared.Tile instances</span>
+<span class="sd">    :param list ifg_paths: List of strings for interferogram paths</span>
+<span class="sd">    :param list tiles: List of pyrate.shared.Tile instances</span>
+<span class="sd">    :param dict params: Dictionary of configuration parameters</span>
+
+<span class="sd">    :return: None, file saved to disk</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">process_ifgs</span> <span class="o">=</span> <span class="n">mpiops</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">ifg_paths</span><span class="p">)</span>
-    <span class="n">outdir</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">OUT_DIR</span><span class="p">]</span>
+    <span class="n">outdir</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="n">cf</span><span class="o">.</span><span class="n">TMPDIR</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">outdir</span><span class="p">):</span>
+        <span class="n">mkdir_p</span><span class="p">(</span><span class="n">outdir</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">ifg_path</span> <span class="ow">in</span> <span class="n">process_ifgs</span><span class="p">:</span>
         <span class="n">ifg</span> <span class="o">=</span> <span class="n">Ifg</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">)</span>
         <span class="n">ifg</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
@@ -1062,14 +1127,18 @@
     <span class="n">mpiops</span><span class="o">.</span><span class="n">comm</span><span class="o">.</span><span class="n">barrier</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="get_projection_info"><a class="viewcode-back" href="../../shared.html#pyrate.shared.get_projection_info">[docs]</a><span class="k">def</span> <span class="nf">get_projection_info</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">):</span>
+<div class="viewcode-block" id="get_geotiff_header_info"><a class="viewcode-back" href="../../shared.html#pyrate.shared.get_geotiff_header_info">[docs]</a><span class="k">def</span> <span class="nf">get_geotiff_header_info</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    return projection information of ifg</span>
+<span class="sd">    Return information from a geotiff interferogram header using GDAL methods.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    ifg_path: str</span>
-<span class="sd">        ifg path</span>
+<span class="sd">    :param str ifg_path: path to interferogram geotiff file</span>
+
+<span class="sd">    :return: md: PyRate metadata</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    :return: gt: GDAL geotransform for the data</span>
+<span class="sd">    :rtype: list</span>
+<span class="sd">    :return: wkt: GDAL projection information for the data</span>
+<span class="sd">    :rtype: list</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">ifg_path</span><span class="p">)</span>
     <span class="n">md</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetMetadata</span><span class="p">()</span>  <span class="c1"># get metadata for writing on output tifs</span>
@@ -1081,35 +1150,73 @@
 
 <div class="viewcode-block" id="warp_required"><a class="viewcode-back" href="../../shared.html#pyrate.shared.warp_required">[docs]</a><span class="k">def</span> <span class="nf">warp_required</span><span class="p">(</span><span class="n">xlooks</span><span class="p">,</span> <span class="n">ylooks</span><span class="p">,</span> <span class="n">crop</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns True if params show rasters need to be cropped and/or resized.</span>
+<span class="sd">    Check if a crop or multi-look operation is required.</span>
 
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    xlooks: int</span>
-<span class="sd">        resampling/multilooking in x dir</span>
+<span class="sd">    :param int xlooks: Resampling/multi-looking in x dir</span>
+<span class="sd">    :param int ylooks: Resampling/multilooking in y dir</span>
+<span class="sd">    :param int crop: Interferogram crop option</span>
 
-<span class="sd">    ylooks: int</span>
-<span class="sd">        resampling/multilooking in y dir</span>
-
-<span class="sd">    crop: int</span>
-<span class="sd">        ifg crop option</span>
+<span class="sd">    :return: True if params show rasters need to be cropped and/or resized</span>
+<span class="sd">    :rtype: bool</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
+    <span class="c1"># Only used in Luigi functionality</span>
     <span class="k">if</span> <span class="n">xlooks</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">ylooks</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">True</span>
-
     <span class="k">if</span> <span class="n">crop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">False</span>
-
     <span class="k">return</span> <span class="kc">True</span></div>
 
 
 <div class="viewcode-block" id="output_tiff_filename"><a class="viewcode-back" href="../../shared.html#pyrate.shared.output_tiff_filename">[docs]</a><span class="k">def</span> <span class="nf">output_tiff_filename</span><span class="p">(</span><span class="n">inpath</span><span class="p">,</span> <span class="n">outpath</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    return the geotiff filename for a given input filename</span>
+<span class="sd">    Output geotiff filename for a given input filename.</span>
+
+<span class="sd">    :param str inpath: path of input file location</span>
+<span class="sd">    :param str outpath: path of output file location</span>
+
+<span class="sd">    :return: Geotiff filename for the given file.</span>
+<span class="sd">    :rtype: str</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">fname</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">inpath</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outpath</span><span class="p">,</span> <span class="n">fname</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">ext</span> <span class="o">+</span> <span class="s1">&#39;.tif&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="check_correction_status"><a class="viewcode-back" href="../../shared.html#pyrate.shared.check_correction_status">[docs]</a><span class="k">def</span> <span class="nf">check_correction_status</span><span class="p">(</span><span class="n">preread_ifgs</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generic function for checking if a correction has already been performed</span>
+<span class="sd">    in a previous run by interrogating PyRate meta data entries</span>
+
+<span class="sd">    :param preread_ifgs: Dictionary of pre-read interferogram information</span>
+<span class="sd">    :param str meta: Meta data flag to check for</span>
+
+<span class="sd">    :return: True if correction has been performed, otherwise False</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ifg_paths</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">preread_ifgs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="c1"># preread_ifgs[i].metadata contains ifg metadata</span>
+    <span class="n">flags</span> <span class="o">=</span> <span class="p">[</span><span class="n">meta</span> <span class="ow">in</span> <span class="n">preread_ifgs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">metadata</span>
+             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ifg_paths</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">flags</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Skipped: interferograms already corrected&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">flags</span><span class="p">))</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Detected mix of corrected and uncorrected interferograms&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">flag</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ifg_paths</span><span class="p">,</span> <span class="n">flags</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: correction detected&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: correction NOT detected&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">CorrectionStatusError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Calculating corrections&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="CorrectionStatusError"><a class="viewcode-back" href="../../shared.html#pyrate.shared.CorrectionStatusError">[docs]</a><span class="k">class</span> <span class="nc">CorrectionStatusError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generic class for correction status errors.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 </pre></div>
 
           </div>
@@ -1143,7 +1250,7 @@
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
     </div>

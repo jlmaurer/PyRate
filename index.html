@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -34,7 +34,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -43,7 +43,7 @@
           <div class="body" role="main">
             
   <div class="section" id="welcome-to-pyrate-s-documentation">
-<h1>Welcome to PyRate&#8217;s documentation!<a class="headerlink" href="#welcome-to-pyrate-s-documentation" title="Permalink to this headline">¶</a></h1>
+<h1>Welcome to PyRate’s documentation!<a class="headerlink" href="#welcome-to-pyrate-s-documentation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="contents">
 <h2>Contents:<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
@@ -54,11 +54,12 @@
 <li class="toctree-l2"><a class="reference internal" href="installation.html#tests">Tests</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="pbs.html">Running PyRate on a HPC system</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pbs.html#pre-installation">Pre-installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pbs.html#installation">Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pbs.html#updating-the-code">Updating the Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pbs.html#running-batch-jobs">Running Batch Jobs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hpc.html">High Performance Computing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hpc.html#running-pyrate-on-a-hpc-system">Running PyRate on a HPC system</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpc.html#pre-installation">Pre-installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpc.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpc.html#updating-the-code">Updating the Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpc.html#running-batch-jobs">Running Batch Jobs</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
@@ -85,14 +86,14 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">Python Modules</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="algorithm.html">Algorithm Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="aps.html">APS Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aps.html">Atmospheric Phase Screen Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="config.html">Config Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gamma.html">GAMMA Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gdal_python.html">GDAL to Python Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="ifgconstants.html">Interferrogram Constants Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="linrate.html">Linrate Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="matlab_mst.html">Matlab MST Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mst.html">MST Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="matlab_mst.html">Matlab Minimum Spanning Tree Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mst.html">Minimum Spanning Tree Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="orbital.html">Orbital Error Correction Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="prepifg.html">Prepifg Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyratelog.html">Logging Module</a></li>
@@ -101,7 +102,7 @@
 <li class="toctree-l2"><a class="reference internal" href="roipac.html">ROIPAC Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shared.html">Shared Module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="timeseries.html">Time Series Module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vcm.html">VCM and Maxvar Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="covariance.html">Covariance Module</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="scripts.html">Pyrate Scripts Module</a><ul>
@@ -141,7 +142,7 @@ know!  Open an Issue at the GitHub
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to PyRate&#8217;s documentation!</a><ul>
+<li><a class="reference internal" href="#">Welcome to PyRate’s documentation!</a><ul>
 <li><a class="reference internal" href="#contents">Contents:</a></li>
 <li><a class="reference internal" href="#feedback">Feedback</a></li>
 </ul>
@@ -181,7 +182,7 @@ know!  Open an Issue at the GitHub
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

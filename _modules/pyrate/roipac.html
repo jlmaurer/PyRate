@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -33,7 +33,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -60,9 +60,8 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">This Python module contains tools for reading ROI_PAC format input data.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="c1">#import os</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">pyrate.ifgconstants</span> <span class="k">as</span> <span class="nn">ifc</span>
 
@@ -116,51 +115,17 @@
 <span class="n">ROI_PAC_HEADER_FILE_EXT</span> <span class="o">=</span> <span class="s2">&quot;rsc&quot;</span>
 
 
-<div class="viewcode-block" id="check_raw_data"><a class="viewcode-back" href="../../roipac.html#pyrate.roipac.check_raw_data">[docs]</a><span class="k">def</span> <span class="nf">check_raw_data</span><span class="p">(</span><span class="n">is_ifg</span><span class="p">,</span> <span class="n">data_path</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="n">nrows</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    is_ifg: bool</span>
-<span class="sd">        whether ifg or dem</span>
-<span class="sd">    data_path: str</span>
-<span class="sd">        path to file</span>
-<span class="sd">    ncols: int</span>
-<span class="sd">        number of cols in ifg/dem</span>
-<span class="sd">    nrows: int</span>
-<span class="sd">        number of rows in ifg/dem</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">base_size</span> <span class="o">=</span> <span class="n">ncols</span> <span class="o">*</span> <span class="n">nrows</span>
-    <span class="k">if</span> <span class="n">is_ifg</span><span class="p">:</span>
-        <span class="n">size</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">base_size</span> <span class="o">*</span> <span class="mi">2</span>  <span class="c1"># 2 bands of 4 bytes each</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">size</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">base_size</span>  <span class="c1"># single 2 byte band</span>
-
-    <span class="n">act_size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">data_path</span><span class="p">)</span><span class="o">.</span><span class="n">st_size</span>
-    <span class="k">if</span> <span class="n">act_size</span> <span class="o">!=</span> <span class="n">size</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> should have size </span><span class="si">%s</span><span class="s1">, not </span><span class="si">%s</span><span class="s1">. Is the correct file being used?&#39;</span>
-        <span class="k">raise</span> <span class="n">RoipacException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="p">(</span><span class="n">data_path</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">act_size</span><span class="p">))</span></div>
-
-
-<div class="viewcode-block" id="check_step_mismatch"><a class="viewcode-back" href="../../roipac.html#pyrate.roipac.check_step_mismatch">[docs]</a><span class="k">def</span> <span class="nf">check_step_mismatch</span><span class="p">(</span><span class="n">header</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    header: dict</span>
-<span class="sd">        dict corresponding to header file</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># pylint: disable=invalid-name</span>
-    <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">header</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_X_STEP</span><span class="p">],</span>
-                               <span class="n">header</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_Y_STEP</span><span class="p">]]]</span>
-
-    <span class="k">if</span> <span class="n">xs</span> <span class="o">!=</span> <span class="n">ys</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;X and Y cell sizes do not match: </span><span class="si">%s</span><span class="s1"> &amp; </span><span class="si">%s</span><span class="s1">&#39;</span>
-        <span class="k">raise</span> <span class="n">RoipacException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">))</span></div>
-
-
 <div class="viewcode-block" id="parse_date"><a class="viewcode-back" href="../../roipac.html#pyrate.roipac.parse_date">[docs]</a><span class="k">def</span> <span class="nf">parse_date</span><span class="p">(</span><span class="n">dstr</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Parses ROI_PAC &#39;yymmdd&#39; or &#39;yymmdd-yymmdd&#39; to date or date tuple&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parses ROI_PAC &#39;yymmdd&#39; or &#39;yymmdd-yymmdd&#39; format string to datetime.</span>
+
+<span class="sd">    :param str dstr: &#39;date&#39; or &#39;date1-date2&#39; string</span>
+
+<span class="sd">    :return: dstr: datetime string or tuple</span>
+<span class="sd">    :rtype: str or tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">to_date</span><span class="p">(</span><span class="n">date_str</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;convert to date&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;convert string to datetime&quot;&quot;&quot;</span>
         <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">date_str</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
         <span class="n">year</span> <span class="o">+=</span> <span class="mi">1900</span> <span class="k">if</span> <span class="p">((</span><span class="n">year</span> <span class="o">&lt;=</span> <span class="mi">99</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">year</span> <span class="o">&gt;=</span> <span class="mi">50</span><span class="p">))</span> <span class="k">else</span> <span class="mi">2000</span>
         <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
@@ -172,16 +137,25 @@
 
 
 <div class="viewcode-block" id="parse_header"><a class="viewcode-back" href="../../roipac.html#pyrate.roipac.parse_header">[docs]</a><span class="k">def</span> <span class="nf">parse_header</span><span class="p">(</span><span class="n">hdr_file</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Parses ROI_PAC header file to a dict&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parses ROI_PAC header file metadata to a dictionary.</span>
+
+<span class="sd">    :param str hdr_file: `path to ROI_PAC *.rsc file`</span>
+
+<span class="sd">    :return: subset: subset of metadata</span>
+<span class="sd">    :rtype: dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">hdr_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">split</span><span class="p">()</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">e</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="p">]</span>
         <span class="n">headers</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
-        <span class="n">is_dem</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">DATUM</span> <span class="ow">in</span> <span class="n">headers</span> <span class="ow">or</span> <span class="n">Z_SCALE</span> <span class="ow">in</span> <span class="n">headers</span> <span class="ow">or</span> <span class="n">PROJECTION</span> <span class="ow">in</span> <span class="n">headers</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="n">is_dem</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">DATUM</span> <span class="ow">in</span> <span class="n">headers</span> <span class="ow">or</span> <span class="n">Z_SCALE</span> <span class="ow">in</span> <span class="n">headers</span> \
+                         <span class="ow">or</span> <span class="n">PROJECTION</span> <span class="ow">in</span> <span class="n">headers</span> <span class="k">else</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="n">is_dem</span> <span class="ow">and</span> <span class="n">DATUM</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">:</span>
-            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s1">&#39;Error: no DATUM parameter in DEM header/resource file&#39;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;No &quot;DATUM&quot; parameter in DEM header/resource file&#39;</span>
+            <span class="k">raise</span> <span class="n">RoipacException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Unable to parse content of </span><span class="si">%s</span><span class="s2">. Is it a ROIPAC header file?&quot;</span>
         <span class="k">raise</span> <span class="n">RoipacException</span><span class="p">(</span><span class="n">msg</span> <span class="o">%</span> <span class="n">hdr_file</span><span class="p">)</span>
@@ -234,6 +208,7 @@
 
 
 <span class="k">def</span> <span class="nf">_parse_dates_from</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Determine dates from file name&quot;&quot;&quot;</span>
     <span class="c1"># pylint: disable=invalid-name</span>
     <span class="c1"># process dates from filename if rsc file doesn&#39;t have them (skip for DEMs)</span>
     <span class="n">p</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\d</span><span class="si">{6}</span><span class="s1">-\d</span><span class="si">{6}</span><span class="s1">&#39;</span><span class="p">)</span>  <span class="c1"># match 2 sets of 6 digits separated by &#39;-&#39;</span>
@@ -251,11 +226,16 @@
 
 <div class="viewcode-block" id="manage_header"><a class="viewcode-back" href="../../roipac.html#pyrate.roipac.manage_header">[docs]</a><span class="k">def</span> <span class="nf">manage_header</span><span class="p">(</span><span class="n">header_file</span><span class="p">,</span> <span class="n">projection</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    :param header_file:</span>
-<span class="sd">    :param projection: project form dem header</span>
-<span class="sd">    ....projection = roipac.parse_header(dem_file)[ifc.PYRATE_DATUM]</span>
-<span class="sd">    :return:</span>
+<span class="sd">    Manage header files for ROI_PAC interferograms and DEM files.</span>
+<span class="sd">    NB: projection = roipac.parse_header(dem_file)[ifc.PYRATE_DATUM]</span>
+
+<span class="sd">    :param str header_file: `ROI_PAC *.rsc header file path`</span>
+<span class="sd">    :param projection: Projection obtained from dem header.</span>
+
+<span class="sd">    :return: combined_header: Combined metadata dictionary</span>
+<span class="sd">    :rtype: dict</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">header</span> <span class="o">=</span> <span class="n">parse_header</span><span class="p">(</span><span class="n">header_file</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_DATUM</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">header</span><span class="p">:</span>  <span class="c1"># DEM already has DATUM</span>
         <span class="n">header</span><span class="p">[</span><span class="n">ifc</span><span class="o">.</span><span class="n">PYRATE_DATUM</span><span class="p">]</span> <span class="o">=</span> <span class="n">projection</span>
@@ -300,7 +280,7 @@
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
     </div>

@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Prepifg Module" href="prepifg.html" />
-    <link rel="prev" title="MST Module" href="mst.html" />
+    <link rel="prev" title="Minimum Spanning Tree Module" href="mst.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -55,17 +55,24 @@
 <dl class="function">
 <dt id="pyrate.orbital.get_design_matrix">
 <code class="descclassname">pyrate.orbital.</code><code class="descname">get_design_matrix</code><span class="sig-paren">(</span><em>ifg</em>, <em>degree</em>, <em>offset</em>, <em>scale=100.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#get_design_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.get_design_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns simple design matrix with columns for model parameters.</p>
+<dd><p>Returns orbital error design matrix with columns for model parameters.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ifg</strong> &#8211; interferogram to base the DM on</li>
-<li><strong>degree</strong> &#8211; PLANAR, QUADRATIC or PART_CUBIC</li>
-<li><strong>offset</strong> &#8211; True to include offset cols, otherwise False.</li>
-<li><strong>scale</strong> &#8211; amount to divide cell size by for improving inversion robustness</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>class instance ifg</strong> (<a class="reference internal" href="shared.html#pyrate.shared.Ifg" title="pyrate.shared.Ifg"><em>Ifg</em></a>) – interferogram to get design matrix for</li>
+<li><strong>degree</strong> (<em>str</em>) – model to fit (PLANAR / QUADRATIC / PART_CUBIC)</li>
+<li><strong>offset</strong> (<em>bool</em>) – True to include offset column, otherwise False.</li>
+<li><strong>scale</strong> (<em>float</em>) – Scale factor to divide cell size by in order to
+improve inversion robustness</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dm: design matrix</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
 </td>
 </tr>
 </tbody>
@@ -75,27 +82,23 @@
 <dl class="function">
 <dt id="pyrate.orbital.get_network_design_matrix">
 <code class="descclassname">pyrate.orbital.</code><code class="descname">get_network_design_matrix</code><span class="sig-paren">(</span><em>ifgs</em>, <em>degree</em>, <em>offset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#get_network_design_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.get_network_design_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns larger format design matrix for networked error correction.</p>
-<p>The network design matrix includes rows which relate to those of NaN cells.
-:param ifgs: sequence of interferograms
-:param degree: PLANAR, QUADRATIC or PART_CUBIC
-:param offset: True to include offset cols, otherwise False.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.orbital.independent_correction">
-<code class="descclassname">pyrate.orbital.</code><code class="descname">independent_correction</code><span class="sig-paren">(</span><em>ifg</em>, <em>degree</em>, <em>offset</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#independent_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.independent_correction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates and removes orbital correction from an ifg.</p>
+<dd><p>Returns larger-format design matrix for network error correction. The
+network design matrix includes rows which relate to those of NaN cells.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ifg</strong> &#8211; the ifg to remove remove the orbital error from</li>
-<li><strong>degree</strong> &#8211; type of model to use PLANAR, QUADRATIC etc</li>
-<li><strong>offset</strong> &#8211; boolean</li>
-<li><strong>params</strong> &#8211; parameter dictionary</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifgs</strong> (<em>list</em>) – List of Ifg class objects</li>
+<li><strong>degree</strong> (<em>str</em>) – model to fit (PLANAR / QUADRATIC / PART_CUBIC)</li>
+<li><strong>offset</strong> (<em>bool</em>) – True to include offset cols, otherwise False.</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">netdm: network design matrix</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
 </td>
 </tr>
 </tbody>
@@ -103,24 +106,24 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="pyrate.orbital.network_correction">
-<code class="descclassname">pyrate.orbital.</code><code class="descname">network_correction</code><span class="sig-paren">(</span><em>ifgs</em>, <em>degree</em>, <em>offset</em>, <em>params</em>, <em>m_ifgs=None</em>, <em>preread_ifgs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#network_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.network_correction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates orbital correction model, removing this from the ifgs.
-.. warn:: This will write orbital error corrected phase_data in the ifgs.</p>
+<dt id="pyrate.orbital.independent_orbital_correction">
+<code class="descclassname">pyrate.orbital.</code><code class="descname">independent_orbital_correction</code><span class="sig-paren">(</span><em>ifg</em>, <em>degree</em>, <em>offset</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#independent_orbital_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.independent_orbital_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates and removes an orbital error surface from a single independent
+interferogram.</p>
+<p>Warning: This will write orbital error corrected phase_data to the ifg.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ifgs</strong> &#8211; interferograms reduced to a minimum tree from prior
-MST calculations</li>
-<li><strong>degree</strong> &#8211; PLANAR, QUADRATIC or PART_CUBIC</li>
-<li><strong>offset</strong> &#8211; True to calculate the model using offsets</li>
-<li><strong>params</strong> &#8211; dict, parameter dictionary</li>
-<li><strong>m_ifgs</strong> &#8211; multilooked orbfit ifgs (sequence must be mlooked
-versions of &#8216;ifgs&#8217; arg)</li>
-<li><strong>preread_ifgs</strong> &#8211; dict, parameters dict corresponding to config file</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>class instance ifg</strong> (<a class="reference internal" href="shared.html#pyrate.shared.Ifg" title="pyrate.shared.Ifg"><em>Ifg</em></a>) – the interferogram to be corrected</li>
+<li><strong>degree</strong> (<em>str</em>) – model to fit (PLANAR / QUADRATIC / PART_CUBIC)</li>
+<li><strong>offset</strong> (<em>bool</em>) – True to calculate the model using an offset</li>
+<li><strong>params</strong> (<em>dict</em>) – dictionary of configuration parameters</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None - interferogram phase data is updated and saved to disk</p>
 </td>
 </tr>
 </tbody>
@@ -128,23 +131,29 @@ versions of &#8216;ifgs&#8217; arg)</li>
 </dd></dl>
 
 <dl class="function">
-<dt id="pyrate.orbital.orbital_correction">
-<code class="descclassname">pyrate.orbital.</code><code class="descname">orbital_correction</code><span class="sig-paren">(</span><em>ifgs_or_ifg_paths</em>, <em>params</em>, <em>mlooked=None</em>, <em>offset=True</em>, <em>preread_ifgs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#orbital_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.orbital_correction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes orbital error from given Ifgs.</p>
-<p>NB: the ifg data is modified in situ, rather than create intermediate files.
-The network method assumes the given ifgs have already been reduced to a
-minimum set from an MST type operation.</p>
+<dt id="pyrate.orbital.network_orbital_correction">
+<code class="descclassname">pyrate.orbital.</code><code class="descname">network_orbital_correction</code><span class="sig-paren">(</span><em>ifgs</em>, <em>degree</em>, <em>offset</em>, <em>params</em>, <em>m_ifgs=None</em>, <em>preread_ifgs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#network_orbital_correction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.network_orbital_correction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This algorithm implements a network inversion to determine orbital
+corrections for a set of interferograms forming a connected network.</p>
+<p>Warning: This will write orbital error corrected phase_data to the ifgs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ifgs</strong> &#8211; sequence of Ifg objs to correct</li>
-<li><strong>degree</strong> &#8211; PLANAR, QUADRATIC or PART_CUBIC</li>
-<li><strong>method</strong> &#8211; INDEPENDENT_METHOD or NETWORK_METHOD</li>
-<li><strong>mlooked</strong> &#8211; sequence of multilooked ifgs (must correspond to &#8216;ifgs&#8217; arg)</li>
-<li><strong>offset</strong> (<em>bool</em>) &#8211; True/False to include the constant/offset component</li>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifgs</strong> (<em>list</em>) – List of Ifg class objects reduced to a minimum spanning
+tree network</li>
+<li><strong>degree</strong> (<em>str</em>) – model to fit (PLANAR / QUADRATIC / PART_CUBIC)</li>
+<li><strong>offset</strong> (<em>bool</em>) – True to calculate the model using offsets</li>
+<li><strong>params</strong> (<em>dict</em>) – dictionary of configuration parameters</li>
+<li><strong>m_ifgs</strong> (<em>list</em>) – list of multilooked Ifg class objects
+(sequence must be multilooked versions of ‘ifgs’ arg)</li>
+<li><strong>preread_ifgs</strong> (<em>dict</em>) – Dictionary containing information specifically
+for MPI jobs (optional)</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None - interferogram phase data is updated and saved to disk</p>
 </td>
 </tr>
 </tbody>
@@ -154,15 +163,27 @@ minimum set from an MST type operation.</p>
 <dl class="function">
 <dt id="pyrate.orbital.remove_orbital_error">
 <code class="descclassname">pyrate.orbital.</code><code class="descname">remove_orbital_error</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em>, <em>preread_ifgs=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/orbital.html#remove_orbital_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.orbital.remove_orbital_error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper for orbital error removal functionality.</p>
-<dl class="docutils">
-<dt>ifgs: list</dt>
-<dd>list of ifgs or ifg paths</dd>
-<dt>params: dict</dt>
-<dd>dict corresponding to config parameters</dd>
-<dt>preread_ifgs: dict, optional</dt>
-<dd>dict containing information regarding MPI jobs</dd>
-</dl>
+<dd><p>Wrapper function for PyRate orbital error removal functionality.</p>
+<p>NB: the ifg data is modified in situ, rather than create intermediate
+files. The network method assumes the given ifgs have already been reduced
+to a minimum spanning tree network.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifgs</strong> (<em>list</em>) – List of interferograms class objects</li>
+<li><strong>params</strong> (<em>dict</em>) – Dictionary containing configuration parameters</li>
+<li><strong>preread_ifgs</strong> (<em>dict</em>) – Dictionary containing information specifically
+for MPI jobs (optional)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None - interferogram phase data is updated and saved to disk</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -177,7 +198,7 @@ minimum set from an MST type operation.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="modules.html">Python Modules</a><ul>
-      <li>Previous: <a href="mst.html" title="previous chapter">MST Module</a></li>
+      <li>Previous: <a href="mst.html" title="previous chapter">Minimum Spanning Tree Module</a></li>
       <li>Next: <a href="prepifg.html" title="next chapter">Prepifg Module</a></li>
   </ul></li>
   </ul></li>
@@ -208,7 +229,7 @@ minimum set from an MST type operation.</p>
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |

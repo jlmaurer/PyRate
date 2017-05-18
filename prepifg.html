@@ -1,6 +1,6 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
@@ -35,7 +35,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
 
   </head>
-  <body role="document">
+  <body>
   
 
     <div class="document">
@@ -62,167 +62,99 @@ the computational problem.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="pyrate.prepifg.check_crop_coords">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">check_crop_coords</code><span class="sig-paren">(</span><em>ifgs</em>, <em>xmin</em>, <em>ymin</em>, <em>xmax</em>, <em>ymax</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#check_crop_coords"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.check_crop_coords" title="Permalink to this definition">¶</a></dt>
-<dd><p>Ensures cropping coords line up with grid system within tolerance.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.check_looks">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">check_looks</code><span class="sig-paren">(</span><em>xlooks</em>, <em>ylooks</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#check_looks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.check_looks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Verifies looks parameters are valid.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.check_resolution">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">check_resolution</code><span class="sig-paren">(</span><em>ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#check_resolution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.check_resolution" title="Permalink to this definition">¶</a></dt>
-<dd><p>Verifies Ifg resolutions are equal for the given grids.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.custom_bounds">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">custom_bounds</code><span class="sig-paren">(</span><em>ifgs</em>, <em>xw</em>, <em>ytop</em>, <em>xe</em>, <em>ybot</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#custom_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.custom_bounds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check and modify input custom crop bounds to line up with grid interval</p>
-</dd></dl>
-
-<dl class="function">
 <dt id="pyrate.prepifg.dem_or_ifg">
 <code class="descclassname">pyrate.prepifg.</code><code class="descname">dem_or_ifg</code><span class="sig-paren">(</span><em>data_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#dem_or_ifg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.dem_or_ifg" title="Permalink to this definition">¶</a></dt>
-<dd><p>whether tif is a dem or an ifg</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.dummy_warp">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">dummy_warp</code><span class="sig-paren">(</span><em>renamed_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#dummy_warp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.dummy_warp" title="Permalink to this definition">¶</a></dt>
-<dd><p>convenience dummy operation</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.extents_from_params">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">extents_from_params</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#extents_from_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.extents_from_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Custom extents from supplied parameters</p>
+<dd><p>Returns an Ifg or DEM class object from input geotiff file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data_path</strong> (<em>str</em>) – file path name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Interferogram or DEM object from input file</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="shared.html#pyrate.shared.Ifg" title="pyrate.shared.Ifg">Ifg</a> or DEM class object</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyrate.prepifg.get_analysis_extent">
 <code class="descclassname">pyrate.prepifg.</code><code class="descname">get_analysis_extent</code><span class="sig-paren">(</span><em>crop_opt</em>, <em>rasters</em>, <em>xlooks</em>, <em>ylooks</em>, <em>user_exts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#get_analysis_extent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.get_analysis_extent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns extents/bounding box args for gdalwarp as strings.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.get_extents">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">get_extents</code><span class="sig-paren">(</span><em>ifgs</em>, <em>crop_opt</em>, <em>user_exts=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#get_extents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.get_extents" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns extents/bounding box args for gdalwarp as strings.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.get_same_bounds">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">get_same_bounds</code><span class="sig-paren">(</span><em>ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#get_same_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.get_same_bounds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check and return bounding box for ALREADY_SAME_SIZE option.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.is_number">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">is_number</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#is_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.is_number" title="Permalink to this definition">¶</a></dt>
-<dd><p>check whether string can be converted to float</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.max_bounds">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">max_bounds</code><span class="sig-paren">(</span><em>ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#max_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.max_bounds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns bounds for the total area covered by the given interferograms.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.min_bounds">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">min_bounds</code><span class="sig-paren">(</span><em>ifgs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#min_bounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.min_bounds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns bounds for overlapping area of the given interferograms.</p>
+<dd><p>Function checks prepifg parameters and returns extents/bounding box.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>crop_opt</strong> (<em>int</em>) – Cropping option</li>
+<li><strong>rasters</strong> (<em>list</em>) – List of either Ifg or DEM class objects</li>
+<li><strong>xlooks</strong> (<em>int</em>) – Number of multi-looks in x</li>
+<li><strong>ylooks</strong> (<em>int</em>) – Number of multi-looks in y</li>
+<li><strong>user_exts</strong> (<em>tuple</em>) – Tuple of user defined cropping coordinates</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">extents: tuple of four bounding coordinates</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyrate.prepifg.prepare_ifg">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">prepare_ifg</code><span class="sig-paren">(</span><em>raster_path</em>, <em>xlooks</em>, <em>ylooks</em>, <em>exts</em>, <em>thresh</em>, <em>crop_opt</em>, <em>write_to_disc=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#prepare_ifg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.prepare_ifg" title="Permalink to this definition">¶</a></dt>
-<dd><p>resample and crop ifgs/dems</p>
+<code class="descclassname">pyrate.prepifg.</code><code class="descname">prepare_ifg</code><span class="sig-paren">(</span><em>raster_path</em>, <em>xlooks</em>, <em>ylooks</em>, <em>exts</em>, <em>thresh</em>, <em>crop_opt</em>, <em>write_to_disk=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#prepare_ifg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.prepare_ifg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open, resample, crop and optionally save to disk an interferogram or DEM.
+Returns are only given if write_to_disk=False</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raster_path</strong> (<em>str</em>) – Raster file path name</li>
+<li><strong>xlooks</strong> (<em>int</em>) – Number of multi-looks in x; 5 is 5 times smaller,
+1 is no change</li>
+<li><strong>ylooks</strong> (<em>int</em>) – Number of multi-looks in y</li>
+<li><strong>exts</strong> (<em>tuple</em>) – Tuple of user defined georeferenced extents for
+new file: (xfirst, yfirst, xlast, ylast)cropping coordinates</li>
+<li><strong>thresh</strong> (<em>float</em>) – see thresh in prepare_ifgs()</li>
+<li><strong>crop_opt</strong> (<em>int</em>) – Crop option</li>
+<li><strong>write_to_disk</strong> (<em>bool</em>) – Write new data to disk</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">resampled_data: output cropped and resampled image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">out_ds: destination gdal dataset object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">gdal.Dataset</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="pyrate.prepifg.prepare_ifgs">
 <code class="descclassname">pyrate.prepifg.</code><code class="descname">prepare_ifgs</code><span class="sig-paren">(</span><em>raster_data_paths</em>, <em>crop_opt</em>, <em>xlooks</em>, <em>ylooks</em>, <em>thresh=0.5</em>, <em>user_exts=None</em>, <em>write_to_disc=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#prepare_ifgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.prepare_ifgs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Produces multilooked/resampled data files for PyRate analysis.</p>
+<dd><p>Wrapper function to prepare a sequence of interferogram files for
+PyRate analysis. See prepifg.prepare_ifg() for full description of
+inputs and returns.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>raster_data_paths</strong> &#8211; sequence of Ifg data paths
-(Currently DEMs are not supported)</li>
-<li><strong>crop_opt</strong> &#8211; integer cropping type option (see config)</li>
-<li><strong>xlooks</strong> &#8211; multilooking factor for the X axis</li>
-<li><strong>ylooks</strong> &#8211; Y axis multilooking factor</li>
-<li><strong>thresh</strong> (<em>float</em>) &#8211; (0.0, 1.0). Controls NaN handling when resampling to
-coarser grids. Value is the proportion above which the number of NaNs in
-an area is considered invalid. thresh=0 resamples to NaN if 1 or more
-contributing cells are NaNs. At 0.25, it resamples to NaN if 1/4 or
-more contributing cells are NaNs. At 1.0, areas are resampled to NaN
-only if all contributing cells are NaNs.</li>
-<li><strong>user_exts</strong> &#8211; CustomExts tuple with user sepcified lat long corners</li>
-<li><strong>verbose</strong> &#8211; Controls level of gdalwarp output</li>
-<li><strong>write_to_disc</strong> &#8211; bool, whether to write to disc during warp</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.resample">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">resample</code><span class="sig-paren">(</span><em>data</em>, <em>xscale</em>, <em>yscale</em>, <em>thresh</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#resample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.resample" title="Permalink to this definition">¶</a></dt>
-<dd><p># TODO: make more efficient
-This is the slowest step in prepifg
-Resamples/averages &#8216;data&#8217; to return an array from the averaging of blocks
-of several tiles in &#8216;data&#8217;. NB: Assumes incoherent cells are NaNs.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>data</strong> &#8211; source array to resample to different size</li>
-<li><strong>xscale</strong> &#8211; number of cells to average along X axis</li>
-<li><strong>yscale</strong> &#8211; number of Y axis cells to average</li>
-<li><strong>thresh</strong> &#8211; minimum allowable
-proportion of NaN cells (range from 0.0-1.0), eg. 0.25 = 1/4 or
-more as NaNs results in a NaN value for the output cell.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="pyrate.prepifg.warp">
-<code class="descclassname">pyrate.prepifg.</code><code class="descname">warp</code><span class="sig-paren">(</span><em>ifg</em>, <em>x_looks</em>, <em>y_looks</em>, <em>extents</em>, <em>resolution</em>, <em>thresh</em>, <em>crop_out</em>, <em>write_to_disc=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/prepifg.html#warp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.prepifg.warp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Resamples &#8216;ifg&#8217; and returns a new Ifg obj.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>xlooks</strong> &#8211; int
-factor to scale X axis by, 5 is 5x smaller, 1 is no change.</li>
-<li><strong>ylooks</strong> &#8211; int
-as xlooks, but for Y axis</li>
-<li><strong>extents</strong> &#8211; tuple
-georeferenced extents for new file: (xfirst, yfirst, xlast, ylast)</li>
-<li><strong>resolution</strong> &#8211; [xres, yres] or None.
-Sets resolution output Ifg metadata.
-Use <em>None</em> if raster size is not being changed.</li>
-<li><strong>thresh</strong> &#8211; see thresh in prepare_ifgs().</li>
-<li><strong>verbose</strong> &#8211; True to print gdalwarp output to stdout</li>
-<li><strong>write_to_disc</strong> &#8211; bool, whether to write to disc during warp</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>raster_data_paths</strong> (<em>list</em>) – List of interferogram file paths</td>
 </tr>
 </tbody>
 </table>
@@ -271,7 +203,7 @@ Use <em>None</em> if raster size is not being changed.</li>
       &copy;2017, Geoscience Australia InSAR team.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.5.3</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
