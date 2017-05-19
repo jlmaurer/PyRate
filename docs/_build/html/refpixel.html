@@ -1,0 +1,226 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Reference Pixel Calculation Module &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ROIPAC Module" href="roipac.html" />
+    <link rel="prev" title="Reference Phase Calculation Module" href="ref_phs_est.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyrate.refpixel">
+<span id="reference-pixel-calculation-module"></span><h1>Reference Pixel Calculation Module<a class="headerlink" href="#module-pyrate.refpixel" title="Permalink to this headline">¶</a></h1>
+<p>This Python module implements an algorithm to search for the location
+of the interferometric reference pixel</p>
+<dl class="exception">
+<dt id="pyrate.refpixel.RefPixelError">
+<em class="property">exception </em><code class="descclassname">pyrate.refpixel.</code><code class="descname">RefPixelError</code><a class="reference internal" href="_modules/pyrate/refpixel.html#RefPixelError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.RefPixelError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic exception for reference pixel errors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.find_min_mean">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">find_min_mean</code><span class="sig-paren">(</span><em>mean_sds</em>, <em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#find_min_mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.find_min_mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine the ref pixel block with minimum mean value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>mean_sds</strong> (<em>list</em>) – List of mean standard deviations from each
+reference pixel grid</li>
+<li><strong>grid</strong> (<em>list</em>) – List of ref pixel coordinates tuples</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Tuple of (refy, refx) with minimum mean</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.ref_pixel">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel</code><span class="sig-paren">(</span><em>ifgs</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the most appropriate reference pixel coordinate by conducting
+a grid search and calculating the mean standard deviation with patches
+around candidate pixels from the given interferograms.</p>
+<p>If the config file REFX or REFY values are empty or negative, the search
+for the reference pixel is performed. If the REFX|Y values are within the
+bounds of the raster, a search is not performed. REFX|Y values outside
+the upper bounds cause an exception.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifgs</strong> (<em>list</em>) – List of interferogram objects</li>
+<li><strong>params</strong> (<em>dict</em>) – Dictionary of configuration parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tuple of best REFX and REFY coordinates</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.ref_pixel_setup">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">ref_pixel_setup</code><span class="sig-paren">(</span><em>ifgs_or_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#ref_pixel_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.ref_pixel_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets up the grid for reference pixel computation and saves numpy files
+to disk for later use during ref pixel computation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifgs_or_paths</strong> (<em>list</em>) – List of interferogram filenames or Ifg objects</li>
+<li><strong>params</strong> (<em>dict</em>) – Dictionary of configuration parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">half_patch_size: size of patch</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">thresh</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">list(product(ysteps, xsteps))</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.refpixel.save_ref_pixel_blocks">
+<code class="descclassname">pyrate.refpixel.</code><code class="descname">save_ref_pixel_blocks</code><span class="sig-paren">(</span><em>grid</em>, <em>half_patch_size</em>, <em>ifg_paths</em>, <em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/refpixel.html#save_ref_pixel_blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.refpixel.save_ref_pixel_blocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save reference pixel grid blocks to numpy array files on disk</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> (<em>list</em>) – List of tuples (y, x) corresponding to ref pixel grids</li>
+<li><strong>half_patch_size</strong> (<em>int</em>) – patch size in pixels</li>
+<li><strong>ifg_paths</strong> (<em>list</em>) – list of interferogram paths</li>
+<li><strong>params</strong> (<em>dict</em>) – Dictionary of configuration parameters</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None, file saved to disk</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Python Modules</a><ul>
+      <li>Previous: <a href="ref_phs_est.html" title="previous chapter">Reference Phase Calculation Module</a></li>
+      <li>Next: <a href="roipac.html" title="next chapter">ROIPAC Module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/refpixel.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/refpixel.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,197 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>GAMMA Module &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GDAL to Python Module" href="gdal_python.html" />
+    <link rel="prev" title="Covariance Module" href="covariance.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyrate.gamma">
+<span id="gamma-module"></span><h1>GAMMA Module<a class="headerlink" href="#module-pyrate.gamma" title="Permalink to this headline">¶</a></h1>
+<p>This Python module contains tools for reading GAMMA format input data.</p>
+<dl class="exception">
+<dt id="pyrate.gamma.GammaException">
+<em class="property">exception </em><code class="descclassname">pyrate.gamma.</code><code class="descname">GammaException</code><a class="reference internal" href="_modules/pyrate/gamma.html#GammaException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gamma.GammaException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gamma generic exception class</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.gamma.combine_headers">
+<code class="descclassname">pyrate.gamma.</code><code class="descname">combine_headers</code><span class="sig-paren">(</span><em>hdr0</em>, <em>hdr1</em>, <em>dem_hdr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gamma.html#combine_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gamma.combine_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines metadata for master and slave epochs and DEM into a single
+dictionary for an interferogram.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>hdr0</strong> (<em>dict</em>) – Metadata for the master image</li>
+<li><strong>hdr1</strong> (<em>dict</em>) – Metadata for the slave image</li>
+<li><strong>dem_hdr</strong> (<em>dict</em>) – Metadata for the DEM</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">chdr: combined metadata</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.gamma.manage_headers">
+<code class="descclassname">pyrate.gamma.</code><code class="descname">manage_headers</code><span class="sig-paren">(</span><em>dem_header_file</em>, <em>header_paths</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gamma.html#manage_headers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gamma.manage_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manage and combine  header files for GAMMA interferograms, DEM and
+incidence files</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dem_header_file</strong> (<em>str</em>) – DEM header path</li>
+<li><strong>header_paths</strong> (<em>list</em>) – List of master/slave header paths</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">combined_header: Combined metadata dictionary</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.gamma.parse_dem_header">
+<code class="descclassname">pyrate.gamma.</code><code class="descname">parse_dem_header</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gamma.html#parse_dem_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gamma.parse_dem_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns dictionary of DEM metadata required for PyRate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – <cite>Full path to Gamma *dem.par file</cite></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">subset: subset of full metadata</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.gamma.parse_epoch_header">
+<code class="descclassname">pyrate.gamma.</code><code class="descname">parse_epoch_header</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/gamma.html#parse_epoch_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.gamma.parse_epoch_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns dictionary of epoch metadata required for PyRate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – <cite>Full path to Gamma *slc.par file</cite></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">subset: subset of full metadata</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Python Modules</a><ul>
+      <li>Previous: <a href="covariance.html" title="previous chapter">Covariance Module</a></li>
+      <li>Next: <a href="gdal_python.html" title="next chapter">GDAL to Python Module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/gamma.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/gamma.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

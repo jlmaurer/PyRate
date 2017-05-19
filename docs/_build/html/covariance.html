@@ -1,0 +1,222 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Covariance Module &#8212; PyRate  documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GAMMA Module" href="gamma.html" />
+    <link rel="prev" title="Config Module" href="config.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyrate.covariance">
+<span id="covariance-module"></span><h1>Covariance Module<a class="headerlink" href="#module-pyrate.covariance" title="Permalink to this headline">¶</a></h1>
+<p>This Python module implements covariance calculation and
+Variance/Covariance matrix functionality. The algorithms
+are based on functions ‘cvdcalc.m’ and ‘vcmt.m’ from
+the Matlab Pirate package.</p>
+<dl class="class">
+<dt id="pyrate.covariance.RDist">
+<em class="property">class </em><code class="descclassname">pyrate.covariance.</code><code class="descname">RDist</code><span class="sig-paren">(</span><em>ifg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/covariance.html#RDist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.covariance.RDist" title="Permalink to this definition">¶</a></dt>
+<dd><p>RDist class used for caching r_dist during maxvar/alpha computation</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.covariance.cvd">
+<code class="descclassname">pyrate.covariance.</code><code class="descname">cvd</code><span class="sig-paren">(</span><em>ifg_path</em>, <em>params</em>, <em>r_dist</em>, <em>calc_alpha=False</em>, <em>write_vals=False</em>, <em>save_acg=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/covariance.html#cvd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.covariance.cvd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the 1D covariance function of an entire interferogram as the
+radial average of its 2D autocorrelation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifg_path</strong> (<em>str</em>) – An interferogram file path. OR</li>
+<li><strong>class ifg_path</strong> (<a class="reference internal" href="shared.html#pyrate.shared.Ifg" title="pyrate.shared.Ifg"><em>Ifg</em></a>) – A pyrate.shared.Ifg class object</li>
+<li><strong>params</strong> (<em>dict</em>) – Dictionary of configuration parameters</li>
+<li><strong>r_dist</strong> (<em>ndarray</em>) – Array of distance values from the image centre
+(See Rdist class for more details)</li>
+<li><strong>calc_alpha</strong> (<em>bool</em>) – If True calculate alpha</li>
+<li><strong>write_vals</strong> (<em>bool</em>) – If True write maxvar and alpha values to
+interferogram metadata</li>
+<li><strong>save_acg</strong> (<em>bool</em>) – If True write autocorrelation and radial distance
+data to numpy array file on disk</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">maxvar: The maximum variance (at zero lag)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">alpha: the exponential length-scale of decay factor</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.covariance.cvd_from_phase">
+<code class="descclassname">pyrate.covariance.</code><code class="descname">cvd_from_phase</code><span class="sig-paren">(</span><em>phase</em>, <em>ifg</em>, <em>r_dist</em>, <em>calc_alpha</em>, <em>save_acg=False</em>, <em>params=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/covariance.html#cvd_from_phase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.covariance.cvd_from_phase" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience function used to compute radial autocovariance from phase
+data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>phase</strong> (<em>ndarray</em>) – An array of interferogram phase data</li>
+<li><strong>class ifg</strong> (<a class="reference internal" href="shared.html#pyrate.shared.Ifg" title="pyrate.shared.Ifg"><em>Ifg</em></a>) – A pyrate.shared.Ifg class instance</li>
+<li><strong>r_dist</strong> (<em>ndarray</em>) – Array of distance values from the image centre
+(See Rdist class for more details)</li>
+<li><strong>calc_alpha</strong> (<em>bool</em>) – If True calculate alpha</li>
+<li><strong>save_acg</strong> (<em>bool</em>) – If True write autocorrelation and radial distance
+data to numpy array file on disk</li>
+<li><strong>params</strong> (<em>dict</em>) – [optional] Dictionary of configuration parameters;
+Must be provided if save_acg=True</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">maxvar: The maximum variance (at zero lag)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">alpha: the exponential length-scale of decay factor</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.covariance.get_vcmt">
+<code class="descclassname">pyrate.covariance.</code><code class="descname">get_vcmt</code><span class="sig-paren">(</span><em>ifgs</em>, <em>maxvar</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/covariance.html#get_vcmt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.covariance.get_vcmt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assembles a temporal variance/covariance matrix using the method
+described by Biggs et al., Geophys. J. Int, 2007. Matrix elements are
+evaluated according to sig_i * sig_j * C_ij where i and j are two
+interferograms and C is a matrix of coefficients:</p>
+<p>C = 1 if the master and slave epochs of i and j are equal
+C = 0.5 if have i and j share either a common master or slave epoch
+C = -0.5 if the master of i or j equals the slave of the other
+C = 0 otherwise</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ifgs</strong> (<em>list</em>) – A list of pyrate.shared.Ifg class objects.</li>
+<li><strong>maxvar</strong> (<em>ndarray</em>) – numpy array of maximum variance values for the
+interferograms.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">vcm_t: temporal variance-covariance matrix</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">Python Modules</a><ul>
+      <li>Previous: <a href="config.html" title="previous chapter">Config Module</a></li>
+      <li>Next: <a href="gamma.html" title="next chapter">GAMMA Module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/covariance.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Geoscience Australia InSAR team.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/covariance.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
