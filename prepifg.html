@@ -150,11 +150,35 @@ new file: (xfirst, yfirst, xlast, ylast)cropping coordinates</li>
 <dd><p>Wrapper function to prepare a sequence of interferogram files for
 PyRate analysis. See prepifg.prepare_ifg() for full description of
 inputs and returns.</p>
+<p>Note: function need refining for crop options</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>raster_data_paths</strong> (<em>list</em>) – List of interferogram file paths</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>raster_data_paths</strong> (<em>list</em>) – List of interferogram file paths</li>
+<li><strong>crop_opt</strong> (<em>int</em>) – Crop option</li>
+<li><strong>xlooks</strong> (<em>int</em>) – Number of multi-looks in x; 5 is 5 times smaller,
+1 is no change</li>
+<li><strong>ylooks</strong> (<em>int</em>) – Number of multi-looks in y</li>
+<li><strong>thresh</strong> (<em>float</em>) – see thresh in prepare_ifgs()</li>
+<li><strong>user_exts</strong> (<em>tuple</em>) – Tuple of user defined georeferenced extents for
+new file: (xfirst, yfirst, xlast, ylast)cropping coordinates</li>
+<li><strong>write_to_disk</strong> (<em>bool</em>) – Write new data to disk</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">resampled_data: output cropped and resampled image</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">ndarray</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">out_ds: destination gdal dataset object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">gdal.Dataset</p>
+</td>
 </tr>
 </tbody>
 </table>

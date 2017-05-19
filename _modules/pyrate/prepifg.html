@@ -239,8 +239,23 @@
 <span class="sd">    Wrapper function to prepare a sequence of interferogram files for</span>
 <span class="sd">    PyRate analysis. See prepifg.prepare_ifg() for full description of</span>
 <span class="sd">    inputs and returns.</span>
+<span class="sd">    </span>
+<span class="sd">    Note: function need refining for crop options</span>
 
 <span class="sd">    :param list raster_data_paths: List of interferogram file paths</span>
+<span class="sd">    :param int crop_opt: Crop option</span>
+<span class="sd">    :param int xlooks: Number of multi-looks in x; 5 is 5 times smaller,</span>
+<span class="sd">        1 is no change</span>
+<span class="sd">    :param int ylooks: Number of multi-looks in y</span>
+<span class="sd">    :param float thresh: see thresh in prepare_ifgs()</span>
+<span class="sd">    :param tuple user_exts: Tuple of user defined georeferenced extents for</span>
+<span class="sd">        new file: (xfirst, yfirst, xlast, ylast)cropping coordinates</span>
+<span class="sd">    :param bool write_to_disk: Write new data to disk</span>
+
+<span class="sd">    :return: resampled_data: output cropped and resampled image</span>
+<span class="sd">    :rtype: ndarray</span>
+<span class="sd">    :return: out_ds: destination gdal dataset object</span>
+<span class="sd">    :rtype: gdal.Dataset</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># use metadata check to check whether it&#39;s a dem or ifg</span>
     <span class="n">rasters</span> <span class="o">=</span> <span class="p">[</span><span class="n">dem_or_ifg</span><span class="p">(</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">raster_data_paths</span><span class="p">]</span>
