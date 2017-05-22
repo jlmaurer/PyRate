@@ -1,0 +1,762 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Config Module &mdash; PyRate  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="PyRate  documentation" href="index.html"/>
+        <link rel="up" title="PyRate Modules" href="modules.html"/>
+        <link rel="next" title="Covariance Module" href="covariance.html"/>
+        <link rel="prev" title="Atmospheric Phase Screen Module" href="aps.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> PyRate
+          
+
+          
+          </a>
+
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#direct-install">Direct Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#virtual-environment">Virtual Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#virtualenv">Virtualenv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="installation.html#anaconda">Anaconda</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#tests">Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#configuration-file">Configuration File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#pyrate-workflow">PyRate workflow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#prepifg-preparing-input-interferograms">prepifg: Preparing input interferograms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#linrate-main-workflow-and-linear-rate-and-time-series-analysis">linrate: Main workflow and linear rate and time series analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage.html#postprocess-putting-the-tiles-back-together">postprocess: Putting the tiles back together</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#mpi-support">MPI Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage.html#python-multiprocessing-support">Python multiprocessing support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hpc.html">Running PyRate on a HPC system</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="hpc.html#pre-installation">Pre-installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpc.html#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpc.html#updating-the-code">Updating the Code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hpc.html#running-batch-jobs">Running Batch Jobs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="hpc.html#batch-testing">Batch testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="hpc.html#mpirun">MPIRun</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#types-of-contributions">Types of Contributions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#report-bugs">Report Bugs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#fix-bugs">Fix Bugs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#implement-features">Implement Features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#write-documentation">Write Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="contributing.html#submit-feedback">Submit Feedback</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#get-started">Get Started!</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#pull-request-guidelines">Pull Request Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing.html#tips">Tips</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Credits</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="authors.html#development-lead">Development Lead</a></li>
+<li class="toctree-l2"><a class="reference internal" href="authors.html#contributors">Contributors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">Release History</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id1">0.1.0 (2017-01-31)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="history.html#id2">0.2.0 (2017-05-22)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="scripts.html">PyRate Scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pyrate.scripts.run_prepifg.html">PyRate run_prepifg Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrate.scripts.run_pyrate.html">PyRate run_pyrate Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrate.scripts.converttogtif.html">PyRate converttogtif Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrate.scripts.postprocessing.html">PyRate postprocessing Script</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyrate.scripts.main.html">PyRate main Script</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">PyRate Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="algorithm.html">Algorithm Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="aps.html">Atmospheric Phase Screen Module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Config Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="covariance.html">Covariance Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gamma.html">GAMMA Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gdal_python.html">GDAL-Python Bindings Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="linrate.html">Linrate Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mst.html">Minimum Spanning Tree Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbital.html">Orbital Error Correction Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="prepifg.html">Prepifg Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyratelog.html">Logging Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ref_phs_est.html">Reference Phase Calculation Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="refpixel.html">Reference Pixel Calculation Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="roipac.html">ROI_PAC Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="shared.html">Shared Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="timeseries.html">Time Series Module</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PyRate</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">PyRate Modules</a> &raquo;</li>
+        
+      <li>Config Module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/config.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pyrate.config">
+<span id="config-module"></span><h1>Config Module<a class="headerlink" href="#module-pyrate.config" title="Permalink to this headline">¶</a></h1>
+<p>This Python module contains utilities to parse PyRate configuration
+files. It also includes numerous general constants relating to options
+in configuration files. Examples of PyRate configuration files are
+provided in the configs/ directory</p>
+<dl class="data">
+<dt id="pyrate.config.APSEST">
+<code class="descclassname">pyrate.config.</code><code class="descname">APSEST</code><em class="property"> = 'apsest'</em><a class="headerlink" href="#pyrate.config.APSEST" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (0/1) Do spatio-temporal filter</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="pyrate.config.ConfigException">
+<em class="property">exception </em><code class="descclassname">pyrate.config.</code><code class="descname">ConfigException</code><a class="reference internal" href="_modules/pyrate/config.html#ConfigException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.config.ConfigException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default exception class for configuration errors.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.DEM_FILE">
+<code class="descclassname">pyrate.config.</code><code class="descname">DEM_FILE</code><em class="property"> = 'demfile'</em><a class="headerlink" href="#pyrate.config.DEM_FILE" title="Permalink to this definition">¶</a></dt>
+<dd><p>STR; Name of Digital Elevation Model file</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.DEM_HEADER_FILE">
+<code class="descclassname">pyrate.config.</code><code class="descname">DEM_HEADER_FILE</code><em class="property"> = 'demHeaderFile'</em><a class="headerlink" href="#pyrate.config.DEM_HEADER_FILE" title="Permalink to this definition">¶</a></dt>
+<dd><p>STR; Name of the header for the DEM</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.IFG_CROP_OPT">
+<code class="descclassname">pyrate.config.</code><code class="descname">IFG_CROP_OPT</code><em class="property"> = 'ifgcropopt'</em><a class="headerlink" href="#pyrate.config.IFG_CROP_OPT" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (1/2/3/4); Method for cropping interferograms, 1 = minimum overlapping area (intersection), 2 = maximum area (union), 3 = customised area, 4 = all ifgs already same size</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.IFG_FILE_LIST">
+<code class="descclassname">pyrate.config.</code><code class="descname">IFG_FILE_LIST</code><em class="property"> = 'ifgfilelist'</em><a class="headerlink" href="#pyrate.config.IFG_FILE_LIST" title="Permalink to this definition">¶</a></dt>
+<dd><p>STR; Name of input interferogram list file</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.IFG_LKSX">
+<code class="descclassname">pyrate.config.</code><code class="descname">IFG_LKSX</code><em class="property"> = 'ifglksx'</em><a class="headerlink" href="#pyrate.config.IFG_LKSX" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Multi look factor for interferogram preparation in x dimension</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.IFG_LKSY">
+<code class="descclassname">pyrate.config.</code><code class="descname">IFG_LKSY</code><em class="property"> = 'ifglksy'</em><a class="headerlink" href="#pyrate.config.IFG_LKSY" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Multi look factor for interferogram preparation in y dimension</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.IFG_XFIRST">
+<code class="descclassname">pyrate.config.</code><code class="descname">IFG_XFIRST</code><em class="property"> = 'ifgxfirst'</em><a class="headerlink" href="#pyrate.config.IFG_XFIRST" title="Permalink to this definition">¶</a></dt>
+<dd><p>REAL; Minimum longitude for cropping with method 3</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.IFG_XLAST">
+<code class="descclassname">pyrate.config.</code><code class="descname">IFG_XLAST</code><em class="property"> = 'ifgxlast'</em><a class="headerlink" href="#pyrate.config.IFG_XLAST" title="Permalink to this definition">¶</a></dt>
+<dd><p>REAL; Maximum longitude for cropping with method 3</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.IFG_YFIRST">
+<code class="descclassname">pyrate.config.</code><code class="descname">IFG_YFIRST</code><em class="property"> = 'ifgyfirst'</em><a class="headerlink" href="#pyrate.config.IFG_YFIRST" title="Permalink to this definition">¶</a></dt>
+<dd><p>REAL; Minimum latitude for cropping with method 3</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.IFG_YLAST">
+<code class="descclassname">pyrate.config.</code><code class="descname">IFG_YLAST</code><em class="property"> = 'ifgylast'</em><a class="headerlink" href="#pyrate.config.IFG_YLAST" title="Permalink to this definition">¶</a></dt>
+<dd><p>REAL; Maximum latitude for cropping with method 3</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.INPUT_IFG_PROJECTION">
+<code class="descclassname">pyrate.config.</code><code class="descname">INPUT_IFG_PROJECTION</code><em class="property"> = 'projection'</em><a class="headerlink" href="#pyrate.config.INPUT_IFG_PROJECTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>STR; The projection of the input interferograms.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.LR_MAXSIG">
+<code class="descclassname">pyrate.config.</code><code class="descname">LR_MAXSIG</code><em class="property"> = 'maxsig'</em><a class="headerlink" href="#pyrate.config.LR_MAXSIG" title="Permalink to this definition">¶</a></dt>
+<dd><p>REAL; Maximum allowable standard error for pixels in linear rate inversion.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.LR_NSIG">
+<code class="descclassname">pyrate.config.</code><code class="descname">LR_NSIG</code><em class="property"> = 'nsig'</em><a class="headerlink" href="#pyrate.config.LR_NSIG" title="Permalink to this definition">¶</a></dt>
+<dd><p>REAL; Threshold ratio between &#8216;model minus observation&#8217; residuals and a-priori observation standard deviations for linear rate estimate acceptance (otherwise remove furthest outlier and re-iterate)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.LR_PTHRESH">
+<code class="descclassname">pyrate.config.</code><code class="descname">LR_PTHRESH</code><em class="property"> = 'pthr'</em><a class="headerlink" href="#pyrate.config.LR_PTHRESH" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Number of required observations per pixel for the linear rate inversion</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.LUIGI">
+<code class="descclassname">pyrate.config.</code><code class="descname">LUIGI</code><em class="property"> = 'use_luigi'</em><a class="headerlink" href="#pyrate.config.LUIGI" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (0/1); Switch for using Luigi to perform prepifg step</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.NAN_CONVERSION">
+<code class="descclassname">pyrate.config.</code><code class="descname">NAN_CONVERSION</code><em class="property"> = 'nan_conversion'</em><a class="headerlink" href="#pyrate.config.NAN_CONVERSION" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (0/1): Convert no data values to Nan</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.NETWORKX_OR_MATLAB_FLAG">
+<code class="descclassname">pyrate.config.</code><code class="descname">NETWORKX_OR_MATLAB_FLAG</code><em class="property"> = 'networkx_or_matlab'</em><a class="headerlink" href="#pyrate.config.NETWORKX_OR_MATLAB_FLAG" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (0/1); Select MST algorithm, 0 = Matlab Pirate algorithm, 1 = NetworkX</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.NO_DATA_AVERAGING_THRESHOLD">
+<code class="descclassname">pyrate.config.</code><code class="descname">NO_DATA_AVERAGING_THRESHOLD</code><em class="property"> = 'noDataAveragingThreshold'</em><a class="headerlink" href="#pyrate.config.NO_DATA_AVERAGING_THRESHOLD" title="Permalink to this definition">¶</a></dt>
+<dd><p>FLOAT; No data averaging threshold for prepifg</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.NO_DATA_VALUE">
+<code class="descclassname">pyrate.config.</code><code class="descname">NO_DATA_VALUE</code><em class="property"> = 'noDataValue'</em><a class="headerlink" href="#pyrate.config.NO_DATA_VALUE" title="Permalink to this definition">¶</a></dt>
+<dd><p>FLOAT; The no data value in the interferogram files.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.OBS_DIR">
+<code class="descclassname">pyrate.config.</code><code class="descname">OBS_DIR</code><em class="property"> = 'obsdir'</em><a class="headerlink" href="#pyrate.config.OBS_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>STR; Name of directory containing input interferograms.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.ORBITAL_FIT">
+<code class="descclassname">pyrate.config.</code><code class="descname">ORBITAL_FIT</code><em class="property"> = 'orbfit'</em><a class="headerlink" href="#pyrate.config.ORBITAL_FIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (1/0); Flag controlling whether to apply orbital error correction</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.ORBITAL_FIT_DEGREE">
+<code class="descclassname">pyrate.config.</code><code class="descname">ORBITAL_FIT_DEGREE</code><em class="property"> = 'orbfitdegrees'</em><a class="headerlink" href="#pyrate.config.ORBITAL_FIT_DEGREE" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (1/2/3) Order of orbital error model, 1 = planar in x and y (2 parameter model, 2 = quadratic in x and y (5 parameter model), 3 = quadratic in x and cubic in y (part-cubic 6 parameter model)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.ORBITAL_FIT_LOOKS_X">
+<code class="descclassname">pyrate.config.</code><code class="descname">ORBITAL_FIT_LOOKS_X</code><em class="property"> = 'orbfitlksx'</em><a class="headerlink" href="#pyrate.config.ORBITAL_FIT_LOOKS_X" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Multi look factor for orbital error calculation in x dimension</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.ORBITAL_FIT_LOOKS_Y">
+<code class="descclassname">pyrate.config.</code><code class="descname">ORBITAL_FIT_LOOKS_Y</code><em class="property"> = 'orbfitlksy'</em><a class="headerlink" href="#pyrate.config.ORBITAL_FIT_LOOKS_Y" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Multi look factor for orbital error calculation in y dimension</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.ORBITAL_FIT_METHOD">
+<code class="descclassname">pyrate.config.</code><code class="descname">ORBITAL_FIT_METHOD</code><em class="property"> = 'orbfitmethod'</em><a class="headerlink" href="#pyrate.config.ORBITAL_FIT_METHOD" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (1/2); Method for orbital error correction, 1: independent, 2: network</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.OUT_DIR">
+<code class="descclassname">pyrate.config.</code><code class="descname">OUT_DIR</code><em class="property"> = 'outdir'</em><a class="headerlink" href="#pyrate.config.OUT_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>STR; Name of directory for saving output products</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.PARALLEL">
+<code class="descclassname">pyrate.config.</code><code class="descname">PARALLEL</code><em class="property"> = 'parallel'</em><a class="headerlink" href="#pyrate.config.PARALLEL" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (0/1/2); Use parallelisation/Multi-threading</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.PROCESSES">
+<code class="descclassname">pyrate.config.</code><code class="descname">PROCESSES</code><em class="property"> = 'processes'</em><a class="headerlink" href="#pyrate.config.PROCESSES" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Number of processes for multi-threading</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.PROCESSOR">
+<code class="descclassname">pyrate.config.</code><code class="descname">PROCESSOR</code><em class="property"> = 'processor'</em><a class="headerlink" href="#pyrate.config.PROCESSOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (0/1); The interferogram processor used (0==ROIPAC, 1==GAMMA)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.REFNX">
+<code class="descclassname">pyrate.config.</code><code class="descname">REFNX</code><em class="property"> = 'refnx'</em><a class="headerlink" href="#pyrate.config.REFNX" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Number of reference pixel grid search nodes in x dimension</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.REFNY">
+<code class="descclassname">pyrate.config.</code><code class="descname">REFNY</code><em class="property"> = 'refny'</em><a class="headerlink" href="#pyrate.config.REFNY" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Number of reference pixel grid search nodes in y dimension</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.REFX">
+<code class="descclassname">pyrate.config.</code><code class="descname">REFX</code><em class="property"> = 'refx'</em><a class="headerlink" href="#pyrate.config.REFX" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Coordinate in x of reference pixel OR -1 = perform search</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.REFY">
+<code class="descclassname">pyrate.config.</code><code class="descname">REFY</code><em class="property"> = 'refy'</em><a class="headerlink" href="#pyrate.config.REFY" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Coordinate in y of reference pixel OR -1 = perform search</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.REF_CHIP_SIZE">
+<code class="descclassname">pyrate.config.</code><code class="descname">REF_CHIP_SIZE</code><em class="property"> = 'refchipsize'</em><a class="headerlink" href="#pyrate.config.REF_CHIP_SIZE" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Dimension of reference pixel search window</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.REF_EST_METHOD">
+<code class="descclassname">pyrate.config.</code><code class="descname">REF_EST_METHOD</code><em class="property"> = 'refest'</em><a class="headerlink" href="#pyrate.config.REF_EST_METHOD" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (1/2); Reference phase estimation method</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.REF_MIN_FRAC">
+<code class="descclassname">pyrate.config.</code><code class="descname">REF_MIN_FRAC</code><em class="property"> = 'refminfrac'</em><a class="headerlink" href="#pyrate.config.REF_MIN_FRAC" title="Permalink to this definition">¶</a></dt>
+<dd><p>REAL; Minimum fraction of observations required in search window for pixel to be a viable reference pixel</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.REPROJECTION">
+<code class="descclassname">pyrate.config.</code><code class="descname">REPROJECTION</code><em class="property"> = 'prjflag'</em><a class="headerlink" href="#pyrate.config.REPROJECTION" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (1/2/3); Re-project data from Line of sight, 1 = vertical,</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.SLC_DIR">
+<code class="descclassname">pyrate.config.</code><code class="descname">SLC_DIR</code><em class="property"> = 'slcFileDir'</em><a class="headerlink" href="#pyrate.config.SLC_DIR" title="Permalink to this definition">¶</a></dt>
+<dd><p>STR; Name of directory containing GAMMA SLC parameter files</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.TIME_SERIES_CAL">
+<code class="descclassname">pyrate.config.</code><code class="descname">TIME_SERIES_CAL</code><em class="property"> = 'tscal'</em><a class="headerlink" href="#pyrate.config.TIME_SERIES_CAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>BOOL (1/0); Do Time series calculation</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.TIME_SERIES_METHOD">
+<code class="descclassname">pyrate.config.</code><code class="descname">TIME_SERIES_METHOD</code><em class="property"> = 'tsmethod'</em><a class="headerlink" href="#pyrate.config.TIME_SERIES_METHOD" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT (1/2); Method for time series inversion (1: Laplacian Smoothing; 2: SVD)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.TIME_SERIES_PTHRESH">
+<code class="descclassname">pyrate.config.</code><code class="descname">TIME_SERIES_PTHRESH</code><em class="property"> = 'ts_pthr'</em><a class="headerlink" href="#pyrate.config.TIME_SERIES_PTHRESH" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT; Number of required input observations per pixel for time series inversion</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.TIME_SERIES_SM_FACTOR">
+<code class="descclassname">pyrate.config.</code><code class="descname">TIME_SERIES_SM_FACTOR</code><em class="property"> = 'smfactor'</em><a class="headerlink" href="#pyrate.config.TIME_SERIES_SM_FACTOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>REAL; Laplacian smoothing factor (values used is 10**smfactor)</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="pyrate.config.TIME_SERIES_SM_ORDER">
+<code class="descclassname">pyrate.config.</code><code class="descname">TIME_SERIES_SM_ORDER</code><em class="property"> = 'smorder'</em><a class="headerlink" href="#pyrate.config.TIME_SERIES_SM_ORDER" title="Permalink to this definition">¶</a></dt>
+<dd><p>INT (1/2); Order of Laplacian smoothing operator, first or # second order</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.config.get_config_params">
+<code class="descclassname">pyrate.config.</code><code class="descname">get_config_params</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/config.html#get_config_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.config.get_config_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dictionary of key:value parameter pairs from the
+configuration file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) &#8211; path of config file</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">params</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.config.get_dest_paths">
+<code class="descclassname">pyrate.config.</code><code class="descname">get_dest_paths</code><span class="sig-paren">(</span><em>base_paths</em>, <em>crop</em>, <em>params</em>, <em>looks</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/config.html#get_dest_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.config.get_dest_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the full path names for the destination multilooked files</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>base_paths</strong> (<em>list</em>) &#8211; original interferogram paths</li>
+<li><strong>crop</strong> (<em>int</em>) &#8211; Crop option applied</li>
+<li><strong>params</strong> (<em>dict</em>) &#8211; Parameters dictionary</li>
+<li><strong>looks</strong> (<em>int</em>) &#8211; number of range looks applied</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">full path names for destination files</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.config.get_ifg_paths">
+<code class="descclassname">pyrate.config.</code><code class="descname">get_ifg_paths</code><span class="sig-paren">(</span><em>config_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/config.html#get_ifg_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.config.get_ifg_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the configuration file, extract interferogram file list and determine
+input and output interferogram path names.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config_file</strong> (<em>str</em>) &#8211; Configuration file path</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">base_unw_paths: List of unwrapped inteferograms</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">dest_paths: List of multi-looked and cropped geotifs</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">params: Dictionary corresponding to the config file</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.config.mlooked_path">
+<code class="descclassname">pyrate.config.</code><code class="descname">mlooked_path</code><span class="sig-paren">(</span><em>path</em>, <em>looks</em>, <em>crop_out</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/config.html#mlooked_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.config.mlooked_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds suffix to ifg path, for creating a new path for multilooked files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) &#8211; original interferogram path</li>
+<li><strong>looks</strong> (<em>int</em>) &#8211; number of range looks applied</li>
+<li><strong>crop_out</strong> (<em>int</em>) &#8211; crop option applied</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">multilooked file name</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.config.original_ifg_paths">
+<code class="descclassname">pyrate.config.</code><code class="descname">original_ifg_paths</code><span class="sig-paren">(</span><em>ifglist_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/config.html#original_ifg_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.config.original_ifg_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns sequence of paths to files in given ifglist file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ifglist_path</strong> (<em>str</em>) &#8211; full path to interferogram file list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">full path to ifg files</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.config.parse_namelist">
+<code class="descclassname">pyrate.config.</code><code class="descname">parse_namelist</code><span class="sig-paren">(</span><em>nml</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/config.html#parse_namelist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.config.parse_namelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses name list file into array of paths</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nml</strong> (<em>str</em>) &#8211; interferogram file list</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of interferogram file names</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.config.transform_params">
+<code class="descclassname">pyrate.config.</code><code class="descname">transform_params</code><span class="sig-paren">(</span><em>params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/config.html#transform_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.config.transform_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns subset of all parameters for cropping and multilooking.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> (<em>dict</em>) &#8211; Parameter dictionary</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">xlooks, ylooks, crop</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pyrate.config.write_config_file">
+<code class="descclassname">pyrate.config.</code><code class="descname">write_config_file</code><span class="sig-paren">(</span><em>params</em>, <em>output_conf_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyrate/config.html#write_config_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyrate.config.write_config_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Takes a param object and writes the config file. Reverse of get_conf_params.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>params</strong> (<em>dict</em>) &#8211; parameter dictionary</li>
+<li><strong>output_conf_file</strong> (<em>str</em>) &#8211; output file name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">config file</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="covariance.html" class="btn btn-neutral float-right" title="Covariance Module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="aps.html" class="btn btn-neutral" title="Atmospheric Phase Screen Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Geoscience Australia.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
